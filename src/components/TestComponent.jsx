@@ -1,5 +1,10 @@
-function TestComponent() {
-  return <h1>Test Component222</h1>;
+function TestComponent({ message, number }) {
+  return (
+    <div>
+      <p>this is {message}</p>
+      <p>this is {number}</p>
+    </div>
+  );
 }
 
 export default TestComponent;

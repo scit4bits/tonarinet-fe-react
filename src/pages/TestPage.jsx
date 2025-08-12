@@ -68,7 +68,7 @@ function TestPage() {
   return (
     <>
       <div>
-        <TestComponent />
+        <TestComponent message={"HELLO"} number={123} />
         <p>{data.reply}</p>
 
         <input type="text" name="lel" onInput={onInputHandler} />
