@@ -1,83 +1,18 @@
-import { useEffect, useState } from "react";
-import TestComponent from "../components/TestComponent";
-import axios from "axios";
+import { useTranslation } from "react-i18next";
+import Header from "../components/Header";
 
-function TestPage() {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState("");
-  const [input, setInput] = useState("");
-  const [postResult, setPostResult] = useState(null);
-  useEffect(() => {
-    async function fetchData() {
-      const data = await axios.get("https://tnsv.thxx.xyz/api/simple/hello");
+export default function TestPage() {
+  const { t, i18n } = useTranslation();
 
-      console.log(data.data);
-      setData(data.data);
-    }
-
-    fetchData();
-  }, []);
-
-  async function onClickHandlerOK() {
-    const payload = {
-      message: input,
-    };
-    const result = await axios.post(
-      "https://tnsv.thxx.xyz/api/simple/echo",
-      payload
-    );
-
-    setPostResult(result.data);
-    console.log(result);
-  }
-
-  async function onClickHandlerError() {
-    try {
-      const payload = {};
-      const result = await axios.post(
-        "https://tnsv.thxx.xyz/api/simple/echo",
-        payload
-      );
-      console.log(result);
-    } catch (e) {
-      setError(e.response.data.reply);
-      console.error(e);
-    }
-  }
-
-  function onInputHandler(event) {
-    setInput(event.target.value);
-  }
-
-  if (!data) {
-    return (
-      <>
-        <h1>Loading...</h1>
-      </>
-    );
-  }
-
-  if (error) {
-    return (
-      <>
-        <h1>{error}</h1>
-      </>
-    );
+  function clickHandler() {
+    i18n.changeLanguage(i18n.language === "ko" ? "ja" : "ko");
   }
 
   return (
-    <>
-      <div>
-        <TestComponent message={"HELLO"} number={123} />
-        <p>{data.reply}</p>
-
-        <input type="text" name="lel" onInput={onInputHandler} />
-        <button onClick={onClickHandlerError}>GO AJAX ERROR</button>
-        <button onClick={onClickHandlerOK}>GO AJAX OK</button>
-        {postResult && <p>{postResult.reply}</p>}
-      </div>
-    </>
+    <div>
+      <Header />
+      <p>{t("hello")}</p>
+      <button onClick={clickHandler}>Hey</button>
+    </div>
   );
 }
-
-export default TestPage;
