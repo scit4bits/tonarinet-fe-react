@@ -13,6 +13,8 @@ import LanguageSelector from "./components/LanguageSelector.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 import SignInPage from "./pages/SignInPage.jsx";
 import AuthTestPage from "./pages/AuthTestPage.jsx";
+import BoardListPage from "./pages/BoardListPage.jsx";
+import BoardArticleListPage from "./pages/BoardArticleListPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StyledEngineProvider enableCssLayer>
@@ -23,23 +25,18 @@ createRoot(document.getElementById("root")).render(
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/logincb">
-          <Route
-            path="/logincb/line"
-            element={<SignUpPage provider={"line"} />}
-          />
-          <Route
-            path="/logincb/kakao"
-            element={<SignUpPage provider={"kakao"} />}
-          />
-          <Route
-            path="/logincb/google"
-            element={<SignUpPage provider={"google"} />}
-          />
+          <Route path="line" element={<SignUpPage provider={"line"} />} />
+          <Route path="kakao" element={<SignUpPage provider={"kakao"} />} />
+          <Route path="google" element={<SignUpPage provider={"google"} />} />
         </Route>
         <Route path="/oauthtest" element={<OAuthTestPage />} />
         <Route element={<Layout />}>
           <Route path="/hello" element={<h1>hello</h1>} />
           <Route path="/testauth" element={<AuthTestPage />} />
+          <Route path="/board">
+            <Route path="list" element={<BoardListPage />} />
+            <Route path=":boardId" element={<BoardArticleListPage />} />
+          </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

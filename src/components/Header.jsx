@@ -10,8 +10,6 @@ import AccountMenu from "./AccountMenu";
 export default function Header() {
   const { t } = useTranslation();
 
-  const onClickAccount = () => {};
-
   return (
     <header className="w-full p-3 h-[100px] self-center max-w-[1200px] flex items-center flex-row gap-10">
       <img src={Logo} alt="TonarinetLogo" className="h-full" />
