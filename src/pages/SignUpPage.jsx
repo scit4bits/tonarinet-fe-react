@@ -39,10 +39,7 @@ export default function SignUpPage({ provider }) {
               oauthid: checkData.oauthid,
             });
             if (authResponse.status === 200) {
-              localStorage.setItem(
-                "accessToken",
-                authResponse.data.accessToken
-              );
+              localStorage.setItem("accessToken", authResponse.data.data);
               window.location.href = "/testauth";
               return;
             }
