@@ -2,13 +2,15 @@ import { useTranslation } from "react-i18next";
 import Logo from "../assets/logo.png";
 import { Link } from "react-router";
 import { Button, IconButton } from "@mui/material";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ChatIcon from "@mui/icons-material/Chat";
 import LanguageSelector from "./LanguageSelector";
+import AccountMenu from "./AccountMenu";
 
 export default function Header() {
   const { t } = useTranslation();
+
+  const onClickAccount = () => {};
 
   return (
     <header className="w-full p-3 h-[100px] self-center max-w-[1200px] flex items-center flex-row gap-10">
@@ -25,9 +27,7 @@ export default function Header() {
         <IconButton>
           <NotificationsIcon />
         </IconButton>
-        <IconButton>
-          <AccountCircleIcon />
-        </IconButton>
+        <AccountMenu />
         <LanguageSelector />
       </div>
     </header>

@@ -1,4 +1,4 @@
-import axios from "axios";
+import taxios from "../utils/taxios";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import CountryData from "../data/country.json";
@@ -19,19 +19,29 @@ export default function SignUpPage({ provider }) {
   const [phone, setPhone] = useState("");
   const [country, setCountry] = useState("");
   const [org, setOrg] = useState("");
-  const [oAuthId, setOAuthId] = useState(null);
+  const [role, setRole] = useState("user");
 
   useEffect(() => {
     async function getOAuthData() {
       try {
         if (provider) {
-          const url = `http://localhost:8999/api/auth/${provider}/check?code=${code}&state=${state}`;
-          const response = await axios.get(url);
-          const data = response.data;
-          setOAuthData(data);
-          setName(data.name || "");
-          setOAuthId(data.userId || "");
-          console.log(data);
+          const checkUrl = `/auth/${provider}/check?code=${code}&state=${state}`;
+          const checkResponse = await taxios.get(checkUrl);
+          const checkData = checkResponse.data;
+
+          const authUrl = `/auth/signin/oauth`; // this must have provider and openid sub
+          const authResponse = await taxios.post(authUrl, {
+            provider,
+            oauthid: checkData.oauthid,
+          });
+          if (authResponse.status === 200) {
+            localStorage.setItem("accessToken", authResponse.data.accessToken);
+            window.location.href = "/testauth";
+            return;
+          }
+
+          setOAuthData(checkData);
+          setName(checkData.name || "");
         }
       } catch (error) {
         console.error("Error fetching OAuth data:", error);
@@ -49,7 +59,7 @@ export default function SignUpPage({ provider }) {
 
     // Validation checks
     if (
-      !email ||
+      !(email || oAuthData?.email) ||
       !password ||
       !passwordRepeat ||
       !name ||
@@ -57,6 +67,7 @@ export default function SignUpPage({ provider }) {
       !nickname ||
       !phone ||
       !country ||
+      !role ||
       !org
     ) {
       alert("All fields are required");
@@ -86,10 +97,11 @@ export default function SignUpPage({ provider }) {
         country,
         org,
         provider,
-        oauthid: oAuthId,
+        role,
+        oauthid: oAuthData?.oauthid || null,
       };
       console.log(payload);
-      const response = await axios.post(
+      const response = await taxios.post(
         "http://localhost:8999/api/auth/signup",
         payload
       );
@@ -105,10 +117,9 @@ export default function SignUpPage({ provider }) {
       <form onSubmit={handleSubmit}>
         <datalist id="country-list">
           {Object.entries(CountryData).map(([key, value]) => (
-            <option
-              key={key}
-              value={i18n.language === "ko" ? value.korean : value.japanese}
-            />
+            <option key={key} value={key}>
+              {i18n.language === "ko" ? value.korean : value.japanese}
+            </option>
           ))}
         </datalist>
         <label htmlFor="email">Email</label>
@@ -170,6 +181,7 @@ export default function SignUpPage({ provider }) {
         <input
           type="text"
           name="nickname"
+          id="nickname"
           placeholder="닉네임"
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
@@ -208,6 +220,17 @@ export default function SignUpPage({ provider }) {
           onChange={(e) => setOrg(e.target.value)}
         />
         <br />
+        <label htmlFor="role">역할</label>
+        <br />
+        <select
+          id="role"
+          name="role"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+        >
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
 
         <button type="submit">Sign Up</button>
       </form>

@@ -3,18 +3,16 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter, Route, Routes } from "react-router";
-import TestPage from "./pages/TestPage.jsx";
-import ChoiPage from "./pages/ChoiPage.jsx";
-import KimPage from "./pages/KimPage.jsx";
-import LeePage from "./pages/LeePage.jsx";
-import Oh from "./pages/Oh.jsx";
-import ParkPage from "./pages/ParkPage.jsx";
 import "./i18n.js";
 import { GlobalStyles, StyledEngineProvider } from "@mui/material";
 import Layout from "./components/Layout.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
 import OAuthTestPage from "./pages/OAuthTestPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
+import LanguageSelector from "./components/LanguageSelector.jsx";
+import NotFoundPage from "./pages/NotFoundPage.jsx";
+import SignInPage from "./pages/SignInPage.jsx";
+import AuthTestPage from "./pages/AuthTestPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StyledEngineProvider enableCssLayer>
@@ -22,28 +20,27 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <Routes>
         <Route index element={<LandingPage />} />
+        <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
-        <Route
-          path="/logincb/line"
-          element={<SignUpPage provider={"line"} />}
-        />
-        <Route
-          path="/logincb/kakao"
-          element={<SignUpPage provider={"kakao"} />}
-        />
-        <Route
-          path="/logincb/google"
-          element={<SignUpPage provider={"google"} />}
-        />
+        <Route path="/logincb">
+          <Route
+            path="/logincb/line"
+            element={<SignUpPage provider={"line"} />}
+          />
+          <Route
+            path="/logincb/kakao"
+            element={<SignUpPage provider={"kakao"} />}
+          />
+          <Route
+            path="/logincb/google"
+            element={<SignUpPage provider={"google"} />}
+          />
+        </Route>
         <Route path="/oauthtest" element={<OAuthTestPage />} />
         <Route element={<Layout />}>
-          <Route path="/test" element={<TestPage />} />
-          <Route path="/choi" element={<ChoiPage />} />
-          <Route path="/kim" element={<KimPage />} />
-          <Route path="/lee" element={<LeePage />} />
-          <Route path="/oh" element={<Oh />} />
-          <Route path="/park" element={<ParkPage />} />
-          <Route path="*" element={<h2>Page Not Found</h2>} />
+          <Route path="/hello" element={<h1>hello</h1>} />
+          <Route path="/testauth" element={<AuthTestPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

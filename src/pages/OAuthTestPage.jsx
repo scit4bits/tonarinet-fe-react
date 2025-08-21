@@ -1,13 +1,11 @@
 import { Button, IconButton } from "@mui/material";
 import { Link } from "react-router";
 import GoogleIcon from "@mui/icons-material/Google";
-import axios from "axios";
+import taxios from "../utils/taxios";
 
 export default function OAuthTestPage() {
   async function generateState() {
-    const response = await axios.get(
-      "http://localhost:8999/api/auth/generateState"
-    );
+    const response = await taxios.get("/api/auth/generateState");
     return response.data;
   }
 
