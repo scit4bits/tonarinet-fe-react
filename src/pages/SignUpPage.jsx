@@ -29,19 +29,26 @@ export default function SignUpPage({ provider }) {
           const checkResponse = await taxios.get(checkUrl);
           const checkData = checkResponse.data;
 
-          const authUrl = `/auth/signin/oauth`; // this must have provider and openid sub
-          const authResponse = await taxios.post(authUrl, {
-            provider,
-            oauthid: checkData.oauthid,
-          });
-          if (authResponse.status === 200) {
-            localStorage.setItem("accessToken", authResponse.data.accessToken);
-            window.location.href = "/testauth";
-            return;
-          }
-
           setOAuthData(checkData);
           setName(checkData.name || "");
+
+          try {
+            const authUrl = `/auth/signin/oauth`; // this must have provider and openid sub
+            const authResponse = await taxios.post(authUrl, {
+              provider,
+              oauthid: checkData.oauthid,
+            });
+            if (authResponse.status === 200) {
+              localStorage.setItem(
+                "accessToken",
+                authResponse.data.accessToken
+              );
+              window.location.href = "/testauth";
+              return;
+            }
+          } catch (error) {
+            console.log("it seems we don't have any account. go for Signup.");
+          }
         }
       } catch (error) {
         console.error("Error fetching OAuth data:", error);
