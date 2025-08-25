@@ -1,15 +1,42 @@
 import { Outlet } from "react-router";
 import Footer from "./Footer";
 import Header from "./Header";
+import Sidebar from "./Sidebar";
+import { Box } from "@mui/material";
+
+const drawerWidth = 240;
+const headerHeight = 65;
 
 export default function Layout() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Header />
-      <main className="flex-1 flex flex-col max-w-[1200px] self-center">
-        <Outlet />
-      </main>
+
+      <Box sx={{ display: "flex", flex: 1, mt: `${headerHeight}px`, minHeight: 0 }}>
+        <Box
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            bgcolor: "#f0f0f0",
+          }}
+        >
+          <Sidebar role="systemAdmin" />
+        </Box>
+
+        <Box
+          component="main"
+          sx={{
+            flex: 1,
+            p: 3,
+            overflow: "auto",
+            bgcolor: "background.default",
+          }}
+        >
+          <Outlet />
+        </Box>
+      </Box>
+
       <Footer />
-    </div>
+    </Box>
   );
 }

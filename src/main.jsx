@@ -15,6 +15,7 @@ import SignInPage from "./pages/SignInPage.jsx";
 import AuthTestPage from "./pages/AuthTestPage.jsx";
 import BoardListPage from "./pages/BoardListPage.jsx";
 import BoardArticleListPage from "./pages/BoardArticleListPage.jsx";
+import MainPage from "./pages/MainPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StyledEngineProvider enableCssLayer>
@@ -31,7 +32,7 @@ createRoot(document.getElementById("root")).render(
         </Route>
         <Route path="/oauthtest" element={<OAuthTestPage />} />
         <Route element={<Layout />}>
-          <Route path="/hello" element={<h1>hello</h1>} />
+          <Route path="/hello" element={<MainPage />} />
           <Route path="/testauth" element={<AuthTestPage />} />
           <Route path="/board">
             <Route path="list" element={<BoardListPage />} />
