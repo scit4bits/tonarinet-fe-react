@@ -13,7 +13,7 @@ export default function BoardArticleViewPage() {
   const [contents, setContents] = useState("내용");
 
   return (
-    <div className="min-h-screen bg-pink-100 flex justify-center items-center p-6">
+    <div className="min-h-screen bg-pink-100 flex justify-center items-center p-6 m-8 rounded-4xl">
       {/* 고정 크기 박스 */}
       <div className="bg-white rounded-xl shadow p-6 w-[1000px] h-[1200px] overflow-y-auto">
         {/* 상단 제목 */}
@@ -64,7 +64,6 @@ export default function BoardArticleViewPage() {
             <div key={i} className="bg-purple-200 p-2 rounded flex justify-between items-center">
               <span className="text-sm">{c}</span>
               <div className="space-x-2 text-xs text-blue-700">
-                <button>수정</button>
                 <button>삭제</button>
               </div>
             </div>
