@@ -9,31 +9,14 @@ const headerHeight = 65;
 
 export default function Layout() {
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <Box className="min-h-screen flex flex-col">
       <Header />
 
-      <Box sx={{ display: "flex", flex: 1, mt: `${headerHeight}px`, minHeight: 0 }}>
-        <Box
-          sx={{
-            width: drawerWidth,
-            flexShrink: 0,
-            bgcolor: "#f0f0f0",
-          }}
-        >
-          <Sidebar role="systemAdmin" />
-        </Box>
-
-        <Box
-          component="main"
-          sx={{
-            flex: 1,
-            p: 3,
-            overflow: "auto",
-            bgcolor: "background.default",
-          }}
-        >
-          <Outlet />
-        </Box>
+      <Box
+        component="main"
+        className="w-full flex flex-1 bg-background-default max-w-[1200px] self-center"
+      >
+        <Outlet />
       </Box>
 
       <Footer />

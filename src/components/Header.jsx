@@ -11,7 +11,7 @@ export default function Header() {
   const { t } = useTranslation();
 
   return (
-    <AppBar position="fixed" color="inherit" elevation={1}>
+    <AppBar color="inherit" elevation={1} className="relative">
       <Toolbar sx={{ justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 5 }}>
           <Link to="/">

@@ -105,10 +105,7 @@ export default function SignUpPage({ provider }) {
         oauthid: oAuthData?.oauthid || null,
       };
       console.log(payload);
-      const response = await taxios.post(
-        "http://localhost:8999/api/auth/signup",
-        payload
-      );
+      const response = await taxios.post("/auth/signup", payload);
       console.log("Sign up successful:", response.data);
     } catch (error) {
       console.error("Sign up error:", error);
