@@ -24,7 +24,7 @@ export default function BoardListPage() {
     if (localStorage.getItem("accessToken")) {
       getAccessibleBoards();
     } else {
-      window.location.href = "/signin";
+      window.location.replace("/signin");
     }
   }, []);
 

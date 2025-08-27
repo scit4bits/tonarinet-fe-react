@@ -27,7 +27,7 @@ taxios.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem("accessToken");
-      window.location.href = "/signin";
+      window.location.replace("/signin");
     }
     return Promise.reject(error);
   }
