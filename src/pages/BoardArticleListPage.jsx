@@ -10,6 +10,7 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  Pagination,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -134,6 +135,21 @@ export default function BoardArticleListPage() {
     { id: 105, title: "관리자 연락처", views: 1023 },
   ]);
 
+  // 페이지네이션 상태
+  const [page, setPage] = useState(1);
+  const articlesPerPage = 10;
+  const totalPages = Math.ceil(articles.length / articlesPerPage);
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+  
+
+  const paginatedArticles = articles.slice(
+    (page - 1) * articlesPerPage,
+    page * articlesPerPage
+  );
+
   useEffect(() => {
     // 실제 API 호출은 주석 처리됨
     // async function getArticles() {
@@ -150,6 +166,7 @@ export default function BoardArticleListPage() {
     //   window.location.href = "/signin";
     // }
   }, []);
+  
 
   return (
     <Box className="max-w-[1400px] mx-auto mt-10 px-4 mb-8 overflow-hidden border rounded p-4 shadow flex-1">
@@ -205,25 +222,17 @@ export default function BoardArticleListPage() {
 
           {/* 페이지네이션 + 글쓰기 */}
           <div className="flex justify-between items-center mt-6">
-            <div className="flex space-x-1">
-              <IconButton>
-                <ArrowBackIcon />
-              </IconButton>
-              {[...Array(5)].map((_, i) => (
-                <Button
-                  key={i}
-                  variant={i === 0 ? "contained" : "outlined"}
-                  size="small"
-                  color={i === 0 ? "primary" : "inherit"}
-                >
-                  {i + 1}
-                </Button>
-              ))}
-              <IconButton>
-                <ArrowForwardIcon />
-              </IconButton>
-            </div>
-
+            <Pagination
+              count={totalPages}
+              page={page}
+              onChange={handlePageChange}
+              color="primary"
+              shape="rounded"
+              showFirstButton
+              showLastButton
+              siblingCount={1}
+              boundaryCount={1}
+            />
             <Button
               variant="contained"
               color="primary"
