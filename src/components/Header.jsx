@@ -6,6 +6,8 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import ChatIcon from "@mui/icons-material/Chat";
 import LanguageSelector from "./LanguageSelector";
 import AccountMenu from "./AccountMenu";
+import Notification from "./Notification";
+import ChatMenu from "./ChatMenu";
 
 export default function Header() {
   const { t } = useTranslation();
@@ -30,12 +32,8 @@ export default function Header() {
         </Box>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <IconButton>
-            <ChatIcon />
-          </IconButton>
-          <IconButton>
-            <NotificationsIcon />
-          </IconButton>
+          <ChatMenu />
+          <Notification />
           <AccountMenu />
           <LanguageSelector />
         </Box>
