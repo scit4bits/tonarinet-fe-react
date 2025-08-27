@@ -55,6 +55,25 @@ export default function LocalReviewPage() {
     console.log("Searching for:", searchQuery);
   };
 
+  const handleMapClick = useCallback((event) => {
+    const lat = event.detail.latLng.lat;
+    const lng = event.detail.latLng.lng;
+
+    // Create a new review location
+    const newPlace = {
+      id: Date.now(), // temporary ID
+      position: { lat, lng },
+      name: "New Location",
+      rating: 0,
+      reviewCount: 0,
+      category: "New Review",
+      description: "Click to add your review here",
+      isNewReview: true,
+    };
+
+    setSelectedPlace(newPlace);
+  }, []);
+
   return (
     <Box
       sx={{
@@ -115,13 +134,21 @@ export default function LocalReviewPage() {
             <>
               <Typography variant="h5" component="h2" gutterBottom>
                 {selectedPlace.name}
+                {selectedPlace.isNewReview && (
+                  <Chip
+                    label="New"
+                    size="small"
+                    color="success"
+                    sx={{ ml: 1 }}
+                  />
+                )}
               </Typography>
 
               <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                 <Rating
                   value={selectedPlace.rating}
                   precision={0.1}
-                  readOnly
+                  readOnly={!selectedPlace.isNewReview}
                   size="medium"
                 />
                 <Typography variant="body1" sx={{ ml: 1 }}>
@@ -140,15 +167,35 @@ export default function LocalReviewPage() {
                 {selectedPlace.description}
               </Typography>
 
-              <Button
-                variant="contained"
-                size="large"
-                startIcon={<LocationOn />}
-                sx={{ mt: "auto" }}
-                fullWidth
-              >
-                View Full Details
-              </Button>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                Coordinates: {selectedPlace.position.lat.toFixed(6)},{" "}
+                {selectedPlace.position.lng.toFixed(6)}
+              </Typography>
+
+              {selectedPlace.isNewReview ? (
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={{ mt: "auto" }}
+                  fullWidth
+                  onClick={() => {
+                    // Handle write review action
+                    console.log("Write review for:", selectedPlace.position);
+                  }}
+                >
+                  Write Review
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  size="large"
+                  startIcon={<LocationOn />}
+                  sx={{ mt: "auto" }}
+                  fullWidth
+                >
+                  View Full Details
+                </Button>
+              )}
 
               <Button
                 variant="outlined"
@@ -167,8 +214,8 @@ export default function LocalReviewPage() {
                 Select a Location
               </Typography>
               <Typography variant="body2">
-                Click on a marker on the map to view details about that
-                location.
+                Click on a marker or anywhere on the map to select a location
+                and write a review.
               </Typography>
             </Box>
           )}
@@ -183,6 +230,7 @@ export default function LocalReviewPage() {
               defaultZoom={13}
               gestureHandling={"greedy"}
               disableDefaultUI={false}
+              onClick={handleMapClick}
             >
               {reviews.map((place) => (
                 <Marker
@@ -191,6 +239,13 @@ export default function LocalReviewPage() {
                   onClick={() => handleMarkerClick(place)}
                 />
               ))}
+
+              {selectedPlace && selectedPlace.isNewReview && (
+                <Marker
+                  position={selectedPlace.position}
+                  onClick={() => handleMarkerClick(selectedPlace)}
+                />
+              )}
             </Map>
           </APIProvider>
         </Box>
