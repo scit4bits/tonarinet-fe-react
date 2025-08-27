@@ -25,6 +25,7 @@ import SysAdminBoardPage from "./pages/SysAdminBoardPage.jsx";
 import SysAdminReviewPage from "./pages/SysAdminReviewPage.jsx";
 import SysAdminPartyPage from "./pages/SysAdminPartyPage.jsx";
 import SysAdminNoticePage from "./pages/SysAdminNoticePage.jsx";
+import ChatPage from "./pages/ChatPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StyledEngineProvider enableCssLayer>
@@ -41,6 +42,7 @@ createRoot(document.getElementById("root")).render(
         </Route>
         <Route path="/oauthtest" element={<OAuthTestPage />} />
         <Route element={<Layout />}>
+          <Route path="chat" element={<ChatPage />} />
           <Route
             path="/sysadmin"
             element={<AdminLayout role={"systemAdmin"} />}
