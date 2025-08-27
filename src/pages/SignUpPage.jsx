@@ -1,8 +1,25 @@
 import taxios from "../utils/taxios";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import CountryData from "../data/country.json";
 import { useTranslation } from "react-i18next";
+import Logo from "../assets/logo.png";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 export default function SignUpPage({ provider }) {
   const [t, i18n] = useTranslation();
@@ -10,6 +27,7 @@ export default function SignUpPage({ provider }) {
   const code = searchParams.get("code");
   const state = searchParams.get("state");
   const [oAuthData, setOAuthData] = useState(null);
+  const [ready, setReady] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordRepeat, setPasswordRepeat] = useState("");
@@ -17,9 +35,16 @@ export default function SignUpPage({ provider }) {
   const [birth, setBirth] = useState("");
   const [nickname, setNickname] = useState("");
   const [phone, setPhone] = useState("");
-  const [country, setCountry] = useState("");
+  const [country, setCountry] = useState(null);
   const [org, setOrg] = useState("");
   const [role, setRole] = useState("user");
+
+  // Transform country data for Autocomplete
+  const countryOptions = Object.entries(CountryData).map(([key, value]) => ({
+    id: key,
+    label: i18n.language === "ko" ? value.korean : value.japanese,
+    code: key,
+  }));
 
   useEffect(() => {
     async function getOAuthData() {
@@ -28,9 +53,6 @@ export default function SignUpPage({ provider }) {
           const checkUrl = `/auth/${provider}/check?code=${code}&state=${state}`;
           const checkResponse = await taxios.get(checkUrl);
           const checkData = checkResponse.data;
-
-          setOAuthData(checkData);
-          setName(checkData.name || "");
 
           try {
             const authUrl = `/auth/signin/oauth`; // this must have provider and openid sub
@@ -46,10 +68,16 @@ export default function SignUpPage({ provider }) {
           } catch (error) {
             console.log("it seems we don't have any account. go for Signup.");
           }
+
+          setOAuthData(checkData);
+          setName(checkData.name || "");
+          setReady(true);
         }
+        setReady(true);
       } catch (error) {
         console.error("Error fetching OAuth data:", error);
         provider = null;
+        setReady(true);
       }
     }
 
@@ -98,7 +126,7 @@ export default function SignUpPage({ provider }) {
         birth,
         nickname,
         phone,
-        country,
+        country: country?.id || country,
         org,
         provider,
         role,
@@ -113,128 +141,181 @@ export default function SignUpPage({ provider }) {
     }
   }
 
+  if (!ready) {
+    return (
+      <Container maxWidth="sm" sx={{ mt: 8 }}>
+        <Paper elevation={10} sx={{ p: 4, textAlign: "center" }}>
+          <CircularProgress />
+        </Paper>
+      </Container>
+    );
+  }
+
   return (
-    <div className="text-left">
-      <form onSubmit={handleSubmit}>
-        <datalist id="country-list">
-          {Object.entries(CountryData).map(([key, value]) => (
-            <option key={key} value={key}>
-              {i18n.language === "ko" ? value.korean : value.japanese}
-            </option>
-          ))}
-        </datalist>
-        <label htmlFor="email">Email</label>
-        <br />
-        <input
-          type="email"
-          placeholder="Email"
-          id="email"
-          value={oAuthData?.email || email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <br />
-        <label htmlFor="password">패스워드</label>
-        <br />
-        <input
-          type="password"
-          placeholder="비밀번호"
-          id="password"
-          name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <br />
+    <div className="w-full h-full bg-blue-200 p-10">
+      <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+        <img src={Logo} alt="Logo" className="h-[150px] rounded-3xl" />
+      </Box>
+      <Container maxWidth="sm">
+        <Paper elevation={10} sx={{ p: 4 }}>
+          <Typography variant="h4" component="h1" gutterBottom align="center">
+            {t("signUp", "Sign Up")}
+          </Typography>
 
-        <label htmlFor="passwordrepeat">패스워드 재확인</label>
-        <br />
-        <input
-          type="password"
-          placeholder="비밀번호 재확인"
-          id="passwordrepeat"
-          name="passwordrepeat"
-          value={passwordRepeat}
-          onChange={(e) => setPasswordRepeat(e.target.value)}
-        />
-        <br />
-        <label htmlFor="name">이름</label>
-        <br />
-        <input
-          type="text"
-          id="name"
-          name="name"
-          placeholder="이름"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <br />
-        <label htmlFor="birthdate">생년월일</label>
-        <br />
-        <input
-          type="date"
-          id="birthdate"
-          name="birthdate"
-          value={birth}
-          onChange={(e) => setBirth(e.target.value)}
-        />
-        <br />
-        <label htmlFor="nickname">닉네임</label>
-        <br />
-        <input
-          type="text"
-          name="nickname"
-          id="nickname"
-          placeholder="닉네임"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-        />
-        <br />
-        <label htmlFor="phone">전화번호</label>
-        <br />
-        <input
-          type="tel"
-          id="phone"
-          name="phone"
-          placeholder="전화번호"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-        />
-        <br />
-        <label htmlFor="country">국가</label>
-        <br />
-        <input
-          list="country-list"
-          id="country"
-          name="country"
-          placeholder={i18n.language === "ko" ? "국가" : "Country"}
-          value={country}
-          onChange={(e) => setCountry(e.target.value)}
-        />
-        <br />
-        <label htmlFor="org">조직</label>
-        <br />
-        <input
-          type="text"
-          id="org"
-          name="org"
-          placeholder="조직"
-          value={org}
-          onChange={(e) => setOrg(e.target.value)}
-        />
-        <br />
-        <label htmlFor="role">역할</label>
-        <br />
-        <select
-          id="role"
-          name="role"
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-        >
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <TextField
+              fullWidth
+              type="email"
+              label="Email"
+              value={oAuthData?.email || email}
+              onChange={(e) => setEmail(e.target.value)}
+              margin="normal"
+              disabled={!!oAuthData?.email}
+              required
+              autoComplete="email"
+            />
 
-        <button type="submit">Sign Up</button>
-      </form>
+            <TextField
+              fullWidth
+              type="password"
+              label={t("password", "Password")}
+              placeholder="비밀번호"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              margin="normal"
+              required
+              autoComplete="new-password"
+            />
+
+            <TextField
+              fullWidth
+              type="password"
+              label={t("passwordRepeat", "Confirm Password")}
+              placeholder="비밀번호 재확인"
+              value={passwordRepeat}
+              onChange={(e) => setPasswordRepeat(e.target.value)}
+              margin="normal"
+              required
+              autoComplete="new-password"
+            />
+
+            <TextField
+              fullWidth
+              type="text"
+              label={t("name", "Name")}
+              placeholder="이름"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              margin="normal"
+              required
+              autoComplete="name"
+            />
+
+            <TextField
+              fullWidth
+              type="date"
+              label={t("birthdate", "Birth Date")}
+              value={birth}
+              onChange={(e) => setBirth(e.target.value)}
+              margin="normal"
+              required
+              InputLabelProps={{ shrink: true }}
+            />
+
+            <TextField
+              fullWidth
+              type="text"
+              label={t("nickname", "Nickname")}
+              placeholder="닉네임"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              margin="normal"
+              required
+            />
+
+            <TextField
+              fullWidth
+              type="tel"
+              label={t("phone", "Phone")}
+              placeholder="전화번호"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              margin="normal"
+              required
+              autoComplete="tel"
+            />
+
+            <Autocomplete
+              fullWidth
+              options={countryOptions}
+              value={country}
+              onChange={(event, newValue) => setCountry(newValue)}
+              getOptionLabel={(option) => option.label || ""}
+              isOptionEqualToValue={(option, value) => option.id === value?.id}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label={t("country", "Country")}
+                  placeholder={
+                    i18n.language === "ko"
+                      ? "국가를 선택하세요"
+                      : "Select a country"
+                  }
+                  margin="normal"
+                  required
+                />
+              )}
+              renderOption={(props, option) => (
+                <Box component="li" {...props}>
+                  <Typography variant="body1">{option.label}</Typography>
+                </Box>
+              )}
+              sx={{ mt: 1, mb: 1 }}
+            />
+
+            <TextField
+              fullWidth
+              type="text"
+              label={t("organization", "Organization")}
+              placeholder="조직"
+              value={org}
+              onChange={(e) => setOrg(e.target.value)}
+              margin="normal"
+              required
+            />
+
+            <FormControl fullWidth margin="normal" required>
+              <InputLabel id="role-label">{t("role", "Role")}</InputLabel>
+              <Select
+                labelId="role-label"
+                label={t("role", "Role")}
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <MenuItem value="user">User</MenuItem>
+                <MenuItem value="admin">Admin</MenuItem>
+              </Select>
+            </FormControl>
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              {t("signUp", "Sign Up")}
+            </Button>
+
+            <Box sx={{ textAlign: "center", mb: 2 }}>
+              <Link to="/signin" style={{ textDecoration: "none" }}>
+                <Typography variant="body2" color="primary">
+                  {t("alreadyHaveAccount", "Already have an account? Sign In")}
+                </Typography>
+              </Link>
+            </Box>
+          </Box>
+        </Paper>
+      </Container>
     </div>
   );
 }

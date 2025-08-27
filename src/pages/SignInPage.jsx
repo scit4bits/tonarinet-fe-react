@@ -3,7 +3,22 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import CountryData from "../data/country.json";
 import { useTranslation } from "react-i18next";
-import { IconButton } from "@mui/material";
+import Logo from "../assets/logo.png";
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  Icon,
+  IconButton,
+  Paper,
+  Stack,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import LineLogo from "../assets/line.png";
+import KakaoLogo from "../assets/kakao.png";
 
 import GoogleIcon from "@mui/icons-material/Google";
 
@@ -68,48 +83,116 @@ export default function SignInPage({}) {
   }
 
   return (
-    <div className="text-left">
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email</label>
-        <br />
-        <input
-          type="email"
-          placeholder="Email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <br />
-        <label htmlFor="password">패스워드</label>
-        <br />
-        <input
-          type="password"
-          placeholder="비밀번호"
-          id="password"
-          name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <br />
+    <div className="min-h-screen w-full bg-blue-200 flex flex-col items-center justify-center p-10">
+      <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
+        <img src={Logo} alt="Logo" className="h-[150px] rounded-3xl" />
+      </Box>
+      <Container maxWidth="sm">
+        <Paper elevation={10} sx={{ p: 4 }}>
+          <Typography variant="h4" component="h1" gutterBottom align="center">
+            {t("signIn", "Sign In")}
+          </Typography>
 
-        <button type="submit">Sign In</button>
-        <Link to="/signup">Sign Up</Link>
-        <br />
-        <div className="flex flex-row">
-          <IconButton onClick={onClickLoginGoogle}>
-            Google
-            <GoogleIcon />
-          </IconButton>
-          <IconButton onClick={onClickLoginLine}>
-            LINE
-            <GoogleIcon />
-          </IconButton>
-          <IconButton onClick={onClickLoginKakao}>
-            Kakao
-            <GoogleIcon />
-          </IconButton>
-        </div>
-      </form>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <TextField
+              fullWidth
+              id="email"
+              label="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              margin="normal"
+              required
+              autoComplete="email"
+              autoFocus
+            />
+
+            <TextField
+              fullWidth
+              id="password"
+              label={t("password", "Password")}
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              margin="normal"
+              required
+              autoComplete="current-password"
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              {t("signIn", "Sign In")}
+            </Button>
+
+            <Box sx={{ textAlign: "center", mb: 2 }}>
+              <Link to="/signup" style={{ textDecoration: "none" }}>
+                <Typography variant="body2" color="primary">
+                  {t("signUp", "Sign Up")}
+                </Typography>
+              </Link>
+            </Box>
+
+            <Divider sx={{ my: 2 }}>
+              <Typography variant="body2" color="text.secondary">
+                {t("orSignInWith", "Or sign in with")}
+              </Typography>
+            </Divider>
+
+            <Stack direction="row" spacing={2} justifyContent="center">
+              <Tooltip title="Sign in with Google">
+                <IconButton
+                  onClick={onClickLoginGoogle}
+                  sx={{
+                    border: 1,
+                    borderColor: "divider",
+                    "&:hover": { borderColor: "primary.main" },
+                  }}
+                >
+                  <GoogleIcon />
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title="Sign in with Line">
+                <IconButton
+                  onClick={onClickLoginLine}
+                  sx={{
+                    border: 1,
+                    borderColor: "divider",
+                    "&:hover": { borderColor: "primary.main" },
+                  }}
+                >
+                  <img
+                    src={LineLogo}
+                    alt="Line"
+                    style={{ width: 24, height: 24 }}
+                  />
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title="Sign in with Kakao">
+                <IconButton
+                  onClick={onClickLoginKakao}
+                  sx={{
+                    border: 1,
+                    borderColor: "divider",
+                    "&:hover": { borderColor: "primary.main" },
+                  }}
+                >
+                  <img
+                    src={KakaoLogo}
+                    alt="Kakao"
+                    style={{ width: 24, height: 24 }}
+                  />
+                </IconButton>
+              </Tooltip>
+            </Stack>
+          </Box>
+        </Paper>
+      </Container>
     </div>
   );
 }
