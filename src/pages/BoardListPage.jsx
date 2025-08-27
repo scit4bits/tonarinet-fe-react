@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import taxios from "../utils/taxios";
 import BoardCard from "../components/BoardCard";
+import { Card, CardContent, Container, Grid, Typography } from "@mui/material";
 
 export default function BoardListPage() {
   const [boards, setBoards] = useState([]);
@@ -9,7 +10,12 @@ export default function BoardListPage() {
     async function getAccessibleBoards() {
       try {
         const response = await taxios.get("/board");
-        setBoards(response.data);
+        setBoards([
+          ...response.data,
+          ...response.data,
+          ...response.data,
+          ...response.data,
+        ]);
       } catch (error) {
         console.error("Error fetching boards:", error);
       }
@@ -27,20 +33,40 @@ export default function BoardListPage() {
   };
 
   return (
-    <div>
-      <h1>Board List</h1>
-      <br />
-      <div className="flex gap-5">
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Typography variant="h3" component="h1" gutterBottom>
+        Board List
+      </Typography>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: "24px",
+        }}
+      >
         {boards.map((board) => (
-          <BoardCard
-            className="w-[500px]"
+          <Card
             key={board.id}
-            title={board.title}
-            description={board.description}
+            sx={{
+              cursor: "pointer",
+              "&:hover": { boxShadow: 3 },
+              transition: "box-shadow 0.3s",
+              width: { xs: "100%", sm: "300px", md: "300px" },
+            }}
             onClick={() => handleBoardClick(board.id)}
-          />
+          >
+            <CardContent>
+              <Typography variant="h5" component="h2" gutterBottom>
+                {board.title}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {board.description}
+              </Typography>
+            </CardContent>
+          </Card>
         ))}
       </div>
-    </div>
+    </Container>
   );
 }
