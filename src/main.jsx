@@ -31,6 +31,7 @@ import OrgAdminTeamPage from "./pages/OrgAdminTeamPage.jsx";
 import OrgAdminTaskPage from "./pages/OrgAdminTaskPage.jsx";
 import OrgAdminCounselPage from "./pages/OrgAdminCounselPage.jsx";
 import OrgAdminNoticePage from "./pages/OrgAdminNoticePage.jsx";
+import LocalReviewPage from "./pages/LocalReviewPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StyledEngineProvider enableCssLayer>
@@ -47,7 +48,8 @@ createRoot(document.getElementById("root")).render(
         </Route>
         <Route path="/oauthtest" element={<OAuthTestPage />} />
         <Route element={<Layout />}>
-          <Route path="chat" element={<ChatPage />} />
+          <Route path="/localReview" element={<LocalReviewPage />} />
+          <Route path="/chat" element={<ChatPage />} />
           <Route
             path="/sysadmin"
             element={<AdminLayout role={"systemAdmin"} />}
