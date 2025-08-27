@@ -43,7 +43,7 @@ export default function ChatPage() {
   };
 
   return (
-    <Box sx={{ display: "flex", height: "100vh" }}>
+    <Box sx={{ display: "flex", width: "100%" }}>
       {/* Left side - Chat rooms list */}
       <Paper sx={{ width: 300, borderRadius: 0 }}>
         <Typography variant="h6" sx={{ p: 2 }}>
@@ -70,7 +70,13 @@ export default function ChatPage() {
       </Paper>
 
       {/* Right side - Messages */}
-      <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         {/* Header */}
         <Paper sx={{ p: 2, borderRadius: 0 }}>
           <Typography variant="h6">{chatRooms[selectedRoom]?.name}</Typography>
@@ -106,7 +112,7 @@ export default function ChatPage() {
               placeholder="Type a message..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+              onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
             />
             <IconButton onClick={handleSendMessage} color="primary">
               <SendIcon />
