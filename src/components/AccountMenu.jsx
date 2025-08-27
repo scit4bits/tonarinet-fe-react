@@ -26,6 +26,8 @@ export default function AccountMenu() {
       }
     } catch (error) {
       console.error("Auth check failed:", error);
+      localStorage.removeItem("accessToken");
+      window.location.href = "/signin";
     }
   };
 

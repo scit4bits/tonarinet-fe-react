@@ -16,6 +16,14 @@ import AuthTestPage from "./pages/AuthTestPage.jsx";
 import BoardListPage from "./pages/BoardListPage.jsx";
 import BoardArticleListPage from "./pages/BoardArticleListPage.jsx";
 import BoardWritePage from "./pages/BoardWritePage.jsx";
+import MainPage from "./pages/MainPage.jsx";
+import AdminLayout from "./components/AdminLayout.jsx";
+import SysAdminUserPage from "./pages/SysAdminUserPage.jsx";
+import SysAdminOrgPage from "./pages/SysAdminOrgPage.jsx";
+import SysAdminBoardPage from "./pages/SysAdminBoardPage.jsx";
+import SysAdminReviewPage from "./pages/SysAdminReviewPage.jsx";
+import SysAdminPartyPage from "./pages/SysAdminPartyPage.jsx";
+import SysAdminNoticePage from "./pages/SysAdminNoticePage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StyledEngineProvider enableCssLayer>
@@ -32,7 +40,22 @@ createRoot(document.getElementById("root")).render(
         </Route>
         <Route path="/oauthtest" element={<OAuthTestPage />} />
         <Route element={<Layout />}>
-          <Route path="/hello" element={<h1>hello</h1>} />
+          <Route
+            path="/sysadmin"
+            element={<AdminLayout role={"systemAdmin"} />}
+          >
+            <Route path="user" element={<SysAdminUserPage />} />
+            <Route path="org" element={<SysAdminOrgPage />} />
+            <Route path="board" element={<SysAdminBoardPage />} />
+            <Route path="review" element={<SysAdminReviewPage />} />
+            <Route path="party" element={<SysAdminPartyPage />} />
+            <Route path="notice" element={<SysAdminNoticePage />} />
+          </Route>
+
+          <Route path="/orgadmin" element={<AdminLayout role={"orgAdmin"} />}>
+            <Route path="member" element={<SysAdminUserPage />} />
+          </Route>
+          <Route path="/hello" element={<MainPage />} />
           <Route path="/testauth" element={<AuthTestPage />} />
           <Route path="/board">
             <Route path="write" element={<BoardWritePage />} />

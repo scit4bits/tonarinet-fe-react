@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const instance = axios.create({
+const taxios = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8999/api",
   timeout: 10000,
 });
 
 // Request interceptor
-instance.interceptors.request.use(
+taxios.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
     if (token) {
@@ -20,7 +20,7 @@ instance.interceptors.request.use(
 );
 
 // Response interceptor
-instance.interceptors.response.use(
+taxios.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -33,4 +33,4 @@ instance.interceptors.response.use(
   }
 );
 
-export default instance;
+export default taxios;
