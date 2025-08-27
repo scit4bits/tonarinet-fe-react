@@ -26,6 +26,11 @@ import SysAdminReviewPage from "./pages/SysAdminReviewPage.jsx";
 import SysAdminPartyPage from "./pages/SysAdminPartyPage.jsx";
 import SysAdminNoticePage from "./pages/SysAdminNoticePage.jsx";
 import ChatPage from "./pages/ChatPage.jsx";
+import OrgAdminMemberPage from "./pages/OrgAdminMemberPage.jsx";
+import OrgAdminTeamPage from "./pages/OrgAdminTeamPage.jsx";
+import OrgAdminTaskPage from "./pages/OrgAdminTaskPage.jsx";
+import OrgAdminCounselPage from "./pages/OrgAdminCounselPage.jsx";
+import OrgAdminNoticePage from "./pages/OrgAdminNoticePage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StyledEngineProvider enableCssLayer>
@@ -56,7 +61,11 @@ createRoot(document.getElementById("root")).render(
           </Route>
 
           <Route path="/orgadmin" element={<AdminLayout role={"orgAdmin"} />}>
-            <Route path="member" element={<SysAdminUserPage />} />
+            <Route path="member" element={<OrgAdminMemberPage />} />
+            <Route path="team" element={<OrgAdminTeamPage />} />
+            <Route path="task" element={<OrgAdminTaskPage />} />
+            <Route path="counsel" element={<OrgAdminCounselPage />} />
+            <Route path="notice" element={<OrgAdminNoticePage />} />
           </Route>
           <Route path="/hello" element={<MainPage />} />
           <Route path="/testauth" element={<AuthTestPage />} />

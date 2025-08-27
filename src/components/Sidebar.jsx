@@ -18,9 +18,10 @@ export default function Sidebar({ role }) {
   ];
   const orgAdmin = [
     { key: "멤버관리", url: "/orgadmin/member" },
-    { key: "그룹관리", url: "/orgadmin/group" },
+    { key: "팀관리", url: "/orgadmin/team" },
     { key: "과제관리", url: "/orgadmin/task" },
     { key: "상담관리", url: "/orgadmin/counsel" },
+    { key: "공지관리", url: "/orgadmin/notice" },
   ];
 
   let menuItems =
