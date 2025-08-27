@@ -12,7 +12,14 @@ export default function Header() {
 
   return (
     <AppBar color="inherit" elevation={1} className="relative">
-      <Toolbar sx={{ justifyContent: "space-between" }}>
+      <Toolbar
+        sx={{
+          justifyContent: "space-between",
+          maxWidth: "1200px",
+          width: "100%",
+          alignSelf: "center",
+        }}
+      >
         <Box sx={{ display: "flex", alignItems: "center", gap: 5 }}>
           <Link to="/">
             <img src={Logo} alt="logo" style={{ height: 50 }} />
