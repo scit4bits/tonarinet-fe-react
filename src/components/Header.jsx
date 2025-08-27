@@ -23,12 +23,12 @@ export default function Header() {
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 5 }}>
-          <Link to="/">
+          <Link to="/main">
             <img src={Logo} alt="logo" style={{ height: 50 }} />
           </Link>
-          <Link to="/">{t("home")}</Link>
-          <Link to="/">{t("localReview")}</Link>
-          <Link to="/">{t("community")}</Link>
+          <Link to="/main">{t("home")}</Link>
+          <Link to="/localreview">{t("localReview")}</Link>
+          <Link to="/board/list">{t("community")}</Link>
         </Box>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
