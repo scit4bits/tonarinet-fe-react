@@ -15,6 +15,7 @@ import SignInPage from "./pages/SignInPage.jsx";
 import AuthTestPage from "./pages/AuthTestPage.jsx";
 import BoardListPage from "./pages/BoardListPage.jsx";
 import BoardArticleListPage from "./pages/BoardArticleListPage.jsx";
+import BoardWritePage from "./pages/BoardWritePage.jsx";
 import MainPage from "./pages/MainPage.jsx";
 import AdminLayout from "./components/AdminLayout.jsx";
 import SysAdminUserPage from "./pages/SysAdminUserPage.jsx";
@@ -57,6 +58,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/hello" element={<MainPage />} />
           <Route path="/testauth" element={<AuthTestPage />} />
           <Route path="/board">
+            <Route path="write" element={<BoardWritePage />} />
             <Route path="list" element={<BoardListPage />} />
             <Route path=":boardId" element={<BoardArticleListPage />} />
           </Route>
