@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import CountryData from "../../data/country.json";
 import { useTranslation } from "react-i18next";
-import LogoWithTitle from "../assets/logoWithTitle.png";
+import LogoWithTitle from "../../assets/logoWithTitle.png";
 import {
   Box,
   Button,
@@ -17,8 +17,8 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import LineLogo from "../assets/line.png";
-import KakaoLogo from "../assets/kakao.png";
+import LineLogo from "../../assets/line.png";
+import KakaoLogo from "../../assets/kakao.png";
 
 import GoogleIcon from "@mui/icons-material/Google";
 

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import CountryData from "../../data/country.json";
 import { useTranslation } from "react-i18next";
-import Logo from "../assets/logo.png";
+import LogoWithTitle from "../../assets/logoWithTitle.png";
 import {
   Autocomplete,
   Box,
@@ -152,9 +152,9 @@ export default function SignUpPage({ provider }) {
   }
 
   return (
-    <div className="w-full h-full bg-blue-200 p-10">
+    <div className="w-full h-full p-10">
       <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-        <img src={Logo} alt="Logo" className="h-[150px] rounded-3xl" />
+        <img src={LogoWithTitle} alt="Logo" className="h-[150px]" />
       </Box>
       <Container maxWidth="sm">
         <Paper elevation={10} sx={{ p: 4 }}>
