@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import taxios from "../utils/taxios";
+import taxios from "../../utils/taxios";
 
 export default function OrgAdminMemberPage() {
   const [users, setUsers] = useState([]);

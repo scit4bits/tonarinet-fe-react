@@ -6,7 +6,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import ChatIcon from "@mui/icons-material/Chat";
 import LanguageSelector from "./LanguageSelector";
 import AccountMenu from "./AccountMenu";
-import Notification from "./Notification";
+import NotificationMenu from "./NotificationMenu";
 import ChatMenu from "./ChatMenu";
 
 export default function Header() {
@@ -33,7 +33,7 @@ export default function Header() {
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <ChatMenu />
-          <Notification />
+          <NotificationMenu />
           <AccountMenu />
           <LanguageSelector />
         </Box>

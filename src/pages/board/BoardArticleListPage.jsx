@@ -17,7 +17,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import EditIcon from "@mui/icons-material/Edit";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
 import WhatshotIcon from "@mui/icons-material/Whatshot";
-import taxios from "../utils/taxios";
+import taxios from "../../utils/taxios";
 
 export default function BoardArticleListPage() {
   const { boardId } = useParams();
@@ -143,7 +143,6 @@ export default function BoardArticleListPage() {
   const handlePageChange = (event, value) => {
     setPage(value);
   };
-  
 
   const paginatedArticles = articles.slice(
     (page - 1) * articlesPerPage,
@@ -166,7 +165,6 @@ export default function BoardArticleListPage() {
     //   window.location.href = "/signin";
     // }
   }, []);
-  
 
   return (
     <Box className="max-w-[1400px] mx-auto mt-10 px-4 mb-8 overflow-hidden border rounded p-4 shadow flex-1">

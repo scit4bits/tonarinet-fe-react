@@ -1,9 +1,9 @@
-import taxios from "../utils/taxios";
+import taxios from "../../utils/taxios";
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
-import CountryData from "../data/country.json";
+import CountryData from "../../data/country.json";
 import { useTranslation } from "react-i18next";
-import Logo from "../assets/logo.png";
+import LogoWithTitle from "../assets/logoWithTitle.png";
 import {
   Box,
   Button,
@@ -74,18 +74,18 @@ export default function SignInPage({}) {
         password,
       };
       const response = await taxios.post("/auth/signin/email", payload);
-      console.log("Sign up successful:", response.data);
+      console.log("Sign in successful:", response.data);
       localStorage.setItem("accessToken", response.data.data);
     } catch (error) {
-      console.error("Sign up error:", error);
-      alert("Sign up failed. Please try again.");
+      console.error("Sign in error:", error);
+      alert("Sign in failed. Please try again.");
     }
   }
 
   return (
-    <div className="min-h-screen w-full bg-blue-200 flex flex-col items-center justify-center p-10">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center p-10">
       <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
-        <img src={Logo} alt="Logo" className="h-[150px] rounded-3xl" />
+        <img src={LogoWithTitle} alt="Logo" className="h-[100px]" />
       </Box>
       <Container maxWidth="sm">
         <Paper elevation={10} sx={{ p: 4 }}>
@@ -118,6 +118,15 @@ export default function SignInPage({}) {
               required
               autoComplete="current-password"
             />
+
+            <Link
+              to="/forgot-password"
+              style={{ textDecoration: "none", textAlign: "left" }}
+            >
+              <Typography variant="body2" color="primary">
+                {t("forgotPassword", "Forgot Password?")}
+              </Typography>
+            </Link>
 
             <Button
               type="submit"

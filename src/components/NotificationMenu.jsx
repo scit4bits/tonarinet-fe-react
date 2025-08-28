@@ -16,7 +16,7 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 
-const Notification = () => {
+export default function NotificationMenu() {
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
@@ -81,30 +81,36 @@ const Notification = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        {notifications.map((notification) => (
-          <MenuItem
-            key={notification.id}
-            onClick={() => handleNotificationClick(notification.url)}
-            sx={{ py: 2 }}
-          >
-            <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2 }}>
-              <Avatar sx={{ width: 24, height: 24 }}>
-                {notification.icon}
-              </Avatar>
-              <Box>
-                <Typography variant="subtitle2" fontWeight="bold">
-                  {notification.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {notification.description}
-                </Typography>
+        {notifications.length > 0 ? (
+          notifications.map((notification) => (
+            <MenuItem
+              key={notification.id}
+              onClick={() => handleNotificationClick(notification.url)}
+              sx={{ py: 2 }}
+            >
+              <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2 }}>
+                <Avatar sx={{ width: 24, height: 24 }}>
+                  {notification.icon}
+                </Avatar>
+                <Box>
+                  <Typography variant="subtitle2" fontWeight="bold">
+                    {notification.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {notification.description}
+                  </Typography>
+                </Box>
               </Box>
-            </Box>
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem disabled>
+            <Typography variant="body2" color="text.secondary">
+              There is no notifications
+            </Typography>
           </MenuItem>
-        ))}
+        )}
       </Menu>
     </>
   );
-};
-
-export default Notification;
+}

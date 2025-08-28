@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import taxios from "../utils/taxios";
-import BoardCard from "../components/BoardCard";
+import taxios from "../../utils/taxios";
+import BoardCard from "../../components/BoardCard";
 import { Card, CardContent, Container, Grid, Typography } from "@mui/material";
 
 export default function BoardListPage() {

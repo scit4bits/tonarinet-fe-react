@@ -1,7 +1,7 @@
-import taxios from "../utils/taxios";
+import taxios from "../../utils/taxios";
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
-import CountryData from "../data/country.json";
+import CountryData from "../../data/country.json";
 import { useTranslation } from "react-i18next";
 import Logo from "../assets/logo.png";
 import {
@@ -230,6 +230,7 @@ export default function SignUpPage({ provider }) {
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
               margin="normal"
+              slotProps={{ htmlInput: { maxLength: "10" } }}
               required
             />
 

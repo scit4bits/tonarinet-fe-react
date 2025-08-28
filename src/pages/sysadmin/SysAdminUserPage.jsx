@@ -15,28 +15,26 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import taxios from "../../utils/taxios";
 
 export default function SysAdminUserPage() {
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      email: "user1@example.com",
-      name: "John Doe",
-      nickname: "john",
-      phone: "123-456-7890",
-    },
-    {
-      id: 2,
-      email: "user2@example.com",
-      name: "Jane Smith",
-      nickname: "jane",
-      phone: "098-765-4321",
-    },
-  ]);
+  const [users, setUsers] = useState([]);
 
   const [open, setOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const response = await taxios.get("/user/list");
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    }
+    fetchUsers();
+  }, []);
 
   const handleRowClick = (user) => {
     setSelectedUser(user);

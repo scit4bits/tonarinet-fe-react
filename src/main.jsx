@@ -7,31 +7,30 @@ import "./i18n.js";
 import { GlobalStyles, StyledEngineProvider } from "@mui/material";
 import Layout from "./components/Layout.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
-import OAuthTestPage from "./pages/OAuthTestPage.jsx";
-import SignUpPage from "./pages/SignUpPage.jsx";
+import SignUpPage from "./pages/auth/SignUpPage.jsx";
 import LanguageSelector from "./components/LanguageSelector.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
-import SignInPage from "./pages/SignInPage.jsx";
-import AuthTestPage from "./pages/AuthTestPage.jsx";
-import BoardListPage from "./pages/BoardListPage.jsx";
-import BoardArticleListPage from "./pages/BoardArticleListPage.jsx";
-import BoardArticleViewPage from "./pages/BoardArticleViewPage.jsx";
-import BoardWritePage from "./pages/BoardWritePage.jsx";
+import SignInPage from "./pages/auth/SignInPage.jsx";
+import AuthTestPage from "./pages/auth/AuthTestPage.jsx";
+import BoardListPage from "./pages/board/BoardListPage.jsx";
+import BoardArticleListPage from "./pages/board/BoardArticleListPage.jsx";
+import BoardArticleViewPage from "./pages/board/BoardArticleViewPage.jsx";
+import BoardWritePage from "./pages/board/BoardWritePage.jsx";
 import MainPage from "./pages/MainPage.jsx";
 import AdminLayout from "./components/AdminLayout.jsx";
-import SysAdminUserPage from "./pages/SysAdminUserPage.jsx";
-import SysAdminOrgPage from "./pages/SysAdminOrgPage.jsx";
-import SysAdminBoardPage from "./pages/SysAdminBoardPage.jsx";
-import SysAdminReviewPage from "./pages/SysAdminReviewPage.jsx";
-import SysAdminPartyPage from "./pages/SysAdminPartyPage.jsx";
-import SysAdminNoticePage from "./pages/SysAdminNoticePage.jsx";
+import SysAdminUserPage from "./pages/sysadmin/SysAdminUserPage.jsx";
+import SysAdminOrgPage from "./pages/sysadmin/SysAdminOrgPage.jsx";
+import SysAdminBoardPage from "./pages/sysadmin/SysAdminBoardPage.jsx";
+import SysAdminReviewPage from "./pages/sysadmin/SysAdminReviewPage.jsx";
+import SysAdminPartyPage from "./pages/sysadmin/SysAdminPartyPage.jsx";
+import SysAdminNoticePage from "./pages/sysadmin/SysAdminNoticePage.jsx";
 import ChatPage from "./pages/ChatPage.jsx";
-import OrgAdminMemberPage from "./pages/OrgAdminMemberPage.jsx";
-import OrgAdminTeamPage from "./pages/OrgAdminTeamPage.jsx";
-import OrgAdminTaskPage from "./pages/OrgAdminTaskPage.jsx";
-import OrgAdminCounselPage from "./pages/OrgAdminCounselPage.jsx";
-import OrgAdminNoticePage from "./pages/OrgAdminNoticePage.jsx";
-import LocalReviewPage from "./pages/LocalReviewPage.jsx";
+import OrgAdminMemberPage from "./pages/orgadmin/OrgAdminMemberPage.jsx";
+import OrgAdminTeamPage from "./pages/orgadmin/OrgAdminTeamPage.jsx";
+import OrgAdminTaskPage from "./pages/orgadmin/OrgAdminTaskPage.jsx";
+import OrgAdminCounselPage from "./pages/orgadmin/OrgAdminCounselPage.jsx";
+import OrgAdminNoticePage from "./pages/orgadmin/OrgAdminNoticePage.jsx";
+import LocalReviewPage from "./pages/localreview/LocalReviewPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StyledEngineProvider enableCssLayer>
@@ -46,7 +45,6 @@ createRoot(document.getElementById("root")).render(
           <Route path="kakao" element={<SignUpPage provider={"kakao"} />} />
           <Route path="google" element={<SignUpPage provider={"google"} />} />
         </Route>
-        <Route path="/oauthtest" element={<OAuthTestPage />} />
         <Route element={<Layout />}>
           <Route path="/localReview" element={<LocalReviewPage />} />
           <Route path="/chat" element={<ChatPage />} />
