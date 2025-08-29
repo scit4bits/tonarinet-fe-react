@@ -11,23 +11,59 @@ import {
   TableCell,
   TableBody,
   Pagination,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import EditIcon from "@mui/icons-material/Edit";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
 import WhatshotIcon from "@mui/icons-material/Whatshot";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import taxios from "../../utils/taxios";
 
 export default function BoardArticleListPage() {
   const { boardId } = useParams();
   const navigate = useNavigate();
 
+  // 게시판 목록 데이터
+  const [boards] = useState([
+    { id: "1", name: "니지동 갤러리" },
+    { id: "2", name: "오너모 갤러리" },
+    { id: "3", name: "러브라이브 갤러리" },
+    { id: "4", name: "스쿠스타 갤러리" },
+    { id: "free", name: "자유게시판" },
+    { id: "notice", name: "공지게시판" },
+    { id: "qna", name: "질문게시판" },
+    { id: "review", name: "리뷰게시판" },
+    { id: "event", name: "이벤트게시판" },
+    { id: "humor", name: "유머게시판" },
+  ]);
+
+  // 선택된 게시판 상태
+  const [selectedBoard, setSelectedBoard] = useState(boardId || "3");
+
+  // 게시판 변경 핸들러
+  const handleBoardChange = (event) => {
+    const newBoardId = event.target.value;
+    setSelectedBoard(newBoardId);
+    navigate(`/board/${newBoardId}`);
+  };
+
+  // 선택된 게시판 이름 가져오기
+  const getSelectedBoardName = () => {
+    const board = boards.find((b) => b.id === selectedBoard);
+    return board ? board.name : "게시판";
+  };
+
   const [articles, setArticles] = useState([
+    //게시물 더미데이터
     {
       id: 1,
       title: "니지동 5th 라이브 후기.txt",
-      author: "μ’s최고",
+      author: "μ's최고",
       date: "2025-08-26",
       views: 1423,
     },
@@ -82,7 +118,7 @@ export default function BoardArticleListPage() {
     },
     {
       id: 9,
-      title: "μ’s 콘서트 다시 보고 싶다...",
+      title: "μ's 콘서트 다시 보고 싶다...",
       author: "추억팔이",
       date: "2025-08-23",
       views: 1789,
@@ -102,12 +138,12 @@ export default function BoardArticleListPage() {
       views: 945,
     },
   ]);
-
+  //핫게시물 더미데이터
   const [hotList, setHotList] = useState([
     {
       id: 1,
       title: "니지동 5th 라이브 후기.txt",
-      author: "μ’s최고",
+      author: "μ's최고",
       date: "2025-08-26",
       views: 1423,
     },
@@ -126,7 +162,7 @@ export default function BoardArticleListPage() {
       views: 2034,
     },
   ]);
-
+  //공지사항 더미데이터
   const [noticeList, setNoticeList] = useState([
     { id: 101, title: "사이트 점검 안내", views: 1423 },
     { id: 102, title: "신규 기능 업데이트", views: 1345 },
@@ -143,11 +179,28 @@ export default function BoardArticleListPage() {
   const handlePageChange = (event, value) => {
     setPage(value);
   };
+  
 
   const paginatedArticles = articles.slice(
     (page - 1) * articlesPerPage,
     page * articlesPerPage
   );
+
+  // 공지사항 페이지네이션
+  const [noticePage, setNoticePage] = useState(1);
+  const NOTICE_PER_PAGE = 3;
+  const noticeTotalPages = Math.ceil(noticeList.length / NOTICE_PER_PAGE);
+
+  const handleNoticePrev = () => setNoticePage((p) => Math.max(1, p - 1));
+  const handleNoticeNext = () => setNoticePage((p) => Math.min(noticeTotalPages, p + 1));
+
+  // HOT 게시물 페이지네이션
+  const [hotPage, setHotPage] = useState(1);
+  const HOT_PER_PAGE = 3;
+  const hotTotalPages = Math.ceil(hotList.length / HOT_PER_PAGE);
+
+  const handleHotPrev = () => setHotPage((p) => Math.max(1, p - 1));
+  const handleHotNext = () => setHotPage((p) => Math.min(hotTotalPages, p + 1));
 
   useEffect(() => {
     // 실제 API 호출은 주석 처리됨
@@ -165,12 +218,39 @@ export default function BoardArticleListPage() {
     //   window.location.href = "/signin";
     // }
   }, []);
+  
 
   return (
     <Box className="max-w-[1400px] mx-auto mt-10 px-4 mb-8 overflow-hidden border rounded p-4 shadow flex-1">
-      <Typography variant="h5" className="font-bold mb-6">
-        🎯 {boardId} 갤러리
-      </Typography>
+      {/* 게시판 선택 드롭다운과 제목 */}
+      <div className="flex items-center gap-3 mb-6">
+        <FormControl size="small" className="min-w-[200px]">
+          <InputLabel id="board-select-label">게시판 선택</InputLabel>
+          <Select
+            labelId="board-select-label"
+            value={selectedBoard}
+            label="게시판 선택"
+            onChange={handleBoardChange}
+            IconComponent={KeyboardArrowDownIcon}
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 300, // 스크롤 가능한 최대 높이
+                },
+              },
+            }}
+          >
+            {boards.map((board) => (
+              <MenuItem key={board.id} value={board.id}>
+                {board.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Typography variant="h5" className="font-bold">
+          🎯 {getSelectedBoardName()}
+        </Typography>
+      </div>
 
       <div className="flex lg:flex-row gap-6 items-stretch">
         {/* 게시글 영역 */}
@@ -199,16 +279,16 @@ export default function BoardArticleListPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {articles.map((article, index) => (
+              {paginatedArticles.map((article, index) => (
                 <TableRow key={article.id} hover>
-                  <TableCell align="center">{index + 1}</TableCell>
-                  <TableCell className="text-blue-600 hover:underline cursor-pointer">
-                    <a
-                      href={`/board/${boardId}/article/${article.id}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      {article.title}
-                    </a>
+                  <TableCell align="center">
+                    {(page - 1) * articlesPerPage + index + 1}
+                  </TableCell>
+                  <TableCell
+                    className="text-blue-600 hover:underline cursor-pointer"
+                    onClick={() => navigate(`/board/view/${article.id}`)}
+                  >
+                    {article.title}
                   </TableCell>
                   <TableCell align="center">{article.author}</TableCell>
                   <TableCell align="center">{article.date}</TableCell>
@@ -235,7 +315,7 @@ export default function BoardArticleListPage() {
               variant="contained"
               color="primary"
               startIcon={<EditIcon />}
-              onClick={() => navigate(`/board/${boardId}/write`)}
+              onClick={() => navigate(`/board/write`)}
             >
               글쓰기
             </Button>
@@ -251,26 +331,27 @@ export default function BoardArticleListPage() {
                 <AnnouncementIcon fontSize="small" /> 공지사항
               </Typography>
               <div className="flex items-center space-x-1 text-sm text-gray-600">
-                <span>1 / {Math.ceil(noticeList.length / 3)}</span>
-                <IconButton size="small">
+                <span>{noticePage} / {noticeTotalPages}</span>
+                <IconButton size="small" onClick={handleNoticePrev} disabled={noticePage === 1}>
                   <ArrowBackIcon />
                 </IconButton>
-                <IconButton size="small">
+                <IconButton size="small" onClick={handleNoticeNext} disabled={noticePage === noticeTotalPages}>
                   <ArrowForwardIcon />
                 </IconButton>
               </div>
             </div>
             <ul className="list-disc list-inside text-sm text-gray-700 text-left">
-              {noticeList.slice(0, 3).map((notice) => (
-                <li key={notice.id}>
-                  <a
-                    href={`/board/${boardId}/article/${notice.id}`}
-                    className="text-blue-600 hover:underline"
+              {noticeList
+                .slice((noticePage - 1) * NOTICE_PER_PAGE, noticePage * NOTICE_PER_PAGE)
+                .map((notice) => (
+                  <li
+                    key={notice.id}
+                    className="text-blue-600 hover:underline cursor-pointer"
+                    onClick={() => navigate(`/board/view/${notice.id}`)}
                   >
                     {notice.title}
-                  </a>
-                </li>
-              ))}
+                  </li>
+                ))}
             </ul>
           </Box>
 
@@ -281,26 +362,27 @@ export default function BoardArticleListPage() {
                 <WhatshotIcon fontSize="small" /> HOT 게시물
               </Typography>
               <div className="flex items-center space-x-1 text-sm text-gray-600">
-                <span>1 / {Math.ceil(hotList.length / 3)}</span>
-                <IconButton size="small">
+                <span>{hotPage} / {hotTotalPages}</span>
+                <IconButton size="small" onClick={handleHotPrev} disabled={hotPage === 1}>
                   <ArrowBackIcon />
                 </IconButton>
-                <IconButton size="small">
+                <IconButton size="small" onClick={handleHotNext} disabled={hotPage === hotTotalPages}>
                   <ArrowForwardIcon />
                 </IconButton>
               </div>
             </div>
             <ul className="space-y-1 text-sm text-gray-700 text-left">
-              {hotList.slice(0, 3).map((item) => (
-                <li key={item.id}>
-                  <a
-                    href={`/board/${boardId}/article/${item.id}`}
-                    className="text-blue-600 hover:underline"
+              {hotList
+                .slice((hotPage - 1) * HOT_PER_PAGE, hotPage * HOT_PER_PAGE)
+                .map((item) => (
+                  <li
+                    key={item.id}
+                    className="text-blue-600 hover:underline cursor-pointer"
+                    onClick={() => navigate(`/board/view/${item.id}`)}
                   >
                     📌 {item.title}
-                  </a>
-                </li>
-              ))}
+                  </li>
+                ))}
             </ul>
           </Box>
         </div>
