@@ -186,11 +186,11 @@ export default function BoardArticleListPage() {
   ]);
   //공지사항 더미데이터
   const [noticeList, setNoticeList] = useState([
-    { id: 101, title: "사이트 점검 안내", views: 1423 },
-    { id: 102, title: "신규 기능 업데이트", views: 1345 },
-    { id: 103, title: "이벤트 참여 방법", views: 1234 },
-    { id: 104, title: "자주 묻는 질문", views: 1123 },
-    { id: 105, title: "관리자 연락처", views: 1023 },
+    { id: 101, title: "사이트 점검 안내", views: 1423, date: "2025-08-26" },
+    { id: 102, title: "신규 기능 업데이트", views: 1345, date: "2025-08-25" },
+    { id: 103, title: "이벤트 참여 방법", views: 1234, date: "2025-08-24" },
+    { id: 104, title: "자주 묻는 질문", views: 1123, date: "2025-08-23" },
+    { id: 105, title: "관리자 연락처", views: 1023, date: "2025-08-22" },
   ]);
 
   // 페이지네이션 상태
@@ -382,10 +382,11 @@ export default function BoardArticleListPage() {
                 .map((notice) => (
                   <li
                     key={notice.id}
-                    className="text-blue-600 hover:underline cursor-pointer"
+                    className="text-blue-600 hover:underline cursor-pointer flex justify-between items-center"
                     onClick={() => navigate(`/board/view/${notice.id}`)}
                   >
-                    {notice.title}
+                    <span>{notice.title}</span>
+                    <span className="text-gray-500 text-xs ml-2">{notice.date}</span>
                   </li>
                 ))}
             </ul>
