@@ -28,7 +28,7 @@ export default function BoardArticleListPage() {
   const { boardId } = useParams();
   const navigate = useNavigate();
 
-  // 게시판 목록 데이터
+  // 게시판 목록 더미데이터
   const [boards] = useState([
     { id: "1", name: "니지동 갤러리" },
     { id: "2", name: "오너모 갤러리" },
@@ -66,6 +66,8 @@ export default function BoardArticleListPage() {
       author: "μ's최고",
       date: "2025-08-26",
       views: 1423,
+      category: "후기",
+      recommend: 45,
     },
     {
       id: 2,
@@ -73,6 +75,8 @@ export default function BoardArticleListPage() {
       author: "요하네짱",
       date: "2025-08-26",
       views: 987,
+      category: "짤방",
+      recommend: 32,
     },
     {
       id: 3,
@@ -80,6 +84,8 @@ export default function BoardArticleListPage() {
       author: "익명",
       date: "2025-08-26",
       views: 2034,
+      category: "잡담",
+      recommend: 67,
     },
     {
       id: 4,
@@ -87,6 +93,8 @@ export default function BoardArticleListPage() {
       author: "가챠망함",
       date: "2025-08-25",
       views: 764,
+      category: "불만",
+      recommend: 12,
     },
     {
       id: 5,
@@ -94,6 +102,8 @@ export default function BoardArticleListPage() {
       author: "성우덕후",
       date: "2025-08-25",
       views: 1120,
+      category: "정보",
+      recommend: 28,
     },
     {
       id: 6,
@@ -101,6 +111,8 @@ export default function BoardArticleListPage() {
       author: "굿즈수집가",
       date: "2025-08-24",
       views: 856,
+      category: "정보",
+      recommend: 19,
     },
     {
       id: 7,
@@ -108,6 +120,8 @@ export default function BoardArticleListPage() {
       author: "극장판러버",
       date: "2025-08-24",
       views: 1345,
+      category: "소식",
+      recommend: 41,
     },
     {
       id: 8,
@@ -115,6 +129,8 @@ export default function BoardArticleListPage() {
       author: "치카짱짱",
       date: "2025-08-23",
       views: 623,
+      category: "짤방",
+      recommend: 25,
     },
     {
       id: 9,
@@ -122,6 +138,8 @@ export default function BoardArticleListPage() {
       author: "추억팔이",
       date: "2025-08-23",
       views: 1789,
+      category: "잡담",
+      recommend: 58,
     },
     {
       id: 10,
@@ -129,6 +147,8 @@ export default function BoardArticleListPage() {
       author: "설문러",
       date: "2025-08-22",
       views: 945,
+      category: "설문",
+      recommend: 15,
     },
     {
       id: 11,
@@ -136,6 +156,8 @@ export default function BoardArticleListPage() {
       author: "설문러",
       date: "2025-08-22",
       views: 945,
+      category: "설문",
+      recommend: 15,
     },
   ]);
   //핫게시물 더미데이터
@@ -264,6 +286,9 @@ export default function BoardArticleListPage() {
                 <TableCell align="center" className="min-w-[40px]">
                   번호
                 </TableCell>
+                <TableCell align="center" className="min-w-[80px]">
+                  카테고리
+                </TableCell>
                 <TableCell align="center" className="min-w-[300px]">
                   제목
                 </TableCell>
@@ -276,6 +301,9 @@ export default function BoardArticleListPage() {
                 <TableCell align="center" className="min-w-[80px]">
                   조회
                 </TableCell>
+                <TableCell align="center" className="min-w-[80px]">
+                  추천
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -283,6 +311,11 @@ export default function BoardArticleListPage() {
                 <TableRow key={article.id} hover>
                   <TableCell align="center">
                     {(page - 1) * articlesPerPage + index + 1}
+                  </TableCell>
+                  <TableCell align="center">
+                    <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                      {article.category}
+                    </span>
                   </TableCell>
                   <TableCell
                     className="text-blue-600 hover:underline cursor-pointer"
@@ -293,6 +326,9 @@ export default function BoardArticleListPage() {
                   <TableCell align="center">{article.author}</TableCell>
                   <TableCell align="center">{article.date}</TableCell>
                   <TableCell align="center">{article.views}</TableCell>
+                  <TableCell align="center" className="text-red-600 font-medium">
+                    {article.recommend}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
