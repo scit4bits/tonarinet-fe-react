@@ -17,8 +17,10 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function SysAdminBoardPage() {
+  const { t } = useTranslation();
   const [boards, setBoards] = useState([]);
   const [selectedBoard, setSelectedBoard] = useState("");
   const [articles, setArticles] = useState([]);
@@ -81,6 +83,7 @@ export default function SysAdminBoardPage() {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <title>{t("pages.sysAdmin.boards.title")}</title>
       <Typography variant="h4" component="h1" gutterBottom>
         System Admin Board Management
       </Typography>

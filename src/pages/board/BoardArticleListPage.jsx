@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import {
   Button,
   IconButton,
@@ -28,6 +29,7 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import taxios from "../../utils/taxios";
 
 export default function BoardArticleListPage() {
+  const { t } = useTranslation();
   const { boardId } = useParams();
   const navigate = useNavigate();
 
@@ -284,6 +286,7 @@ export default function BoardArticleListPage() {
 
   return (
     <Box className="max-w-[1400px] mx-auto mt-10 px-4 mb-8 overflow-hidden border rounded p-4 shadow flex-1">
+    <title>{t("pages.board.articles.title")}</title>
       {/* 게시판 선택 드롭다운과 제목 */}
       <div className="flex items-center gap-3 mb-6">
         <FormControl size="small" className="min-w-[200px]">

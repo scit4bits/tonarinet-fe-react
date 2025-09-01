@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Box,
   List,
@@ -15,6 +16,7 @@ import {
 import SendIcon from "@mui/icons-material/Send";
 
 export default function ChatPage() {
+  const { t } = useTranslation();
   const [selectedRoom, setSelectedRoom] = useState(0);
   const [message, setMessage] = useState("");
 
@@ -44,6 +46,7 @@ export default function ChatPage() {
 
   return (
     <Box sx={{ display: "flex", width: "100%" }}>
+      <title>{t("pages.chat.title")}</title>
       {/* Left side - Chat rooms list */}
       <Paper sx={{ width: 300, borderRadius: 0 }}>
         <Typography variant="h6" sx={{ p: 2 }}>

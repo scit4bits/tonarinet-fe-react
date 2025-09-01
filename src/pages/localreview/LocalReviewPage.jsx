@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import {
   APIProvider,
   Map,
@@ -20,6 +21,7 @@ import {
 } from "@mui/material";
 
 export default function LocalReviewPage() {
+  const { t } = useTranslation();
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [mapCenter, setMapCenter] = useState({ lat: 37.7749, lng: -122.4194 });
@@ -84,6 +86,7 @@ export default function LocalReviewPage() {
         padding: "10px",
       }}
     >
+      <title>{t("pages.localReview.title")}</title>
       {/* Header */}
       <Paper elevation={2} sx={{ p: 2, mb: 2 }}>
         <Box sx={{ display: "flex", gap: 1, mb: 2 }}>

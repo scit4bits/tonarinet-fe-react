@@ -20,6 +20,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { checkEmailDup } from "../../utils/auth";
 
 export default function SignUpPage({ provider }) {
   const [t, i18n] = useTranslation();
@@ -35,9 +36,9 @@ export default function SignUpPage({ provider }) {
   const [birth, setBirth] = useState("");
   const [nickname, setNickname] = useState("");
   const [phone, setPhone] = useState("");
-  const [country, setCountry] = useState(null);
-  const [org, setOrg] = useState("");
-  const [role, setRole] = useState("user");
+  const [nationality, setNationality] = useState(null);
+  const [gender, setGender] = useState("");
+  const [emailError, setEmailError] = useState(null);
 
   // Transform country data for Autocomplete
   const countryOptions = Object.entries(CountryData).map(([key, value]) => ({
@@ -84,6 +85,22 @@ export default function SignUpPage({ provider }) {
     getOAuthData();
   }, []);
 
+  async function onEmailInputHandler(event) {
+    const targetEmail = event.target.value;
+    // email regex check
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(targetEmail)) {
+      setEmailError("Invalid email format");
+      return;
+    }
+
+    if (!(await checkEmailDup(targetEmail))) {
+      setEmailError("Email is already in use");
+    } else {
+      setEmailError(null);
+    }
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
     // Handle form submission
@@ -98,16 +115,25 @@ export default function SignUpPage({ provider }) {
       !birth ||
       !nickname ||
       !phone ||
-      !country ||
-      !role ||
-      !org
+      !nationality ||
+      !gender
     ) {
       alert("All fields are required");
       return;
     }
 
+    if (emailError) {
+      alert(emailError);
+      return;
+    }
+
     if (password !== passwordRepeat) {
       alert("Passwords do not match");
+      return;
+    }
+
+    if (nickname.length > 10) {
+      alert("Nickname must be at most 10 characters");
       return;
     }
 
@@ -126,10 +152,9 @@ export default function SignUpPage({ provider }) {
         birth,
         nickname,
         phone,
-        country: country?.id || country,
-        org,
+        gender,
+        nationality: nationality?.id || nationality,
         provider,
-        role,
         oauthid: oAuthData?.oauthid || null,
       };
       console.log(payload);
@@ -153,9 +178,13 @@ export default function SignUpPage({ provider }) {
 
   return (
     <div className="w-full h-full p-10">
+      <title>{t("pages.auth.signUp.title")}</title>
       <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-        <img src={LogoWithTitle} alt="Logo" className="h-[150px]" />
+        <Link to="/">
+          <img src={LogoWithTitle} alt="Logo" className="h-[100px]" />
+        </Link>
       </Box>
+
       <Container maxWidth="sm">
         <Paper elevation={10} sx={{ p: 4 }}>
           <Typography variant="h4" component="h1" gutterBottom align="center">
@@ -168,12 +197,21 @@ export default function SignUpPage({ provider }) {
               type="email"
               label="Email"
               value={oAuthData?.email || email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                onEmailInputHandler(e);
+              }}
               margin="normal"
               disabled={!!oAuthData?.email}
               required
               autoComplete="email"
             />
+
+            {emailError && (
+              <Typography color="error" variant="body2" className="text-left">
+                {emailError}
+              </Typography>
+            )}
 
             <TextField
               fullWidth
@@ -213,17 +251,6 @@ export default function SignUpPage({ provider }) {
 
             <TextField
               fullWidth
-              type="date"
-              label={t("birthdate", "Birth Date")}
-              value={birth}
-              onChange={(e) => setBirth(e.target.value)}
-              margin="normal"
-              required
-              InputLabelProps={{ shrink: true }}
-            />
-
-            <TextField
-              fullWidth
               type="text"
               label={t("nickname", "Nickname")}
               placeholder="닉네임"
@@ -232,6 +259,29 @@ export default function SignUpPage({ provider }) {
               margin="normal"
               slotProps={{ htmlInput: { maxLength: "10" } }}
               required
+            />
+
+            <FormControl fullWidth margin="normal" required>
+              <InputLabel>{t("gender", "Gender")}</InputLabel>
+              <Select
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                label={t("gender", "Gender")}
+              >
+                <MenuItem value="male">{t("male", "Male")}</MenuItem>
+                <MenuItem value="female">{t("female", "Female")}</MenuItem>
+              </Select>
+            </FormControl>
+
+            <TextField
+              fullWidth
+              type="date"
+              label={t("birthdate", "Birth Date")}
+              value={birth}
+              onChange={(e) => setBirth(e.target.value)}
+              margin="normal"
+              required
+              InputLabelProps={{ shrink: true }}
             />
 
             <TextField
@@ -249,14 +299,14 @@ export default function SignUpPage({ provider }) {
             <Autocomplete
               fullWidth
               options={countryOptions}
-              value={country}
-              onChange={(event, newValue) => setCountry(newValue)}
+              value={nationality}
+              onChange={(event, newValue) => setNationality(newValue)}
               getOptionLabel={(option) => option.label || ""}
               isOptionEqualToValue={(option, value) => option.id === value?.id}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label={t("country", "Country")}
+                  label={t("nationality", "Nationality")}
                   placeholder={
                     i18n.language === "ko"
                       ? "국가를 선택하세요"
@@ -273,30 +323,6 @@ export default function SignUpPage({ provider }) {
               )}
               sx={{ mt: 1, mb: 1 }}
             />
-
-            <TextField
-              fullWidth
-              type="text"
-              label={t("organization", "Organization")}
-              placeholder="조직"
-              value={org}
-              onChange={(e) => setOrg(e.target.value)}
-              margin="normal"
-              required
-            />
-
-            <FormControl fullWidth margin="normal" required>
-              <InputLabel id="role-label">{t("role", "Role")}</InputLabel>
-              <Select
-                labelId="role-label"
-                label={t("role", "Role")}
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-              >
-                <MenuItem value="user">User</MenuItem>
-                <MenuItem value="admin">Admin</MenuItem>
-              </Select>
-            </FormControl>
 
             <Button
               type="submit"
