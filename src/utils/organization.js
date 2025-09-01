@@ -1,5 +1,15 @@
 import taxios from "./taxios";
 
+async function getMyOrganizations() {
+  try {
+    const response = await taxios.get("/organization/my");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching my organizations:", error);
+    return null;
+  }
+}
+
 async function searchOrganizations(
   searchBy = "all",
   search = "",
@@ -50,6 +60,7 @@ async function updateOrganization(
 }
 
 export {
+  getMyOrganizations,
   searchOrganizations,
   applyToOrganization,
   createOrganization,

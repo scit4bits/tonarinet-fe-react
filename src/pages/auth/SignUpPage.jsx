@@ -160,6 +160,7 @@ export default function SignUpPage({ provider }) {
       console.log(payload);
       const response = await taxios.post("/auth/signup", payload);
       console.log("Sign up successful:", response.data);
+      window.location.href = "/signin";
     } catch (error) {
       console.error("Sign up error:", error);
       alert("Sign up failed. Please try again.");

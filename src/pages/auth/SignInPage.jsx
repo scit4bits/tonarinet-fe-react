@@ -75,6 +75,7 @@ export default function SignInPage({}) {
       const response = await taxios.post("/auth/signin/email", payload);
       console.log("Sign in successful:", response.data);
       localStorage.setItem("accessToken", response.data.data);
+      window.location.href = "/main";
     } catch (error) {
       console.error("Sign in error:", error);
       alert("Sign in failed. Please try again.");

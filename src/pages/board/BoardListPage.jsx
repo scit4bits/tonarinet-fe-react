@@ -12,12 +12,7 @@ export default function BoardListPage() {
     async function getAccessibleBoards() {
       try {
         const response = await taxios.get("/board");
-        setBoards([
-          ...response.data,
-          ...response.data,
-          ...response.data,
-          ...response.data,
-        ]);
+        setBoards([...response.data]);
       } catch (error) {
         console.error("Error fetching boards:", error);
       }

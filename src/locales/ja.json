@@ -4,7 +4,32 @@
   "community": "コミュニティ",
   "pages": {
     "main": {
-      "title": "Tonarinet - ホーム"
+      "title": "Tonarinet - ホーム",
+      "dashboard": {
+        "selectOrganization": "組織を選択",
+        "allOrganizations": "すべての組織",
+        "enrollmentStatus": "登録状況",
+        "daysRemaining": "残り日数",
+        "tasksTitle": "タスク一覧",
+        "pendingTasks": "保留中のタスク",
+        "latestNotices": "最新のお知らせ",
+        "recentAnnouncements": "最近の発表",
+        "upcomingEvents": "今後のイベント",
+        "importantDates": "重要な日付と締切",
+        "progress": "進捗",
+        "stepsCompleted": "ステップ完了",
+        "nextDeadline": "次の締切",
+        "due": "期限",
+        "high": "高",
+        "medium": "中",
+        "low": "低",
+        "completed": "完了",
+        "inProgress": "進行中",
+        "pending": "保留中",
+        "deadline": "締切",
+        "meeting": "会議",
+        "appointment": "予定"
+      }
     },
     "landing": {
       "title": "Tonarinet - ランディングページ"
@@ -42,6 +67,11 @@
     },
     "localReview": {
       "title": "Tonarinet - 街レビュー"
+    },
+    "organization": {
+      "main": {
+        "title": "Tonarinet - {{orgName}}"
+      }
     },
     "orgAdmin": {
       "members": {

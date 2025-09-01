@@ -5,6 +5,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Typography,
 } from "@mui/material";
 import { Link } from "react-router";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -53,6 +54,7 @@ export default function AccountMenu() {
           vertical: "top",
           horizontal: "right",
         }}
+        disableScrollLock={true}
       >
         {!user ? (
           <MenuItem disabled>
@@ -65,8 +67,13 @@ export default function AccountMenu() {
             <MenuItem key="email" disabled>
               {user?.email || "User"}
             </MenuItem>,
-            <MenuItem key="mypage" onClick={handleClose}>
-              <Link to="/mypage">MyPage</Link>
+            <MenuItem
+              key="mypage"
+              onClick={() => {
+                window.location.href = "/my";
+              }}
+            >
+              <Typography>마이 페이지</Typography>
             </MenuItem>,
             <MenuItem key="signout" onClick={handleSignOut}>
               Sign out

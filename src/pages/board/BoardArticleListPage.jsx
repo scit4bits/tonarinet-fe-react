@@ -234,7 +234,6 @@ export default function BoardArticleListPage() {
   const handlePageChange = (event, value) => {
     setPage(value);
   };
-  
 
   const paginatedArticles = articles.slice(
     (page - 1) * articlesPerPage,
@@ -247,13 +246,14 @@ export default function BoardArticleListPage() {
   const noticeTotalPages = Math.ceil(noticeList.length / NOTICE_PER_PAGE);
 
   const handleNoticePrev = () => setNoticePage((p) => Math.max(1, p - 1));
-  const handleNoticeNext = () => setNoticePage((p) => Math.min(noticeTotalPages, p + 1));
+  const handleNoticeNext = () =>
+    setNoticePage((p) => Math.min(noticeTotalPages, p + 1));
 
   // 핫게시글 필터링 및 정렬 함수
   const getHotArticles = () => {
     // 추천수 15개 이상인 게시글만 필터링하고 추천수 높은 순으로 정렬
     return articles
-      .filter(article => article.recommend >= 15)
+      .filter((article) => article.recommend >= 15)
       .sort((a, b) => b.recommend - a.recommend)
       .slice(0, 10); // 상위 10개만
   };
@@ -282,11 +282,10 @@ export default function BoardArticleListPage() {
     //   window.location.href = "/signin";
     // }
   }, []);
-  
 
   return (
     <Box className="max-w-[1400px] mx-auto mt-10 px-4 mb-8 overflow-hidden border rounded p-4 shadow flex-1">
-    <title>{t("pages.board.articles.title")}</title>
+      <title>{t("pages.board.articles.title")}</title>
       {/* 게시판 선택 드롭다운과 제목 */}
       <div className="flex items-center gap-3 mb-6">
         <FormControl size="small" className="min-w-[200px]">
@@ -312,10 +311,10 @@ export default function BoardArticleListPage() {
             ))}
           </Select>
         </FormControl>
-                 <Typography variant="h5" className="font-bold">
-           <FlagIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
-           {getSelectedBoardName()}
-         </Typography>
+        <Typography variant="h5" className="font-bold">
+          <FlagIcon sx={{ mr: 1, verticalAlign: "middle" }} />
+          {getSelectedBoardName()}
+        </Typography>
       </div>
 
       <div className="flex lg:flex-row gap-6 items-stretch">
@@ -361,23 +360,26 @@ export default function BoardArticleListPage() {
                       {article.category}
                     </span>
                   </TableCell>
-                                     <TableCell
-                     className="text-blue-600 hover:underline cursor-pointer"
-                     onClick={() => navigate(`/board/view/${article.id}`)}
-                     style={{
-                       maxWidth: '300px',
-                       overflow: 'hidden',
-                       textOverflow: 'ellipsis',
-                       whiteSpace: 'nowrap'
-                     }}
-                     title={article.title}
-                   >
-                     {article.title}
-                   </TableCell>
+                  <TableCell
+                    className="text-blue-600 hover:underline cursor-pointer"
+                    onClick={() => navigate(`/board/view/${article.id}`)}
+                    style={{
+                      maxWidth: "300px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                    title={article.title}
+                  >
+                    {article.title}
+                  </TableCell>
                   <TableCell align="center">{article.author}</TableCell>
                   <TableCell align="center">{article.date}</TableCell>
                   <TableCell align="center">{article.views}</TableCell>
-                  <TableCell align="center" className="text-red-600 font-medium">
+                  <TableCell
+                    align="center"
+                    className="text-red-600 font-medium"
+                  >
                     {article.recommend}
                   </TableCell>
                 </TableRow>
@@ -402,7 +404,7 @@ export default function BoardArticleListPage() {
               variant="contained"
               color="primary"
               startIcon={<EditIcon />}
-              onClick={() => navigate(`/board/write`)}
+              onClick={() => navigate(`/board/3/write`)}
             >
               글쓰기
             </Button>
@@ -418,37 +420,52 @@ export default function BoardArticleListPage() {
                 <AnnouncementIcon fontSize="small" /> 공지사항
               </Typography>
               <div className="flex items-center space-x-1 text-sm text-gray-600">
-                <span>{noticePage} / {noticeTotalPages}</span>
-                <IconButton size="small" onClick={handleNoticePrev} disabled={noticePage === 1}>
+                <span>
+                  {noticePage} / {noticeTotalPages}
+                </span>
+                <IconButton
+                  size="small"
+                  onClick={handleNoticePrev}
+                  disabled={noticePage === 1}
+                >
                   <ArrowBackIcon />
                 </IconButton>
-                <IconButton size="small" onClick={handleNoticeNext} disabled={noticePage === noticeTotalPages}>
+                <IconButton
+                  size="small"
+                  onClick={handleNoticeNext}
+                  disabled={noticePage === noticeTotalPages}
+                >
                   <ArrowForwardIcon />
                 </IconButton>
               </div>
             </div>
             <ul className="list-disc list-inside text-sm text-gray-700 text-left">
               {noticeList
-                .slice((noticePage - 1) * NOTICE_PER_PAGE, noticePage * NOTICE_PER_PAGE)
+                .slice(
+                  (noticePage - 1) * NOTICE_PER_PAGE,
+                  noticePage * NOTICE_PER_PAGE
+                )
                 .map((notice) => (
                   <li
                     key={notice.id}
                     className="text-blue-600 hover:underline cursor-pointer flex justify-between items-center"
                     onClick={() => navigate(`/board/view/${notice.id}`)}
                   >
-                                         <span 
-                       style={{
-                         maxWidth: '200px',
-                         overflow: 'hidden',
-                         textOverflow: 'ellipsis',
-                         whiteSpace: 'nowrap',
-                         display: 'inline-block'
-                       }}
-                       title={notice.title}
-                     >
-                       {notice.title}
-                     </span>
-                     <span className="text-gray-500 text-xs ml-2">{notice.date}</span>
+                    <span
+                      style={{
+                        maxWidth: "200px",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        display: "inline-block",
+                      }}
+                      title={notice.title}
+                    >
+                      {notice.title}
+                    </span>
+                    <span className="text-gray-500 text-xs ml-2">
+                      {notice.date}
+                    </span>
                   </li>
                 ))}
             </ul>
@@ -461,11 +478,21 @@ export default function BoardArticleListPage() {
                 <WhatshotIcon fontSize="small" /> HOT 게시물
               </Typography>
               <div className="flex items-center space-x-1 text-sm text-gray-600">
-                <span>{hotPage} / {hotTotalPages}</span>
-                <IconButton size="small" onClick={handleHotPrev} disabled={hotPage === 1}>
+                <span>
+                  {hotPage} / {hotTotalPages}
+                </span>
+                <IconButton
+                  size="small"
+                  onClick={handleHotPrev}
+                  disabled={hotPage === 1}
+                >
                   <ArrowBackIcon />
                 </IconButton>
-                <IconButton size="small" onClick={handleHotNext} disabled={hotPage === hotTotalPages}>
+                <IconButton
+                  size="small"
+                  onClick={handleHotNext}
+                  disabled={hotPage === hotTotalPages}
+                >
                   <ArrowForwardIcon />
                 </IconButton>
               </div>
@@ -479,22 +506,27 @@ export default function BoardArticleListPage() {
                     className="text-blue-600 hover:underline cursor-pointer flex justify-between items-center"
                     onClick={() => navigate(`/board/view/${item.id}`)}
                   >
-                                         <span 
-                       style={{
-                         maxWidth: '200px',
-                         overflow: 'hidden',
-                         textOverflow: 'ellipsis',
-                         whiteSpace: 'nowrap',
-                         display: 'inline-block'
-                       }}
-                       title={item.title}
-                     >
-                       <PushPinIcon sx={{ fontSize: 16, mr: 0.5, verticalAlign: 'middle' }} /> {item.title}
-                     </span>
-                     <span className="text-red-600 text-xs font-medium">
-                       <ThumbUpIcon sx={{ fontSize: 14, mr: 0.5, verticalAlign: 'middle' }} />
-                       {item.recommend}
-                     </span>
+                    <span
+                      style={{
+                        maxWidth: "200px",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        display: "inline-block",
+                      }}
+                      title={item.title}
+                    >
+                      <PushPinIcon
+                        sx={{ fontSize: 16, mr: 0.5, verticalAlign: "middle" }}
+                      />{" "}
+                      {item.title}
+                    </span>
+                    <span className="text-red-600 text-xs font-medium">
+                      <ThumbUpIcon
+                        sx={{ fontSize: 14, mr: 0.5, verticalAlign: "middle" }}
+                      />
+                      {item.recommend}
+                    </span>
                   </li>
                 ))}
             </ul>
