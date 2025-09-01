@@ -31,6 +31,7 @@ import OrgAdminTaskPage from "./pages/orgadmin/OrgAdminTaskPage.jsx";
 import OrgAdminCounselPage from "./pages/orgadmin/OrgAdminCounselPage.jsx";
 import OrgAdminNoticePage from "./pages/orgadmin/OrgAdminNoticePage.jsx";
 import LocalReviewPage from "./pages/localreview/LocalReviewPage.jsx";
+import OrgSearchPage from "./pages/OrgSearchPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StyledEngineProvider enableCssLayer>
@@ -46,6 +47,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="google" element={<SignUpPage provider={"google"} />} />
         </Route>
         <Route element={<Layout />}>
+          <Route path="/org/list" element={<OrgSearchPage />} />
           <Route path="/localReview" element={<LocalReviewPage />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route

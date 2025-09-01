@@ -11,4 +11,22 @@ async function getMe() {
   }
 }
 
-export { getMe };
+async function setUserAdmin(userId) {
+  try {
+    const response = await taxios.get(`/user/toggleAdmin?userId=${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error setting user admin status:", error);
+  }
+}
+
+async function fetchUsers() {
+  try {
+    const response = await taxios.get("/user/list");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+  }
+}
+
+export { getMe, setUserAdmin, fetchUsers };

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Table,
   TableBody,
@@ -12,6 +13,7 @@ import {
 } from "@mui/material";
 
 export default function OrgAdminTeamPage() {
+  const { t } = useTranslation();
   const [parties, setParties] = useState([]);
 
   useEffect(() => {
@@ -40,6 +42,7 @@ export default function OrgAdminTeamPage() {
 
   return (
     <TableContainer component={Paper}>
+      <title>{t("pages.orgAdmin.teams.title")}</title>
       <Table>
         <TableHead>
           <TableRow>

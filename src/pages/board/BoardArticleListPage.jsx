@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import {
   Button,
   IconButton,
@@ -20,6 +21,7 @@ import WhatshotIcon from "@mui/icons-material/Whatshot";
 import taxios from "../../utils/taxios";
 
 export default function BoardArticleListPage() {
+  const { t } = useTranslation();
   const { boardId } = useParams();
   const navigate = useNavigate();
 
@@ -168,6 +170,7 @@ export default function BoardArticleListPage() {
 
   return (
     <Box className="max-w-[1400px] mx-auto mt-10 px-4 mb-8 overflow-hidden border rounded p-4 shadow flex-1">
+      <title>{t("pages.board.articles.title")}</title>
       <Typography variant="h5" className="font-bold mb-6">
         🎯 {boardId} 갤러리
       </Typography>

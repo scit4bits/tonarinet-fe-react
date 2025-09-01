@@ -1,5 +1,84 @@
 {
   "home": "ホーム",
   "localReview": "街レビュー",
-  "community": "コミュニティ"
+  "community": "コミュニティ",
+  "pages": {
+    "main": {
+      "title": "Tonarinet - ホーム"
+    },
+    "landing": {
+      "title": "Tonarinet - ランディングページ"
+    },
+    "notFound": {
+      "title": "Tonarinet - ページが見つかりません"
+    },
+    "chat": {
+      "title": "Tonarinet - チャット"
+    },
+    "auth": {
+      "signIn": {
+        "title": "Tonarinet - ログイン"
+      },
+      "signUp": {
+        "title": "Tonarinet - サインアップ"
+      },
+      "authTest": {
+        "title": "Tonarinet - 認証テストページ"
+      }
+    },
+    "board": {
+      "list": {
+        "title": "Tonarinet - 掲示板一覧"
+      },
+      "write": {
+        "title": "Tonarinet - 投稿作成"
+      },
+      "view": {
+        "title": "Tonarinet - 投稿表示"
+      },
+      "articles": {
+        "title": "Tonarinet - 掲示板記事"
+      }
+    },
+    "localReview": {
+      "title": "Tonarinet - 街レビュー"
+    },
+    "orgAdmin": {
+      "members": {
+        "title": "Tonarinet - 組織メンバー管理"
+      },
+      "teams": {
+        "title": "Tonarinet - 組織チーム管理"
+      },
+      "tasks": {
+        "title": "Tonarinet - 組織タスク管理"
+      },
+      "notices": {
+        "title": "Tonarinet - 組織お知らせ"
+      },
+      "counseling": {
+        "title": "Tonarinet - 組織カウンセリング"
+      }
+    },
+    "sysAdmin": {
+      "users": {
+        "title": "Tonarinet - システム管理 - ユーザー"
+      },
+      "boards": {
+        "title": "Tonarinet - システム管理 - 掲示板"
+      },
+      "notices": {
+        "title": "Tonarinet - システム管理 - お知らせ"
+      },
+      "organizations": {
+        "title": "Tonarinet - システム管理 - 組織"
+      },
+      "parties": {
+        "title": "Tonarinet - システム管理 - パーティー"
+      },
+      "reviews": {
+        "title": "Tonarinet - システム管理 - レビュー"
+      }
+    }
+  }
 }
