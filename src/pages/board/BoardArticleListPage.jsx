@@ -22,6 +22,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
 import WhatshotIcon from "@mui/icons-material/Whatshot";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import FlagIcon from "@mui/icons-material/Flag";
+import PushPinIcon from "@mui/icons-material/PushPin";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import taxios from "../../utils/taxios";
 
 export default function BoardArticleListPage() {
@@ -160,14 +163,39 @@ export default function BoardArticleListPage() {
       recommend: 15,
     },
   ]);
-  //핫게시물 더미데이터
+  //핫게시물 더미데이터 - 추천수 15개 이상인 게시글 중 추천수 높은 순으로 정렬
   const [hotList, setHotList] = useState([
+    {
+      id: 3,
+      title: "[잡담] 러브라이브 신작 루머 떴다",
+      author: "익명",
+      date: "2025-08-26",
+      views: 2034,
+      recommend: 67,
+    },
+    {
+      id: 9,
+      title: "μ's 콘서트 다시 보고 싶다...",
+      author: "추억팔이",
+      date: "2025-08-23",
+      views: 1789,
+      recommend: 58,
+    },
     {
       id: 1,
       title: "니지동 5th 라이브 후기.txt",
       author: "μ's최고",
       date: "2025-08-26",
       views: 1423,
+      recommend: 45,
+    },
+    {
+      id: 7,
+      title: "러브라이브 극장판 리마스터 소식",
+      author: "극장판러버",
+      date: "2025-08-24",
+      views: 1345,
+      recommend: 41,
     },
     {
       id: 2,
@@ -175,13 +203,15 @@ export default function BoardArticleListPage() {
       author: "요하네짱",
       date: "2025-08-26",
       views: 987,
+      recommend: 32,
     },
     {
-      id: 3,
-      title: "[잡담] 러브라이브 신작 루머 떴다",
-      author: "익명",
-      date: "2025-08-26",
-      views: 2034,
+      id: 8,
+      title: "[짤] 치카 웃는 짤 공유함",
+      author: "치카짱짱",
+      date: "2025-08-23",
+      views: 623,
+      recommend: 25,
     },
   ]);
   //공지사항 더미데이터
@@ -191,6 +221,7 @@ export default function BoardArticleListPage() {
     { id: 103, title: "이벤트 참여 방법", views: 1234, date: "2025-08-24" },
     { id: 104, title: "자주 묻는 질문", views: 1123, date: "2025-08-23" },
     { id: 105, title: "관리자 연락처", views: 1023, date: "2025-08-22" },
+    { id: 106, title: "커뮤니티 이용 규칙", views: 987, date: "2025-08-21" },
   ]);
 
   // 페이지네이션 상태
@@ -210,16 +241,25 @@ export default function BoardArticleListPage() {
 
   // 공지사항 페이지네이션
   const [noticePage, setNoticePage] = useState(1);
-  const NOTICE_PER_PAGE = 3;
+  const NOTICE_PER_PAGE = 5;
   const noticeTotalPages = Math.ceil(noticeList.length / NOTICE_PER_PAGE);
 
   const handleNoticePrev = () => setNoticePage((p) => Math.max(1, p - 1));
   const handleNoticeNext = () => setNoticePage((p) => Math.min(noticeTotalPages, p + 1));
 
+  // 핫게시글 필터링 및 정렬 함수
+  const getHotArticles = () => {
+    // 추천수 15개 이상인 게시글만 필터링하고 추천수 높은 순으로 정렬
+    return articles
+      .filter(article => article.recommend >= 15)
+      .sort((a, b) => b.recommend - a.recommend)
+      .slice(0, 10); // 상위 10개만
+  };
+
   // HOT 게시물 페이지네이션
   const [hotPage, setHotPage] = useState(1);
-  const HOT_PER_PAGE = 3;
-  const hotTotalPages = Math.ceil(hotList.length / HOT_PER_PAGE);
+  const HOT_PER_PAGE = 5;
+  const hotTotalPages = Math.ceil(getHotArticles().length / HOT_PER_PAGE);
 
   const handleHotPrev = () => setHotPage((p) => Math.max(1, p - 1));
   const handleHotNext = () => setHotPage((p) => Math.min(hotTotalPages, p + 1));
@@ -269,9 +309,10 @@ export default function BoardArticleListPage() {
             ))}
           </Select>
         </FormControl>
-        <Typography variant="h5" className="font-bold">
-          🎯 {getSelectedBoardName()}
-        </Typography>
+                 <Typography variant="h5" className="font-bold">
+           <FlagIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+           {getSelectedBoardName()}
+         </Typography>
       </div>
 
       <div className="flex lg:flex-row gap-6 items-stretch">
@@ -317,12 +358,19 @@ export default function BoardArticleListPage() {
                       {article.category}
                     </span>
                   </TableCell>
-                  <TableCell
-                    className="text-blue-600 hover:underline cursor-pointer"
-                    onClick={() => navigate(`/board/view/${article.id}`)}
-                  >
-                    {article.title}
-                  </TableCell>
+                                     <TableCell
+                     className="text-blue-600 hover:underline cursor-pointer"
+                     onClick={() => navigate(`/board/view/${article.id}`)}
+                     style={{
+                       maxWidth: '300px',
+                       overflow: 'hidden',
+                       textOverflow: 'ellipsis',
+                       whiteSpace: 'nowrap'
+                     }}
+                     title={article.title}
+                   >
+                     {article.title}
+                   </TableCell>
                   <TableCell align="center">{article.author}</TableCell>
                   <TableCell align="center">{article.date}</TableCell>
                   <TableCell align="center">{article.views}</TableCell>
@@ -385,8 +433,19 @@ export default function BoardArticleListPage() {
                     className="text-blue-600 hover:underline cursor-pointer flex justify-between items-center"
                     onClick={() => navigate(`/board/view/${notice.id}`)}
                   >
-                    <span>{notice.title}</span>
-                    <span className="text-gray-500 text-xs ml-2">{notice.date}</span>
+                                         <span 
+                       style={{
+                         maxWidth: '200px',
+                         overflow: 'hidden',
+                         textOverflow: 'ellipsis',
+                         whiteSpace: 'nowrap',
+                         display: 'inline-block'
+                       }}
+                       title={notice.title}
+                     >
+                       {notice.title}
+                     </span>
+                     <span className="text-gray-500 text-xs ml-2">{notice.date}</span>
                   </li>
                 ))}
             </ul>
@@ -409,15 +468,30 @@ export default function BoardArticleListPage() {
               </div>
             </div>
             <ul className="space-y-1 text-sm text-gray-700 text-left">
-              {hotList
+              {getHotArticles()
                 .slice((hotPage - 1) * HOT_PER_PAGE, hotPage * HOT_PER_PAGE)
                 .map((item) => (
                   <li
                     key={item.id}
-                    className="text-blue-600 hover:underline cursor-pointer"
+                    className="text-blue-600 hover:underline cursor-pointer flex justify-between items-center"
                     onClick={() => navigate(`/board/view/${item.id}`)}
                   >
-                    📌 {item.title}
+                                         <span 
+                       style={{
+                         maxWidth: '200px',
+                         overflow: 'hidden',
+                         textOverflow: 'ellipsis',
+                         whiteSpace: 'nowrap',
+                         display: 'inline-block'
+                       }}
+                       title={item.title}
+                     >
+                       <PushPinIcon sx={{ fontSize: 16, mr: 0.5, verticalAlign: 'middle' }} /> {item.title}
+                     </span>
+                     <span className="text-red-600 text-xs font-medium">
+                       <ThumbUpIcon sx={{ fontSize: 14, mr: 0.5, verticalAlign: 'middle' }} />
+                       {item.recommend}
+                     </span>
                   </li>
                 ))}
             </ul>
