@@ -12,14 +12,24 @@ export default function BoardArticleViewPage() {
   const [viewCount, setViewCount] = useState("55");
   const [contents, setContents] = useState("내용");
 
+  const handleCopyClipBoard = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      alert("클립보드에 링크가 복사되었습니다.");
+    } catch (err) {
+      console.error("클립보드 복사 실패:", err);
+      alert("링크 복사에 실패했습니다.");
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-pink-100 flex justify-center items-center p-6 m-8 rounded-4xl">
+    <div className="min-h-screen bg-pink-100 flex flex-col justify-center items-center p-6 m-8 rounded-4xl">
+      <h1 className="text-3xl font-bold mb-4">{schoolName}</h1>
       {/* 고정 크기 박스 */}
       <div className="bg-white rounded-xl shadow p-6 w-[1000px] h-[1200px] overflow-y-auto">
         {/* 상단 제목 */}
         <div className="border-b border-gray-300 pb-2 mb-4 text-left">
-          <h1 className="text-3xl font-bold">{schoolName}</h1>
-          <p className="text-lg mt-1">{title}</p>
+          <p className="text-3xl font-bold">{title}</p>
 
           {/* 글쓴이/날짜 + 조회/추천/댓글 */}
           <div className="flex items-center justify-between text-xs text-gray-500 mt-1">
@@ -48,14 +58,18 @@ export default function BoardArticleViewPage() {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <span>🔗공유</span>
+            <span>💾첨부파일</span>
+            <button onClick={handleCopyClipBoard} className="rounded-lg px-3 py-1 hover:bg-pink-200 transition-colors">
+              🔗링크복사
+            </button>
             <span>⚠️신고</span>
           </div>
         </div>
 
-        {/* 댓글 헤더 */}
-        <div className="bg-purple-100 p-3 rounded-lg mb-4 text-left">
-          <p className="text-sm text-purple-700 font-semibold">댓글 {reply.length}</p>
+        {/* 댓글 입력 */}
+        <div className="flex items-center border-t pt-4 m-8">
+          <input type="text" placeholder="댓글입력" className="flex-1 border rounded px-3 py-2 text-sm" />
+          <button className="ml-2 bg-purple-500 text-white px-4 py-2 rounded">➤</button>
         </div>
 
         {/* 댓글 목록 */}
@@ -68,12 +82,6 @@ export default function BoardArticleViewPage() {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* 댓글 입력 */}
-        <div className="flex items-center border-t pt-4">
-          <input type="text" placeholder="댓글입력" className="flex-1 border rounded px-3 py-2 text-sm" />
-          <button className="ml-2 bg-purple-500 text-white px-4 py-2 rounded">➤</button>
         </div>
       </div>
     </div>
