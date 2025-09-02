@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router";
 import {
@@ -14,15 +14,22 @@ import {
   Chip,
   Divider,
   IconButton,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import {
   Send as SendIcon,
   AttachFile as AttachFileIcon,
   Create as CreateIcon,
   ChevronLeft as ChevronLeftIcon,
+  LocalOffer as TagIcon,
+  Category as CategoryIcon,
 } from "@mui/icons-material";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
+import { getMe } from "../../utils/user";
 
 export default function BoardWritePage() {
   const { t } = useTranslation();
@@ -33,9 +40,31 @@ export default function BoardWritePage() {
     title: "",
     content: "",
     files: [],
+    tags: [],
+    category: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [tagInput, setTagInput] = useState("");
+  const [categories, setCategories] = useState([
+    { value: "general", label: "일반" },
+    { value: "question", label: "질문" },
+    { value: "discussion", label: "토론" },
+    { value: "review", label: "후기" },
+    { value: "tip", label: "팁" },
+  ]);
+
+  useEffect(() => {
+    getMe().then((data) => {
+      if (data.isAdmin) {
+        setCategories((prev) => [
+          ...prev,
+          { value: "notice", label: "공지사항" },
+          { value: "event", label: "이벤트" },
+        ]);
+      }
+    });
+  }, []);
 
   // React Quill modules configuration
   const quillModules = {
@@ -63,7 +92,6 @@ export default function BoardWritePage() {
     "blockquote",
     "code-block",
     "list",
-    "bullet",
     "link",
     "image",
     "video",
@@ -71,6 +99,10 @@ export default function BoardWritePage() {
 
   const handleTitleChange = (event) => {
     setFormData((prev) => ({ ...prev, title: event.target.value }));
+  };
+
+  const handleCategoryChange = (event) => {
+    setFormData((prev) => ({ ...prev, category: event.target.value }));
   };
 
   const handleContentChange = (content) => {
@@ -89,6 +121,33 @@ export default function BoardWritePage() {
     }));
   };
 
+  const handleTagInputChange = (event) => {
+    setTagInput(event.target.value);
+  };
+
+  const handleTagInputKeyDown = (event) => {
+    if (event.key === "Enter" && tagInput.trim()) {
+      event.preventDefault();
+      const newTag = tagInput.trim();
+
+      // Check if tag already exists
+      if (!formData.tags.includes(newTag) && newTag.length > 0) {
+        setFormData((prev) => ({
+          ...prev,
+          tags: [...prev.tags, newTag],
+        }));
+      }
+      setTagInput("");
+    }
+  };
+
+  const removeTag = (tagToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      tags: prev.tags.filter((tag) => tag !== tagToRemove),
+    }));
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -99,6 +158,11 @@ export default function BoardWritePage() {
 
     if (!formData.content.trim()) {
       setError("내용을 입력해주세요.");
+      return;
+    }
+
+    if (!formData.category) {
+      setError("카테고리를 선택해주세요.");
       return;
     }
 
@@ -168,24 +232,56 @@ export default function BoardWritePage() {
         {/* Form */}
         <Box component="form" onSubmit={handleSubmit}>
           <Stack spacing={3}>
-            {/* Title Input */}
-            <TextField
-              label="제목"
-              variant="outlined"
-              fullWidth
-              required
-              value={formData.title}
-              onChange={handleTitleChange}
-              placeholder="제목을 입력하세요"
-              disabled={loading}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "&:hover fieldset": {
-                    borderColor: "primary.main",
+            {/* Category and Title Row */}
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <FormControl
+                variant="outlined"
+                sx={{
+                  minWidth: 200,
+                  "& .MuiOutlinedInput-root": {
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "primary.main",
+                    },
                   },
-                },
-              }}
-            />
+                }}
+                disabled={loading}
+                required
+              >
+                <InputLabel>카테고리</InputLabel>
+                <Select
+                  value={formData.category}
+                  onChange={handleCategoryChange}
+                  label="카테고리"
+                  startAdornment={
+                    <CategoryIcon sx={{ mr: 1, color: "text.secondary" }} />
+                  }
+                >
+                  {categories.map((category) => (
+                    <MenuItem key={category.value} value={category.value}>
+                      {category.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <TextField
+                label="제목"
+                variant="outlined"
+                fullWidth
+                required
+                value={formData.title}
+                onChange={handleTitleChange}
+                placeholder="제목을 입력하세요"
+                disabled={loading}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "&:hover fieldset": {
+                      borderColor: "primary.main",
+                    },
+                  },
+                }}
+              />
+            </Box>
 
             {/* Content Editor */}
             <Box>
@@ -211,6 +307,60 @@ export default function BoardWritePage() {
                   readOnly={loading}
                 />
               </Box>
+            </Box>
+
+            {/* Tags Input */}
+            <Box>
+              <TextField
+                label="태그"
+                variant="outlined"
+                fullWidth
+                value={tagInput}
+                onChange={handleTagInputChange}
+                onKeyDown={handleTagInputKeyDown}
+                placeholder="태그를 입력하고 Enter를 누르세요"
+                disabled={loading}
+                InputProps={{
+                  startAdornment: (
+                    <TagIcon sx={{ mr: 1, color: "text.secondary" }} />
+                  ),
+                }}
+                helperText="Enter 키를 누르면 태그가 추가됩니다"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "&:hover fieldset": {
+                      borderColor: "primary.main",
+                    },
+                  },
+                }}
+              />
+
+              {/* Display Tags */}
+              {formData.tags.length > 0 && (
+                <Box sx={{ mt: 2 }}>
+                  <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                    {formData.tags.map((tag, index) => (
+                      <Chip
+                        key={index}
+                        label={`#${tag}`}
+                        onDelete={() => removeTag(tag)}
+                        color="primary"
+                        variant="outlined"
+                        size="small"
+                        sx={{
+                          mb: 1,
+                          "& .MuiChip-deleteIcon": {
+                            color: "primary.main",
+                            "&:hover": {
+                              color: "primary.dark",
+                            },
+                          },
+                        }}
+                      />
+                    ))}
+                  </Stack>
+                </Box>
+              )}
             </Box>
 
             {/* File Upload */}
