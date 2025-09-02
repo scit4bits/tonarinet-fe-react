@@ -31,6 +31,11 @@ import OrgAdminTaskPage from "./pages/orgadmin/OrgAdminTaskPage.jsx";
 import OrgAdminCounselPage from "./pages/orgadmin/OrgAdminCounselPage.jsx";
 import OrgAdminNoticePage from "./pages/orgadmin/OrgAdminNoticePage.jsx";
 import LocalReviewPage from "./pages/localreview/LocalReviewPage.jsx";
+import OrgSearchPage from "./pages/OrgSearchPage.jsx";
+import MyPageMainPage from "./pages/my/MyPageMainPage.jsx";
+import MyPageLayout from "./components/MyPageLayout.jsx";
+import MyPageOrgPage from "./pages/my/MyPageOrgPage.jsx";
+import OrgMainPage from "./pages/org/OrgMainPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StyledEngineProvider enableCssLayer>
@@ -38,16 +43,32 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <Routes>
         <Route index element={<LandingPage />} />
+
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
+
         <Route path="/logincb">
           <Route path="line" element={<SignUpPage provider={"line"} />} />
           <Route path="kakao" element={<SignUpPage provider={"kakao"} />} />
           <Route path="google" element={<SignUpPage provider={"google"} />} />
         </Route>
+
         <Route element={<Layout />}>
+          <Route path="/main" element={<MainPage />} />
+
+          <Route path="/my" element={<MyPageLayout />}>
+            <Route index element={<MyPageMainPage />} />
+            <Route path="org" element={<MyPageOrgPage />} />
+          </Route>
+
+          <Route path="/org">
+            <Route path=":orgId" element={<OrgMainPage />} />
+            <Route path="list" element={<OrgSearchPage />} />
+          </Route>
+
           <Route path="/localReview" element={<LocalReviewPage />} />
           <Route path="/chat" element={<ChatPage />} />
+
           <Route
             path="/sysadmin"
             element={<AdminLayout role={"systemAdmin"} />}
@@ -67,14 +88,18 @@ createRoot(document.getElementById("root")).render(
             <Route path="counsel" element={<OrgAdminCounselPage />} />
             <Route path="notice" element={<OrgAdminNoticePage />} />
           </Route>
-          <Route path="/hello" element={<MainPage />} />
+
           <Route path="/testauth" element={<AuthTestPage />} />
+
           <Route path="/board">
-            <Route path="view/:articleId" element={<BoardArticleViewPage />} />
-            <Route path="write" element={<BoardWritePage />} />
             <Route path="list" element={<BoardListPage />} />
-            <Route path=":boardId" element={<BoardArticleListPage />} />
+            <Route path=":boardId">
+              <Route index element={<BoardArticleListPage />} />
+              <Route path=":articleId" element={<BoardArticleViewPage />} />
+              <Route path="write" element={<BoardWritePage />} />
+            </Route>
           </Route>
+
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

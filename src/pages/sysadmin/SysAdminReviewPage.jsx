@@ -11,8 +11,10 @@ import {
   TableRow,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function SysAdminReviewPage() {
+  const { t } = useTranslation();
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -63,6 +65,7 @@ export default function SysAdminReviewPage() {
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
+      <title>{t("pages.sysAdmin.reviews.title")}</title>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader>
           <TableHead>

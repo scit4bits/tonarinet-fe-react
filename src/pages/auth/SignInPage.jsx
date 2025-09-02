@@ -19,8 +19,7 @@ import {
 } from "@mui/material";
 import LineLogo from "../../assets/line.png";
 import KakaoLogo from "../../assets/kakao.png";
-
-import GoogleIcon from "@mui/icons-material/Google";
+import GoogleLogo from "../../assets/google.png";
 
 export default function SignInPage({}) {
   const [t, i18n] = useTranslation();
@@ -76,6 +75,7 @@ export default function SignInPage({}) {
       const response = await taxios.post("/auth/signin/email", payload);
       console.log("Sign in successful:", response.data);
       localStorage.setItem("accessToken", response.data.data);
+      window.location.href = "/main";
     } catch (error) {
       console.error("Sign in error:", error);
       alert("Sign in failed. Please try again.");
@@ -84,8 +84,11 @@ export default function SignInPage({}) {
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-10">
+      <title>{t("pages.auth.signIn.title")}</title>
       <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
-        <img src={LogoWithTitle} alt="Logo" className="h-[100px]" />
+        <Link to="/">
+          <img src={LogoWithTitle} alt="Logo" className="h-[100px]" />
+        </Link>
       </Box>
       <Container maxWidth="sm">
         <Paper elevation={10} sx={{ p: 4 }}>
@@ -161,7 +164,11 @@ export default function SignInPage({}) {
                     "&:hover": { borderColor: "primary.main" },
                   }}
                 >
-                  <GoogleIcon />
+                  <img
+                    src={GoogleLogo}
+                    alt="Google"
+                    style={{ width: 24, height: 24 }}
+                  />
                 </IconButton>
               </Tooltip>
 

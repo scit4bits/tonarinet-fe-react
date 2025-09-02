@@ -10,8 +10,11 @@ export default function AuthTestPage({}) {
   const { user } = useAuth();
 
   return (
-    <div className="text-left">
-      <p>{user?.name || "NO!!!"}</p>
-    </div>
+    <>
+      <title>{t("pages.auth.authTest.title")}</title>
+      <div className="text-left">
+        <p>{user?.name || "NO!!!"}</p>
+      </div>
+    </>
   );
 }

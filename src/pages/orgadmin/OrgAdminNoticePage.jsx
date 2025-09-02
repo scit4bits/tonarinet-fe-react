@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Table,
   TableBody,
@@ -14,6 +15,7 @@ import {
 import { useNavigate } from "react-router";
 
 export default function OrgAdminNoticePage() {
+  const { t } = useTranslation();
   const [notices, setNotices] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -62,6 +64,7 @@ export default function OrgAdminNoticePage() {
 
   return (
     <Box sx={{ p: 3 }}>
+      <title>{t("pages.orgAdmin.notices.title")}</title>
       <Typography variant="h4" component="h1" gutterBottom>
         Notice Management
       </Typography>

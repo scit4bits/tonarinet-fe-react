@@ -10,10 +10,7 @@ import {
 export default function Sidebar({ role }) {
   const systemAdmin = [
     { key: "유저관리", url: "/sysadmin/user" },
-    { key: "단체관리", url: "/sysadmin/org" },
-    { key: "게시판관리", url: "/sysadmin/board" },
-    { key: "리뷰관리", url: "/sysadmin/review" },
-    { key: "파티관리", url: "/sysadmin/party" },
+    { key: "조직관리", url: "/sysadmin/org" },
     { key: "공지관리", url: "/sysadmin/notice" },
   ];
   const orgAdmin = [

@@ -1,5 +1,114 @@
 {
   "home": "ホーム",
   "localReview": "街レビュー",
-  "community": "コミュニティ"
+  "community": "コミュニティ",
+  "pages": {
+    "main": {
+      "title": "Tonarinet - ホーム",
+      "dashboard": {
+        "selectOrganization": "組織を選択",
+        "allOrganizations": "すべての組織",
+        "enrollmentStatus": "登録状況",
+        "daysRemaining": "残り日数",
+        "tasksTitle": "タスク一覧",
+        "pendingTasks": "保留中のタスク",
+        "latestNotices": "最新のお知らせ",
+        "recentAnnouncements": "最近の発表",
+        "upcomingEvents": "今後のイベント",
+        "importantDates": "重要な日付と締切",
+        "progress": "進捗",
+        "stepsCompleted": "ステップ完了",
+        "nextDeadline": "次の締切",
+        "due": "期限",
+        "high": "高",
+        "medium": "中",
+        "low": "低",
+        "completed": "完了",
+        "inProgress": "進行中",
+        "pending": "保留中",
+        "deadline": "締切",
+        "meeting": "会議",
+        "appointment": "予定"
+      }
+    },
+    "landing": {
+      "title": "Tonarinet - ランディングページ"
+    },
+    "notFound": {
+      "title": "Tonarinet - ページが見つかりません"
+    },
+    "chat": {
+      "title": "Tonarinet - チャット"
+    },
+    "auth": {
+      "signIn": {
+        "title": "Tonarinet - ログイン"
+      },
+      "signUp": {
+        "title": "Tonarinet - サインアップ"
+      },
+      "authTest": {
+        "title": "Tonarinet - 認証テストページ"
+      }
+    },
+    "board": {
+      "list": {
+        "title": "Tonarinet - 掲示板一覧"
+      },
+      "write": {
+        "title": "Tonarinet - 投稿作成"
+      },
+      "view": {
+        "title": "Tonarinet - 投稿表示"
+      },
+      "articles": {
+        "title": "Tonarinet - 掲示板記事"
+      }
+    },
+    "localReview": {
+      "title": "Tonarinet - 街レビュー"
+    },
+    "organization": {
+      "main": {
+        "title": "Tonarinet - {{orgName}}"
+      }
+    },
+    "orgAdmin": {
+      "members": {
+        "title": "Tonarinet - 組織メンバー管理"
+      },
+      "teams": {
+        "title": "Tonarinet - 組織チーム管理"
+      },
+      "tasks": {
+        "title": "Tonarinet - 組織タスク管理"
+      },
+      "notices": {
+        "title": "Tonarinet - 組織お知らせ"
+      },
+      "counseling": {
+        "title": "Tonarinet - 組織カウンセリング"
+      }
+    },
+    "sysAdmin": {
+      "users": {
+        "title": "Tonarinet - システム管理 - ユーザー"
+      },
+      "boards": {
+        "title": "Tonarinet - システム管理 - 掲示板"
+      },
+      "notices": {
+        "title": "Tonarinet - システム管理 - お知らせ"
+      },
+      "organizations": {
+        "title": "Tonarinet - システム管理 - 組織"
+      },
+      "parties": {
+        "title": "Tonarinet - システム管理 - パーティー"
+      },
+      "reviews": {
+        "title": "Tonarinet - システム管理 - レビュー"
+      }
+    }
+  }
 }

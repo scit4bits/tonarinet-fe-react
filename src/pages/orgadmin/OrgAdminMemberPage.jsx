@@ -16,9 +16,11 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import taxios from "../../utils/taxios";
 
 export default function OrgAdminMemberPage() {
+  const { t } = useTranslation();
   const [users, setUsers] = useState([]);
 
   const [open, setOpen] = useState(false);
@@ -55,6 +57,7 @@ export default function OrgAdminMemberPage() {
 
   return (
     <div className="mt-5">
+      <title>{t("pages.orgAdmin.members.title")}</title>
       <Typography variant="h4" gutterBottom>
         유저 관리
       </Typography>

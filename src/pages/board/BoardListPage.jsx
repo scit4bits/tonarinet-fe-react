@@ -1,21 +1,18 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import taxios from "../../utils/taxios";
 import BoardCard from "../../components/BoardCard";
 import { Card, CardContent, Container, Grid, Typography } from "@mui/material";
 
 export default function BoardListPage() {
+  const { t } = useTranslation();
   const [boards, setBoards] = useState([]);
 
   useEffect(() => {
     async function getAccessibleBoards() {
       try {
         const response = await taxios.get("/board");
-        setBoards([
-          ...response.data,
-          ...response.data,
-          ...response.data,
-          ...response.data,
-        ]);
+        setBoards([...response.data]);
       } catch (error) {
         console.error("Error fetching boards:", error);
       }
@@ -34,6 +31,7 @@ export default function BoardListPage() {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <title>{t("pages.board.list.title")}</title>
       <Typography variant="h3" component="h1" gutterBottom>
         Board List
       </Typography>

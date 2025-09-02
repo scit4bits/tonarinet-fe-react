@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Container,
   Box,
@@ -28,6 +29,7 @@ import {
 } from "@mui/icons-material";
 
 export default function BoardArticleViewPage() {
+  const { t } = useTranslation();
   const { articleId } = useParams();
   const [article, setArticle] = useState(null);
   const [replies, setReplies] = useState([]);
