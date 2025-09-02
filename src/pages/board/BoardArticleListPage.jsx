@@ -16,6 +16,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -26,6 +28,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import FlagIcon from "@mui/icons-material/Flag";
 import PushPinIcon from "@mui/icons-material/PushPin";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import SearchIcon from "@mui/icons-material/Search";
 import taxios from "../../utils/taxios";
 
 export default function BoardArticleListPage() {
@@ -50,10 +53,15 @@ export default function BoardArticleListPage() {
   // 선택된 게시판 상태
   const [selectedBoard, setSelectedBoard] = useState(boardId || "3");
 
+  // 검색 상태
+  const [searchType, setSearchType] = useState("title_author"); // title_author | title | author
+  const [searchQuery, setSearchQuery] = useState("");
+
   // 게시판 변경 핸들러
   const handleBoardChange = (event) => {
     const newBoardId = event.target.value;
     setSelectedBoard(newBoardId);
+    setPage(1);
     navigate(`/board/${newBoardId}`);
   };
 
@@ -226,16 +234,34 @@ export default function BoardArticleListPage() {
     { id: 106, title: "커뮤니티 이용 규칙", views: 987, date: "2025-08-21" },
   ]);
 
-  // 페이지네이션 상태
+  // 페이지네이션 상태 (검색 반영 전용 계산 추가)
   const [page, setPage] = useState(1);
   const articlesPerPage = 10;
-  const totalPages = Math.ceil(articles.length / articlesPerPage);
 
   const handlePageChange = (event, value) => {
     setPage(value);
   };
 
-  const paginatedArticles = articles.slice(
+  // 검색 필터링된 목록 계산
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const filteredArticles = articles.filter((article) => {
+    if (!normalizedQuery) return true;
+    const title = (article.title || "").toLowerCase();
+    const author = (article.author || "").toLowerCase();
+    if (searchType === "title_author") {
+      return title.includes(normalizedQuery) || author.includes(normalizedQuery);
+    }
+    if (searchType === "title") {
+      return title.includes(normalizedQuery);
+    }
+    if (searchType === "author") {
+      return author.includes(normalizedQuery);
+    }
+    return true;
+  });
+
+  const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
+  const paginatedArticles = filteredArticles.slice(
     (page - 1) * articlesPerPage,
     page * articlesPerPage
   );
@@ -265,6 +291,11 @@ export default function BoardArticleListPage() {
 
   const handleHotPrev = () => setHotPage((p) => Math.max(1, p - 1));
   const handleHotNext = () => setHotPage((p) => Math.min(hotTotalPages, p + 1));
+
+  useEffect(() => {
+    // 검색 타입/쿼리 변경 시 첫 페이지로 이동
+    setPage(1);
+  }, [searchType, searchQuery]);
 
   useEffect(() => {
     // 실제 API 호출은 주석 처리됨
@@ -315,6 +346,46 @@ export default function BoardArticleListPage() {
           <FlagIcon sx={{ mr: 1, verticalAlign: "middle" }} />
           {getSelectedBoardName()}
         </Typography>
+
+        {/* 검색 UI */}
+        <div className="flex items-center gap-2 ml-auto">
+          <FormControl size="small">
+            <InputLabel id="search-type-label">검색 대상</InputLabel>
+            <Select
+              labelId="search-type-label"
+              value={searchType}
+              label="검색 대상"
+              onChange={(e) => setSearchType(e.target.value)}
+              sx={{ minWidth: 150 }}
+            >
+              <MenuItem value="title_author">제목+작성자</MenuItem>
+              <MenuItem value="title">제목</MenuItem>
+              <MenuItem value="author">작성자</MenuItem>
+            </Select>
+          </FormControl>
+
+          <TextField
+            size="small"
+            placeholder="검색어를 입력하세요"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setPage(1);
+              }
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton size="small" onClick={() => setPage(1)}>
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            sx={{ width: 260 }}
+          />
+        </div>
       </div>
 
       <div className="flex lg:flex-row gap-6 items-stretch">
@@ -350,40 +421,48 @@ export default function BoardArticleListPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {paginatedArticles.map((article, index) => (
-                <TableRow key={article.id} hover>
-                  <TableCell align="center">
-                    {(page - 1) * articlesPerPage + index + 1}
-                  </TableCell>
-                  <TableCell align="center">
-                    <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                      {article.category}
-                    </span>
-                  </TableCell>
-                  <TableCell
-                    className="text-blue-600 hover:underline cursor-pointer"
-                    onClick={() => navigate(`/board/view/${article.id}`)}
-                    style={{
-                      maxWidth: "300px",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                    title={article.title}
-                  >
-                    {article.title}
-                  </TableCell>
-                  <TableCell align="center">{article.author}</TableCell>
-                  <TableCell align="center">{article.date}</TableCell>
-                  <TableCell align="center">{article.views}</TableCell>
-                  <TableCell
-                    align="center"
-                    className="text-red-600 font-medium"
-                  >
-                    {article.recommend}
+              {normalizedQuery && paginatedArticles.length === 0 ? (
+                <TableRow>
+                  <TableCell align="center" colSpan={7}>
+                    검색 결과가 없습니다. 입력한 내용과 일치하는 게시글이 없어요.
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                paginatedArticles.map((article, index) => (
+                  <TableRow key={article.id} hover>
+                    <TableCell align="center">
+                      {(page - 1) * articlesPerPage + index + 1}
+                    </TableCell>
+                    <TableCell align="center">
+                      <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                        {article.category}
+                      </span>
+                    </TableCell>
+                    <TableCell
+                      className="text-blue-600 hover:underline cursor-pointer"
+                      onClick={() => navigate(`/board/view/${article.id}`)}
+                      style={{
+                        maxWidth: "300px",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                      title={article.title}
+                    >
+                      {article.title}
+                    </TableCell>
+                    <TableCell align="center">{article.author}</TableCell>
+                    <TableCell align="center">{article.date}</TableCell>
+                    <TableCell align="center">{article.views}</TableCell>
+                    <TableCell
+                      align="center"
+                      className="text-red-600 font-medium"
+                    >
+                      {article.recommend}
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
 
@@ -518,7 +597,7 @@ export default function BoardArticleListPage() {
                     >
                       <PushPinIcon
                         sx={{ fontSize: 16, mr: 0.5, verticalAlign: "middle" }}
-                      />{" "}
+                      /> {" "}
                       {item.title}
                     </span>
                     <span className="text-red-600 text-xs font-medium">
