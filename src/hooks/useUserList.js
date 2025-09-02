@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { fetchUsers, searchUsers } from "../utils/user";
 
 export default function useUserList(
-	_search = "",
 	_searchBy = "all",
+	_search = "",
 	_page = 0,
 	_pageSize = 10,
 	_sortBy = "id",
