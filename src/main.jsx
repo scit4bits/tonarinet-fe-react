@@ -80,7 +80,10 @@ createRoot(document.getElementById("root")).render(
             <Route path="notice" element={<SysAdminNoticePage />} />
           </Route>
 
-          <Route path="/orgadmin" element={<AdminLayout role={"orgAdmin"} />}>
+          <Route
+            path="/orgadmin/:orgId"
+            element={<AdminLayout role={"orgAdmin"} />}
+          >
             <Route path="member" element={<OrgAdminMemberPage />} />
             <Route path="team" element={<OrgAdminTeamPage />} />
             <Route path="task" element={<OrgAdminTaskPage />} />
