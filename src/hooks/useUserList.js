@@ -1,56 +1,61 @@
 import { useEffect, useState } from "react";
-import { searchOrganizations } from "../utils/organization";
+import { fetchUsers, searchUsers } from "../utils/user";
 
 export default function useUserList(
-  _searchBy = "all",
-  _search = "",
-  _page = 0,
-  _pageSize = 10,
-  _sortBy = "all",
-  _sortDirection = "asc"
+	_searchBy = "all",
+	_search = "",
+	_page = 0,
+	_pageSize = 10,
+	_sortBy = "id",
+	_sortDirection = "asc"
 ) {
-  const [organizations, setOrganizations] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [searchBy, setSearchBy] = useState(_searchBy);
-  const [search, setSearch] = useState(_search);
-  const [page, setPage] = useState(_page);
-  const [pageSize, setPageSize] = useState(_pageSize);
-  const [sortBy, setSortBy] = useState(_sortBy);
-  const [sortDirection, setSortDirection] = useState(_sortDirection);
+	const [users, setUsers] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [search, setSearch] = useState(_search);
+	const [searchBy, setSearchBy] = useState(_searchBy);
+	const [page, setPage] = useState(_page);
+	const [pageSize, setPageSize] = useState(_pageSize);
+	const [sortBy, setSortBy] = useState(_sortBy);
+	const [sortDirection, setSortDirection] = useState(_sortDirection);
 
-  async function refresh() {
-    setLoading(true);
-    const data = await searchOrganizations(
-      searchBy,
-      search,
-      page,
-      pageSize,
-      sortBy,
-      sortDirection
-    );
-    setOrganizations(data);
-    setLoading(false);
-  }
+	async function refresh() {
+		try {
+			setLoading(true);
+			const data = await searchUsers(
+				search,
+				searchBy,
+				page,
+				pageSize,
+				sortBy,
+				sortDirection
+			);
+			setUsers(data);
+		} catch (error) {
+			console.error("Failed to fetch users:", error);
+		} finally {
+			setLoading(false);
+		}
+	}
 
-  useEffect(() => {
-    refresh();
-  }, [search, searchBy, page, pageSize, sortBy, sortDirection]);
+	useEffect(() => {
+		refresh();
+	}, [search, searchBy, page, pageSize, sortBy, sortDirection]);
 
-  return {
-    organizations,
-    loading,
-    search,
-    setSearch,
-    searchBy,
-    setSearchBy,
-    page,
-    setPage,
-    pageSize,
-    setPageSize,
-    sortBy,
-    setSortBy,
-    sortDirection,
-    setSortDirection,
-    refresh,
-  };
+	return {
+		users,
+		loading,
+		search,
+		setSearch,
+		searchBy,
+		setSearchBy,
+		page,
+		setPage,
+		pageSize,
+		setPageSize,
+		sortBy,
+		setSortBy,
+		sortDirection,
+		setSortDirection,
+		refresh,
+	};
 }
