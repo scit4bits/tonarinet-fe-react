@@ -1,5 +1,6 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
 @import "tailwindcss";
+@import "react-quill-new/dist/quill.snow.css";
 
 :root {
   font-family: "Pretendard Variable", Pretendard, system-ui, Avenir, Helvetica,
@@ -25,4 +26,53 @@ body {
   width: 100%;
   margin: 0 auto;
   text-align: center;
+}
+
+/* Ensure Quill content styles are applied */
+.ql-editor {
+  font-family: inherit !important;
+}
+
+.ql-editor p {
+  margin: 0 0 1em 0 !important;
+}
+
+.ql-editor h1,
+.ql-editor h2,
+.ql-editor h3,
+.ql-editor h4,
+.ql-editor h5,
+.ql-editor h6 {
+  margin: 0.5em 0 !important;
+  font-weight: bold !important;
+}
+
+.ql-editor-readonly > * {
+  cursor: auto !important;
+}
+
+.ql-editor ul,
+.ql-editor ol {
+  padding-left: 1.5em !important;
+  margin: 0 0 1em 0 !important;
+}
+
+.ql-editor blockquote {
+  border-left: 4px solid #ccc !important;
+  margin: 0 0 1em 0 !important;
+  padding: 0.5em 1em !important;
+  background-color: #f9f9f9 !important;
+}
+
+/* Override Tailwind's text alignment reset for Quill content */
+.ql-align-center {
+  text-align: center !important;
+}
+
+.ql-align-right {
+  text-align: right !important;
+}
+
+.ql-align-justify {
+  text-align: justify !important;
 }

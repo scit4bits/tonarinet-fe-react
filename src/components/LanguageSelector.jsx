@@ -25,7 +25,12 @@ export default function LanguageSelector() {
       <IconButton onClick={handleClick}>
         <LanguageIcon />
       </IconButton>
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        disableScrollLock={true}
+      >
         <MenuItem onClick={() => handleLanguageChange("ko")}>한국어</MenuItem>
         <MenuItem onClick={() => handleLanguageChange("ja")}>日本語</MenuItem>
       </Menu>

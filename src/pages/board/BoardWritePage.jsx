@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router";
 import {
@@ -27,9 +27,11 @@ import {
   LocalOffer as TagIcon,
   Category as CategoryIcon,
 } from "@mui/icons-material";
-import ReactQuill from "react-quill-new";
+import ReactQuill, { Quill } from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { getMe } from "../../utils/user";
+import { uploadOneImage } from "../../utils/fileattachment";
+import { writeArticle } from "../../utils/board";
 
 export default function BoardWritePage() {
   const { t } = useTranslation();
@@ -46,12 +48,12 @@ export default function BoardWritePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [tagInput, setTagInput] = useState("");
+  const quillRef = useRef(null);
   const [categories, setCategories] = useState([
     { value: "general", label: "일반" },
     { value: "question", label: "질문" },
-    { value: "discussion", label: "토론" },
-    { value: "review", label: "후기" },
     { value: "tip", label: "팁" },
+    { value: "counsel", label: "상담" },
   ]);
 
   useEffect(() => {
@@ -60,28 +62,104 @@ export default function BoardWritePage() {
         setCategories((prev) => [
           ...prev,
           { value: "notice", label: "공지사항" },
-          { value: "event", label: "이벤트" },
         ]);
       }
     });
   }, []);
 
+  // Image upload handler for ReactQuill
+  const imageHandler = () => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (file) {
+        // Validate file size (limit to 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          console.log("이미지 파일 크기는 5MB 이하로 제한됩니다.");
+          return;
+        }
+
+        // Validate file type
+        if (!file.type.startsWith("image/")) {
+          console.log("이미지 파일만 업로드 가능합니다.");
+          return;
+        }
+
+        const response = await uploadOneImage(file);
+        console.log("Image uploaded successfully:", response);
+        const quill = quillRef.current?.getEditor();
+        if (quill) {
+          const range = quill.getSelection();
+          if (range) {
+            // Insert the image
+            quill.insertEmbed(
+              range.index,
+              "image",
+              (import.meta.env.VITE_API_BASE_URL ||
+                "http://localhost:8999/api") + `/files/${response.id}/download`
+            );
+            // Move cursor after the image
+            quill.setSelection(range.index + 1);
+          } else {
+            // If no selection, insert at the end
+            const length = quill.getLength();
+            quill.insertEmbed(
+              length,
+              "image",
+              (import.meta.env.VITE_API_BASE_URL ||
+                "http://localhost:8999/api") + `/files/${response.id}/download`
+            );
+            quill.setSelection(length + 1);
+          }
+        }
+
+        // TODO: Here you can also upload to your server and replace base64 with URL
+        // const formData = new FormData();
+        // formData.append('image', file);
+        // try {
+        //   const response = await uploadImage(formData);
+        //   const quill = quillRef.current?.getEditor();
+        //   if (quill) {
+        //     const range = quill.getSelection();
+        //     quill.insertEmbed(range.index, 'image', response.url);
+        //     quill.setSelection(range.index + 1);
+        //   }
+        // } catch (error) {
+        //   setError('이미지 업로드 중 오류가 발생했습니다.');
+        // }
+      }
+    };
+  };
+
   // React Quill modules configuration
   const quillModules = {
-    toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ color: [] }, { background: [] }],
-      [{ align: [] }],
-      ["blockquote", "code-block"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image", "video"],
-      ["clean"],
-    ],
+    toolbar: {
+      container: [
+        [
+          {
+            size: ["small", false, "large", "huge"],
+          },
+        ],
+        ["bold", "italic", "underline", "strike"],
+        [{ color: [] }, { background: [] }],
+        [{ align: [] }],
+        ["blockquote", "code-block"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["link", "image", "video"],
+        ["clean"],
+      ],
+      handlers: {
+        image: imageHandler,
+      },
+    },
   };
 
   const quillFormats = [
-    "header",
+    "size",
     "bold",
     "italic",
     "underline",
@@ -173,11 +251,10 @@ export default function BoardWritePage() {
       // TODO: Implement API call to submit the form
       console.log("Submitting:", formData);
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const response = await writeArticle(boardId, formData);
+      console.log("Submit Response:", response);
 
-      // Navigate back to board list after successful submission
-      navigate(`/board/${boardId}`);
+      navigate(`/board/view/${response.id}`);
     } catch (err) {
       setError("게시글 작성 중 오류가 발생했습니다.");
     } finally {
@@ -298,6 +375,7 @@ export default function BoardWritePage() {
                 }}
               >
                 <ReactQuill
+                  ref={quillRef}
                   theme="snow"
                   value={formData.content}
                   onChange={handleContentChange}

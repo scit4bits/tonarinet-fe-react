@@ -96,10 +96,11 @@ export default function NotificationMenu() {
         open={open}
         onClose={handleClose}
         slotProps={{
-          sx: {
-            maxHeight: 600,
-            maxWidth: 500,
-            overflow: "auto",
+          list: {
+            sx: {
+              maxHeight: 600,
+              width: 400,
+            },
           },
         }}
         disableScrollLock={true}
@@ -121,9 +122,16 @@ export default function NotificationMenu() {
                   : "transparent",
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 2,
+                  width: "100%",
+                }}
+              >
                 <Avatar sx={{ width: 24, height: 24 }} />
-                <Box>
+                <Box className="w-full">
                   <Typography
                     variant="subtitle2"
                     fontWeight={notification.isRead ? "normal" : "bold"}
@@ -131,6 +139,8 @@ export default function NotificationMenu() {
                       color: notification.isRead
                         ? "text.secondary"
                         : "text.primary",
+                      textWrap: "wrap",
+                      overflowWrap: "anywhere",
                     }}
                   >
                     {notification.contents}
