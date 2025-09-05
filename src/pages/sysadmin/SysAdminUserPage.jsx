@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import {
+	Typography,
 	Box,
 	FormControl,
 	InputLabel,
@@ -7,9 +8,8 @@ import {
 	MenuItem,
 	TextField,
 	InputAdornment,
-	Typography,
-	Paper,
 	TableContainer,
+	Paper,
 	Table,
 	TableHead,
 	TableBody,
@@ -53,7 +53,7 @@ export default function SysAdminUserPage() {
 	};
 
 	// 페이지 번호 (MUI TablePagination)
-	const handleChangePage = (newPage) => {
+	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
 	};
 
@@ -77,17 +77,17 @@ export default function SysAdminUserPage() {
 		<main className="mt-5">
 			<title>{t("pages.sysAdmin.users.title")}</title>
 
-			<Typography variant="h4" gutterBottom>
+			<Typography variant="h4" gutterBottom className="mt-10 mb-7">
 				유저 관리
 			</Typography>
 
-			<Box className="flex gap-5 items-center">
+			<Box className="flex items-center mb-4 gap-4">
 				<FormControl size="small" className="min-w-[120px]">
 					<InputLabel>검색 키워드</InputLabel>
 					<Select
 						value={searchBy}
-						onChange={(e) => setSearchBy(e.target.value)}
 						label="검색 키워드"
+						onChange={(e) => setSearchBy(e.target.value)}
 					>
 						<MenuItem value="all">전체</MenuItem>
 						<MenuItem value="id">ID</MenuItem>
@@ -96,19 +96,19 @@ export default function SysAdminUserPage() {
 						<MenuItem value="nickname">닉네임</MenuItem>
 						<MenuItem value="phone">핸드폰</MenuItem>
 						<MenuItem value="birth">생일</MenuItem>
-						<MenuItem value="nationality">국가</MenuItem>
+						<MenuItem value="nationality">국적</MenuItem>
 					</Select>
 				</FormControl>
 
 				<TextField
+					value={search}
+					variant="outlined"
+					size="small"
+					className="min-w-[250px]"
+					onChange={(e) => setSearch(e.target.value)}
 					placeholder={`Search ${
 						searchBy === "all" ? "users" : `by ${searchBy}`
 					}`}
-					variant="outlined"
-					size="small"
-					value={search}
-					onChange={(e) => setSearch(e.target.value)}
-					className="min-w-[250px]"
 					slotProps={{
 						input: {
 							startAdornment: (
@@ -191,7 +191,7 @@ export default function SysAdminUserPage() {
 									direction={sortBy === "nationality" ? sortDirection : "asc"}
 									onClick={() => handleRequestSort("nationality")}
 								>
-									국가
+									국적
 								</TableSortLabel>
 							</TableCell>
 
