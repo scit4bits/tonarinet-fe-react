@@ -32,6 +32,7 @@ import {
   getBoardHotArticles,
   getLastVisitedBoard,
   searchArticles,
+  setLastVisitedBoard,
 } from "../../utils/board";
 
 export default function BoardArticleListPage() {
@@ -41,9 +42,7 @@ export default function BoardArticleListPage() {
   const { boards } = useMyBoardList();
 
   // 선택된 게시판 상태
-  const [selectedBoard, setSelectedBoard] = useState(
-    boardId || getLastVisitedBoard() || boards[0]?.id
-  );
+  const [selectedBoard, setSelectedBoard] = useState(null);
 
   // 카테고리 선택 상태
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -63,23 +62,39 @@ export default function BoardArticleListPage() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    searchArticles(selectedBoard, selectedCategory, searchBy, search).then(
-      (data) => {
-        setArticles(data);
+    console.log(boards);
+    if (boards && (boardId === "undefined" || boardId === undefined)) {
+      const fallbackBoardId = boardId ?? getLastVisitedBoard() ?? boards[0]?.id;
+      console.log(fallbackBoardId);
+      if (fallbackBoardId !== "undefined" && fallbackBoardId !== undefined) {
+        console.log(fallbackBoardId);
+        window.location.href = `/board/${fallbackBoardId}`;
       }
-    );
+    }
+  }, [boards]);
+
+  useEffect(() => {
+    searchArticles(boardId, selectedCategory, searchBy, search).then((data) => {
+      setArticles(data);
+    });
   }, [selectedCategory, searchBy, search]);
 
   useEffect(() => {
-    getBoardHotArticles(selectedBoard).then((data) => {
+    getBoardHotArticles(boardId).then((data) => {
       setHotArticles(data);
     });
   }, []);
 
   useEffect(() => {
-    searchArticles(selectedBoard, "notice").then((data) => {
+    searchArticles(boardId, "notice").then((data) => {
       setNotice(data);
     });
+  }, []);
+
+  useEffect(() => {
+    if (boardId !== "undefined" && boardId !== undefined) {
+      setLastVisitedBoard(boardId);
+    }
   }, []);
 
   // ===== 상수 및 함수들 =====
@@ -170,7 +185,7 @@ export default function BoardArticleListPage() {
         </FormControl>
         <Typography variant="h4" className="font-bold">
           <FlagIcon sx={{ mr: 1, verticalAlign: "middle" }} />
-          {boards.filter((board) => board.id == selectedBoard)[0]?.title ||
+          {boards.filter((board) => board.id == boardId)[0]?.title ||
             "존재하지 않는 게시판"}
         </Typography>
         <div />

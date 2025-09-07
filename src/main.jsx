@@ -28,13 +28,13 @@ import OrgAdminMemberPage from "./pages/orgadmin/OrgAdminMemberPage.jsx";
 import OrgAdminTeamPage from "./pages/orgadmin/OrgAdminTeamPage.jsx";
 import OrgAdminTaskPage from "./pages/orgadmin/OrgAdminTaskPage.jsx";
 import OrgAdminCounselPage from "./pages/orgadmin/OrgAdminCounselPage.jsx";
-import OrgAdminNoticePage from "./pages/orgadmin/OrgAdminNoticePage.jsx";
 import LocalReviewPage from "./pages/localreview/LocalReviewPage.jsx";
 import OrgSearchPage from "./pages/OrgSearchPage.jsx";
 import MyPageMainPage from "./pages/my/MyPageMainPage.jsx";
 import MyPageLayout from "./components/MyPageLayout.jsx";
 import MyPageOrgPage from "./pages/my/MyPageOrgPage.jsx";
 import OrgMainPage from "./pages/org/OrgMainPage.jsx";
+import TaskDetailPage from "./pages/TaskDetailPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StyledEngineProvider enableCssLayer>
@@ -88,12 +88,16 @@ createRoot(document.getElementById("root")).render(
             <Route path="team" element={<OrgAdminTeamPage />} />
             <Route path="task" element={<OrgAdminTaskPage />} />
             <Route path="counsel" element={<OrgAdminCounselPage />} />
-            <Route path="notice" element={<OrgAdminNoticePage />} />
+          </Route>
+
+          <Route path="/task">
+            <Route path=":taskId" element={<TaskDetailPage />} />
           </Route>
 
           <Route path="/testauth" element={<AuthTestPage />} />
 
           <Route path="/board">
+            <Route index element={<BoardArticleListPage />} />
             <Route path=":boardId">
               <Route index element={<BoardArticleListPage />} />
               <Route path=":articleId" element={<BoardArticleViewPage />} />

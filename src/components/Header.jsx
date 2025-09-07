@@ -28,7 +28,7 @@ export default function Header() {
           </Link>
           <Link to="/main">{t("home")}</Link>
           <Link to="/localreview">{t("localReview")}</Link>
-          <Link to="/board/list">{t("community")}</Link>
+          <Link to="/board">{t("community")}</Link>
         </Box>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>

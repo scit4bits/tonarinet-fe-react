@@ -18,4 +18,22 @@ async function getTeamByOrgId(orgId) {
   }
 }
 
-export { createTeam, getTeamByOrgId };
+async function searchTeam(
+  searchBy = "all",
+  search = "",
+  page = 1,
+  pageSize = 10,
+  sortBy = "name",
+  sortDirection = "asc"
+) {
+  try {
+    const response = await taxios.get(
+      `/team/search?searchBy=${searchBy}&search=${search}&page=${page}&pageSize=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error searching teams:", error);
+  }
+}
+
+export { createTeam, getTeamByOrgId, searchTeam };
