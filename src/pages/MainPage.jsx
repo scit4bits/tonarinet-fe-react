@@ -5,10 +5,6 @@ import {
   Grid,
   Paper,
   Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Card,
   CardContent,
   CardHeader,
@@ -18,137 +14,108 @@ import {
   ListItemIcon,
   Chip,
   Divider,
-  LinearProgress,
   Avatar,
+  Button,
 } from "@mui/material";
 import {
   Assignment,
   Notifications,
   Event,
-  School,
-  Group,
   CheckCircle,
   Schedule,
-  TrendingUp,
   Person,
-  Business,
+  ArrowForward,
 } from "@mui/icons-material";
-import useOrganizationList from "../hooks/useOrganizationList";
 import useAuth from "../hooks/useAuth";
-import { getMyOrganizations } from "../utils/organization";
+import taxios from "../utils/taxios";
+import { useNavigate } from "react-router";
 
 export default function MainPage() {
   const { t } = useTranslation();
-  const { user, loading: userLoading } = useAuth();
-  const [organizations, setOrganizations] = useState([]);
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [selectedOrganization, setSelectedOrganization] = useState("");
-  const [selectedOrgProfile, setSelectedOrgProfile] = useState(null);
+  const [tasks, setTasks] = useState([]);
+  const [notices, setNotices] = useState([]);
+  const [tasksCount, setTasksCount] = useState(0);
+  const [noticesCount, setNoticesCount] = useState(0);
 
-  useEffect(() => {
-    getMyOrganizations().then((data) => {
-      setOrganizations(data);
-      setLoading(false);
-    });
-  }, []);
-
-  // Mock data for dashboard - replace with real API calls
-  const [enrollmentStatus, setEnrollmentStatus] = useState({
-    daysRemaining: 15,
-    progress: 75,
-    totalSteps: 8,
-    completedSteps: 6,
-    nextDeadline: "2025-09-15",
+  // Enrollment status - simplified to show only D+ days
+  const [enrollmentStatus] = useState({
+    daysRemaining: 15, // This can be calculated from a target date
   });
 
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "Complete registration documents",
-      priority: "high",
-      dueDate: "2025-09-03",
-      status: "pending",
-    },
-    {
-      id: 2,
-      title: "Attend orientation meeting",
-      priority: "medium",
-      dueDate: "2025-09-05",
-      status: "in-progress",
-    },
-    {
-      id: 3,
-      title: "Submit health certificate",
-      priority: "low",
-      dueDate: "2025-09-10",
-      status: "completed",
-    },
+  // Calendar events remain as mockup
+  const [calendarEvents] = useState([
+    { date: "2025-09-10", title: "Document Submission", type: "deadline" },
+    { date: "2025-09-12", title: "Orientation", type: "meeting" },
+    { date: "2025-09-15", title: "Health Check", type: "appointment" },
+    { date: "2025-09-20", title: "Registration Deadline", type: "deadline" },
   ]);
 
-  const [notices, setNotices] = useState([
-    {
-      id: 1,
-      title: "Welcome to the new semester",
-      date: "2025-08-30",
-      summary: "Important information about the upcoming semester...",
-    },
-    {
-      id: 2,
-      title: "Schedule changes for next week",
-      date: "2025-08-28",
-      summary: "Please note the following schedule modifications...",
-    },
-    {
-      id: 3,
-      title: "New facility guidelines",
-      date: "2025-08-25",
-      summary: "Updated guidelines for using campus facilities...",
-    },
-  ]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch all data in parallel
+        const [tasksResponse, noticesResponse] = await Promise.allSettled([
+          taxios.get("/task/my"),
+          taxios.get("/board/0/articles")
+        ]);
 
-  const [calendarEvents, setCalendarEvents] = useState([
-    { date: "2025-09-03", title: "Document Submission", type: "deadline" },
-    { date: "2025-09-05", title: "Orientation", type: "meeting" },
-    { date: "2025-09-10", title: "Health Check", type: "appointment" },
-    { date: "2025-09-15", title: "Registration Deadline", type: "deadline" },
-  ]);
+        // Handle tasks
+        if (tasksResponse.status === 'fulfilled') {
+          const tasksData = tasksResponse.value.data || [];
+          setTasks(tasksData);
+          setTasksCount(tasksData.length);
+        }
 
-  const handleOrganizationChange = (event) => {
-    const orgId = event.target.value;
-    setSelectedOrganization(orgId);
+        // Handle notices
+        if (noticesResponse.status === 'fulfilled') {
+          const noticesData = noticesResponse.value.data.data || [];
+          setNotices(noticesData);
+          setNoticesCount(noticesData.length);
+        }
 
-    if (orgId) {
-      const selectedOrg = organizations.find((org) => org.id === orgId);
-      setSelectedOrgProfile(selectedOrg);
-    } else {
-      setSelectedOrgProfile(null);
-    }
+      } catch (error) {
+        console.error("Failed to fetch dashboard data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    // Here you would typically fetch data specific to the selected organization
-  };
+    fetchData();
+  }, []);
 
-  const getPriorityColor = (priority) => {
-    switch (priority) {
-      case "high":
-        return "error";
-      case "medium":
-        return "warning";
-      case "low":
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "완료":
+      case "COMPLETED":
+      case "completed":
         return "success";
+      case "진행중":
+      case "IN_PROGRESS":
+      case "in_progress":
+        return "primary";
+      case "대기":
+      case "PENDING":
+      case "pending":
+        return "warning";
+      case "지연":
+      case "OVERDUE":
+      case "overdue":
+        return "error";
       default:
         return "default";
     }
   };
 
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case "completed":
-        return <CheckCircle color="success" />;
-      case "in-progress":
-        return <Schedule color="warning" />;
-      default:
-        return <Assignment color="action" />;
-    }
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    return new Date(dateString).toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
   };
 
   const formatDaysRemaining = (days) => {
@@ -161,6 +128,18 @@ export default function MainPage() {
     }
   };
 
+  const handleTaskClick = (taskId) => {
+    navigate(`/task/${taskId}`);
+  };
+
+  if (loading) {
+    return (
+      <Box className="flex justify-center items-center min-h-96">
+        <Typography>로딩 중...</Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box className="flex w-full min-h-screen bg-gray-50">
       <title>{t("pages.main.title")}</title>
@@ -172,87 +151,30 @@ export default function MainPage() {
         sx={{ borderRadius: 0, borderRight: "1px solid #e0e0e0" }}
       >
         <Box className="p-6">
-          {/* Organization Selection at the top */}
-          <Box className="mb-6">
-            <FormControl fullWidth variant="outlined">
-              <InputLabel id="organization-select-label">
-                Select Organization
-              </InputLabel>
-              <Select
-                labelId="organization-select-label"
-                value={selectedOrganization}
-                onChange={handleOrganizationChange}
-                label="Select Organization"
-                disabled={loading}
-              >
-                <MenuItem value="">
-                  <em>Personal Dashboard</em>
-                </MenuItem>
-                {organizations.map((org) => (
-                  <MenuItem key={org.id} value={org.id}>
-                    {org.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
-
           {/* Profile Section */}
           <Box className="flex flex-col items-center mb-6">
-            {selectedOrgProfile ? (
-              // Organization Profile
+            {user && (
               <>
                 <Avatar
-                  src={selectedOrgProfile.logo || null}
+                  src={user?.profilePicture || null}
                   sx={{ width: 100, height: 100, mb: 2 }}
                 >
-                  <Business sx={{ fontSize: 40 }} />
+                  <Person sx={{ fontSize: 40 }} />
                 </Avatar>
-                <Typography variant="h6" className="font-semibold text-center">
-                  {selectedOrgProfile.name}
+                <Typography
+                  variant="h6"
+                  className="font-semibold text-center"
+                >
+                  {user?.name || "User"}
                 </Typography>
                 <Typography
                   variant="body2"
                   color="text.secondary"
                   className="text-center"
                 >
-                  {selectedOrgProfile.description || "Organization"}
+                  {user?.email}
                 </Typography>
-                {selectedOrgProfile.memberCount && (
-                  <Chip
-                    icon={<Group />}
-                    label={`${selectedOrgProfile.memberCount} members`}
-                    size="small"
-                    variant="outlined"
-                    className="mt-2"
-                  />
-                )}
               </>
-            ) : (
-              // User Profile (Default)
-              user && (
-                <>
-                  <Avatar
-                    src={user?.profilePicture || null}
-                    sx={{ width: 100, height: 100, mb: 2 }}
-                  >
-                    <Person sx={{ fontSize: 40 }} />
-                  </Avatar>
-                  <Typography
-                    variant="h6"
-                    className="font-semibold text-center"
-                  >
-                    {user?.name || "User"}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    className="text-center"
-                  >
-                    {user?.email}
-                  </Typography>
-                </>
-              )
             )}
           </Box>
 
@@ -260,20 +182,6 @@ export default function MainPage() {
 
           {/* Dashboard Stats */}
           <Box className="space-y-3">
-            <Paper className="p-3 bg-blue-50" elevation={0}>
-              <Box className="flex items-center justify-between">
-                <Box className="flex items-center">
-                  <School color="primary" className="mr-2" />
-                  <Typography variant="body2" className="font-medium">
-                    Enrollment Progress
-                  </Typography>
-                </Box>
-                <Typography variant="h6" color="primary">
-                  {enrollmentStatus.progress}%
-                </Typography>
-              </Box>
-            </Paper>
-
             <Paper className="p-3 bg-orange-50" elevation={0}>
               <Box className="flex items-center justify-between">
                 <Box className="flex items-center">
@@ -283,7 +191,7 @@ export default function MainPage() {
                   </Typography>
                 </Box>
                 <Typography variant="h6" color="warning">
-                  {tasks.filter((task) => task.status !== "completed").length}
+                  {tasksCount}
                 </Typography>
               </Box>
             </Paper>
@@ -297,7 +205,7 @@ export default function MainPage() {
                   </Typography>
                 </Box>
                 <Typography variant="h6" color="success">
-                  {notices.length}
+                  {noticesCount}
                 </Typography>
               </Box>
             </Paper>
@@ -315,100 +223,93 @@ export default function MainPage() {
         <Grid container spacing={3}>
           {/* Left Side */}
           <Grid item xs={12} lg={6}>
-            {/* Enrollment Status */}
+            {/* Enrollment Status - Simplified */}
             <Paper className="mb-4" elevation={3}>
               <CardHeader
-                avatar={<School color="primary" />}
+                avatar={<Event color="primary" />}
                 title="Enrollment Status"
                 subheader={`${formatDaysRemaining(
                   enrollmentStatus.daysRemaining
                 )} days remaining`}
               />
               <CardContent>
-                <Box className="mb-4">
-                  <Box className="flex justify-between items-center mb-2">
-                    <Typography variant="body2" color="text.secondary">
-                      Progress: {enrollmentStatus.completedSteps}/
-                      {enrollmentStatus.totalSteps} steps completed
-                    </Typography>
-                    <Chip
-                      label={`${enrollmentStatus.progress}%`}
-                      color="primary"
-                      size="small"
-                    />
-                  </Box>
-                  <LinearProgress
-                    variant="determinate"
-                    value={enrollmentStatus.progress}
-                    className="h-2 rounded"
-                  />
-                </Box>
-                <Typography variant="body2" color="text.secondary">
-                  Next deadline:{" "}
-                  {new Date(enrollmentStatus.nextDeadline).toLocaleDateString()}
+                <Typography variant="body1" color="text.secondary">
+                  Have a good day.
                 </Typography>
               </CardContent>
             </Paper>
 
-            {/* Tasks List */}
+            {/* Tasks List - Similar to MyPageMainPage */}
             <Paper elevation={3}>
               <CardHeader
                 avatar={<Assignment color="primary" />}
-                title="Tasks"
-                subheader={`${
-                  tasks.filter((task) => task.status !== "completed").length
-                } pending tasks`}
+                title="My Tasks"
+                subheader={`${tasksCount} pending tasks`}
+                action={
+                  <Button
+                    size="small"
+                    endIcon={<ArrowForward />}
+                    onClick={() => navigate("/my/task")}
+                  >
+                    모두 보기
+                  </Button>
+                }
               />
               <CardContent className="pt-0">
-                <List>
-                  {tasks.map((task, index) => (
-                    <div key={task.id}>
-                      <ListItem className="px-0">
-                        <ListItemIcon>
-                          {getStatusIcon(task.status)}
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={
-                            <Box className="flex justify-between items-center">
-                              <Typography
-                                variant="body1"
-                                className={
-                                  task.status === "completed"
-                                    ? "line-through text-gray-500"
-                                    : ""
-                                }
-                              >
-                                {task.title}
-                              </Typography>
-                              <Chip
-                                label={task.priority}
-                                color={getPriorityColor(task.priority)}
-                                size="small"
-                                variant="outlined"
-                              />
-                            </Box>
-                          }
-                          secondary={`Due: ${new Date(
-                            task.dueDate
-                          ).toLocaleDateString()}`}
-                        />
-                      </ListItem>
-                      {index < tasks.length - 1 && <Divider />}
-                    </div>
+                <Box className="space-y-3">
+                  {tasks.map((task) => (
+                    <Card
+                      key={task.id}
+                      variant="outlined"
+                      className="cursor-pointer hover:shadow-md transition-shadow"
+                      onClick={() => handleTaskClick(task.id)}
+                    >
+                      <CardContent className="pb-2">
+                        <Box className="flex justify-between items-start mb-2">
+                          <Typography variant="subtitle2" className="font-medium">
+                            {task.title || task.name}
+                          </Typography>
+                          <Chip
+                            label={task.status || "진행중"}
+                            size="small"
+                            color={getStatusColor(task.status || "진행중")}
+                            variant="outlined"
+                          />
+                        </Box>
+                        <Typography variant="caption" color="text.secondary">
+                          마감일: {formatDate(task.dueDate)}
+                        </Typography>
+                        {task.score !== undefined && task.maxScore !== undefined && (
+                          <Typography variant="caption" color="text.secondary" className="ml-2">
+                            점수: {task.score}/{task.maxScore}
+                          </Typography>
+                        )}
+                      </CardContent>
+                    </Card>
                   ))}
-                </List>
+
+                  {tasks.length === 0 && (
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      className="text-center py-4"
+                    >
+                      등록된 과제가 없습니다.
+                    </Typography>
+                  )}
+                </Box>
               </CardContent>
             </Paper>
           </Grid>
 
           {/* Right Side */}
           <Grid item xs={12} lg={6}>
-            {/* Latest Notices */}
+            {/* Latest Notices - From API */}
             <Paper className="mb-4" elevation={3}>
               <CardHeader
                 avatar={<Notifications color="primary" />}
                 title="Latest Notices"
-                subheader={`${notices.length} recent announcements`}
+                subheader={`${noticesCount} recent announcements`}
               />
               <CardContent className="pt-0">
                 <List>
@@ -431,26 +332,36 @@ export default function MainPage() {
                                 color="text.secondary"
                                 className="mb-1"
                               >
-                                {notice.summary}
+                                {notice.content?.slice(0, 100) || ""}
+                                {notice.content?.length > 100 && "..."}
                               </Typography>
                               <Typography
                                 variant="caption"
                                 color="text.secondary"
                               >
-                                {new Date(notice.date).toLocaleDateString()}
+                                {formatDate(notice.createdAt || notice.date)}
                               </Typography>
                             </Box>
                           }
                         />
                       </ListItem>
-                      {index < notices.length - 1 && <Divider />}
+                      {index < notices.slice(0, 3).length - 1 && <Divider />}
                     </div>
                   ))}
+                  {notices.length === 0 && (
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      className="text-center py-4"
+                    >
+                      공지사항이 없습니다.
+                    </Typography>
+                  )}
                 </List>
               </CardContent>
             </Paper>
 
-            {/* Calendar */}
+            {/* Calendar - Remains as mockup */}
             <Paper elevation={3}>
               <CardHeader
                 avatar={<Event color="primary" />}

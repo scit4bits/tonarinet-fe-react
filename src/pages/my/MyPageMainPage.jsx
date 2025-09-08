@@ -28,58 +28,60 @@ import {
   Person,
 } from "@mui/icons-material";
 import { getMe } from "../../utils/user";
+import taxios from "../../utils/taxios";
+import { getMyOrganizations } from "../../utils/organization";
 
 export default function MyPageMainPage() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [counsels, setCounsels] = useState([]);
+  const [organizations, setOrganizations] = useState([]);
+  const [teams, setTeams] = useState([]);
+  const [parties, setParties] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        // Fetch user profile
         const userData = await getMe();
         setUser(userData);
 
-        // Mock data for tasks and counsels - replace with actual API calls
-        setTasks([
-          {
-            id: 1,
-            title: "프로젝트 기획서 작성",
-            status: "진행중",
-            dueDate: "2025-09-15",
-          },
-          {
-            id: 2,
-            title: "시스템 요구사항 분석",
-            status: "완료",
-            dueDate: "2025-09-05",
-          },
-          {
-            id: 3,
-            title: "UI/UX 디자인 검토",
-            status: "대기",
-            dueDate: "2025-09-20",
-          },
+        // Fetch all user-related data in parallel
+        const [tasksResponse, counselsResponse, orgsResponse, teamsResponse, partiesResponse] = await Promise.allSettled([
+          taxios.get("/task/my"),
+          taxios.get("/user/mycounsels"),
+          getMyOrganizations(),
+          taxios.get("/team/my"),
+          taxios.get("/party/my")
         ]);
 
-        setCounsels([
-          {
-            id: 1,
-            title: "진로 상담",
-            counselor: "김상담사",
-            date: "2025-09-10",
-            status: "완료",
-          },
-          {
-            id: 2,
-            title: "스트레스 관리 상담",
-            counselor: "이상담사",
-            date: "2025-09-12",
-            status: "예정",
-          },
-        ]);
+        // Handle tasks
+        if (tasksResponse.status === 'fulfilled') {
+          setTasks(tasksResponse.value.data || []);
+        }
+
+        // Handle counsels
+        if (counselsResponse.status === 'fulfilled') {
+          setCounsels(counselsResponse.value.data || []);
+        }
+
+        // Handle organizations
+        if (orgsResponse.status === 'fulfilled') {
+          setOrganizations(orgsResponse.value || []);
+        }
+
+        // Handle teams
+        if (teamsResponse.status === 'fulfilled') {
+          setTeams(teamsResponse.value.data || []);
+        }
+
+        // Handle parties
+        if (partiesResponse.status === 'fulfilled') {
+          setParties(partiesResponse.value.data || []);
+        }
+
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       } finally {
@@ -93,24 +95,59 @@ export default function MyPageMainPage() {
   const getStatusColor = (status) => {
     switch (status) {
       case "완료":
+      case "COMPLETED":
+      case "completed":
         return "success";
       case "진행중":
+      case "IN_PROGRESS":
+      case "in_progress":
         return "primary";
       case "대기":
+      case "PENDING":
+      case "pending":
         return "warning";
       case "예정":
+      case "SCHEDULED":
+      case "scheduled":
         return "info";
       default:
         return "default";
     }
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    return new Date(dateString).toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const getTaskStatus = (task) => {
+    // Check if task has a specific status field, otherwise derive from dates
+    if (task.status) return task.status;
+    if (task.submissionTime) return "완료";
+    if (task.dueDate && new Date(task.dueDate) < new Date()) return "지연";
+    return "진행중";
+  };
+
+  const getCounselStatus = (counsel) => {
+    // Adapt based on actual counsel data structure
+    if (counsel.status) return counsel.status;
+    const counselDate = new Date(counsel.date || counsel.scheduledDate);
+    const now = new Date();
+    
+    if (counselDate < now) return "완료";
+    return "예정";
+  };
+
   const handleTaskClick = (taskId) => {
     navigate(`/task/${taskId}`);
   };
 
-  const handleCounselClick = (counselId) => {
-    navigate(`/counsel/${counselId}`);
+  const handleCounselClick = () => {
+    navigate(`/my/counsel`); // Navigate to counsel list page since individual counsel view might not exist
   };
 
   if (loading) {
@@ -140,6 +177,61 @@ export default function MyPageMainPage() {
         </Paper>
 
         <Grid container spacing={3}>
+          {/* Summary Stats Section */}
+          <Grid xs={12}>
+            <Paper elevation={1} className="p-6 mb-6">
+              <Typography variant="h6" className="font-semibold mb-4">
+                활동 요약
+              </Typography>
+              <Grid container spacing={3}>
+                <Grid xs={12} sm={6} md={3}>
+                  <Card variant="outlined" className="text-center p-4">
+                    <Business color="primary" sx={{ fontSize: 40 }} />
+                    <Typography variant="h5" className="font-bold mt-2">
+                      {organizations.length}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      소속 조직
+                    </Typography>
+                  </Card>
+                </Grid>
+                <Grid xs={12} sm={6} md={3}>
+                  <Card variant="outlined" className="text-center p-4">
+                    <Groups color="primary" sx={{ fontSize: 40 }} />
+                    <Typography variant="h5" className="font-bold mt-2">
+                      {teams.length}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      참여 팀
+                    </Typography>
+                  </Card>
+                </Grid>
+                <Grid xs={12} sm={6} md={3}>
+                  <Card variant="outlined" className="text-center p-4">
+                    <Group color="secondary" sx={{ fontSize: 40 }} />
+                    <Typography variant="h5" className="font-bold mt-2">
+                      {parties.length}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      참여 파티
+                    </Typography>
+                  </Card>
+                </Grid>
+                <Grid xs={12} sm={6} md={3}>
+                  <Card variant="outlined" className="text-center p-4">
+                    <Assignment color="success" sx={{ fontSize: 40 }} />
+                    <Typography variant="h5" className="font-bold mt-2">
+                      {tasks.length}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      할당된 과제
+                    </Typography>
+                  </Card>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Grid>
+
           {/* Tasks Section */}
           <Grid xs={12} md={6}>
             <Paper elevation={1} className="p-6">
@@ -150,7 +242,7 @@ export default function MyPageMainPage() {
                 <Button
                   size="small"
                   endIcon={<ArrowForward />}
-                  onClick={() => navigate("/my-tasks")}
+                  onClick={() => navigate("/my/task")}
                 >
                   모두 보기
                 </Button>
@@ -167,18 +259,23 @@ export default function MyPageMainPage() {
                     <CardContent className="pb-2">
                       <Box className="flex justify-between items-start mb-2">
                         <Typography variant="subtitle2" className="font-medium">
-                          {task.title}
+                          {task.title || task.name}
                         </Typography>
                         <Chip
-                          label={task.status}
+                          label={getTaskStatus(task)}
                           size="small"
-                          color={getStatusColor(task.status)}
+                          color={getStatusColor(getTaskStatus(task))}
                           variant="outlined"
                         />
                       </Box>
                       <Typography variant="caption" color="text.secondary">
-                        마감일: {task.dueDate}
+                        마감일: {formatDate(task.dueDate)}
                       </Typography>
+                      {task.score !== undefined && task.maxScore !== undefined && (
+                        <Typography variant="caption" color="text.secondary" className="ml-2">
+                          점수: {task.score}/{task.maxScore}
+                        </Typography>
+                      )}
                     </CardContent>
                   </Card>
                 ))}
@@ -206,7 +303,7 @@ export default function MyPageMainPage() {
                 <Button
                   size="small"
                   endIcon={<ArrowForward />}
-                  onClick={() => navigate("/my-counsels")}
+                  onClick={() => navigate("/my/counsel")}
                 >
                   모두 보기
                 </Button>
@@ -218,7 +315,7 @@ export default function MyPageMainPage() {
                     key={counsel.id}
                     variant="outlined"
                     className="cursor-pointer hover:shadow-md transition-shadow"
-                    onClick={() => handleCounselClick(counsel.id)}
+                    onClick={() => handleCounselClick()}
                   >
                     <CardContent className="pb-2">
                       <Box className="flex justify-between items-start mb-2">
@@ -226,21 +323,23 @@ export default function MyPageMainPage() {
                           {counsel.title}
                         </Typography>
                         <Chip
-                          label={counsel.status}
+                          label={getCounselStatus(counsel)}
                           size="small"
-                          color={getStatusColor(counsel.status)}
+                          color={getStatusColor(getCounselStatus(counsel))}
                           variant="outlined"
                         />
                       </Box>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        className="mb-1"
-                      >
-                        상담사: {counsel.counselor}
-                      </Typography>
+                      {counsel.counselor && (
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          className="mb-1"
+                        >
+                          상담사: {counsel.counselor}
+                        </Typography>
+                      )}
                       <Typography variant="caption" color="text.secondary">
-                        일정: {counsel.date}
+                        일정: {formatDate(counsel.date || counsel.scheduledDate || counsel.createdAt)}
                       </Typography>
                     </CardContent>
                   </Card>

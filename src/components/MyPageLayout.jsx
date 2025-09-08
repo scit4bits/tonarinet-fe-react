@@ -38,19 +38,19 @@ export default function MyPageLayout() {
       icon: <Business />,
       path: "/my/org",
     },
-    { key: "my-team", label: "내 팀", icon: <Group />, path: "/my-team" },
-    { key: "my-party", label: "내 파티", icon: <Groups />, path: "/my-party" },
+    { key: "my-team", label: "내 팀", icon: <Group />, path: "/my/team" },
+    { key: "my-party", label: "내 파티", icon: <Groups />, path: "/my/party" },
     {
       key: "my-tasks",
       label: "내 과제",
       icon: <Assignment />,
-      path: "/my-tasks",
+      path: "/my/tasks",
     },
     {
       key: "my-counsels",
       label: "내 상담",
       icon: <Psychology />,
-      path: "/my-counsels",
+      path: "/my/counsels",
     },
   ];
 

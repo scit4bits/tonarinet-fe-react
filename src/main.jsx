@@ -35,6 +35,12 @@ import MyPageLayout from "./components/MyPageLayout.jsx";
 import MyPageOrgPage from "./pages/my/MyPageOrgPage.jsx";
 import OrgMainPage from "./pages/org/OrgMainPage.jsx";
 import TaskDetailPage from "./pages/TaskDetailPage.jsx";
+import MyPageTeamPage from "./pages/my/MyPageTeamPage.jsx";
+import MyPagePartyPage from "./pages/my/MyPagePartyPage.jsx";
+import MyPageTaskPage from "./pages/my/MyPageTaskPage.jsx";
+import OrgAdminNoticePage from "./pages/orgadmin/OrgAdminNoticePage.jsx";
+import MyPageCounselPage from "./pages/my/MyPageCounselPage.jsx";
+import WSTestPage from "./pages/WSTestPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StyledEngineProvider enableCssLayer>
@@ -52,12 +58,18 @@ createRoot(document.getElementById("root")).render(
           <Route path="google" element={<SignUpPage provider={"google"} />} />
         </Route>
 
+        <Route path="/wstest" element={<WSTestPage />} />
+
         <Route element={<Layout />}>
           <Route path="/main" element={<MainPage />} />
 
           <Route path="/my" element={<MyPageLayout />}>
             <Route index element={<MyPageMainPage />} />
             <Route path="org" element={<MyPageOrgPage />} />
+            <Route path="team" element={<MyPageTeamPage />} />
+            <Route path="party" element={<MyPagePartyPage />} />
+            <Route path="tasks" element={<MyPageTaskPage />} />
+            <Route path="counsels" element={<MyPageCounselPage />} />
           </Route>
 
           <Route path="/org">
@@ -88,6 +100,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="team" element={<OrgAdminTeamPage />} />
             <Route path="task" element={<OrgAdminTaskPage />} />
             <Route path="counsel" element={<OrgAdminCounselPage />} />
+            <Route path="notice" element={<OrgAdminNoticePage />} />
           </Route>
 
           <Route path="/task">

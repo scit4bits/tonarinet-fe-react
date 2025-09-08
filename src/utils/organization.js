@@ -59,10 +59,22 @@ async function updateOrganization(
   return response.data;
 }
 
+async function getBoardByOrgId(orgId) {
+  try {
+    const response = await taxios.get(`/board`);
+    const board = response.data.find((b) => b.orgId == orgId);
+    return board;
+  } catch (error) {
+    console.error("Error fetching board ID by org ID:", error);
+    return null;
+  }
+}
+
 export {
   getMyOrganizations,
   searchOrganizations,
   applyToOrganization,
   createOrganization,
   updateOrganization,
+  getBoardByOrgId,
 };

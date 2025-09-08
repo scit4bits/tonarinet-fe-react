@@ -202,20 +202,11 @@ export default function MyPageOrgPage() {
                           variant="contained"
                           size="small"
                           sx={{ flexGrow: 1 }}
+                          onClick={()=>{window.location.href=`/orgadmin/${org.id}`}}
                         >
                           관리
                         </Button>
                       )}
-                      <Button
-                        startIcon={<ExitToApp />}
-                        variant="outlined"
-                        color="error"
-                        size="small"
-                        onClick={() => handleLeaveOrganization(org.id)}
-                        sx={org.role !== "ADMIN" ? { flexGrow: 1 } : {}}
-                      >
-                        탈퇴
-                      </Button>
                     </Stack>
                   </CardActions>
                 </Card>

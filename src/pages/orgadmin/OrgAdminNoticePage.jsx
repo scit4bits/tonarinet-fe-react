@@ -19,15 +19,18 @@ import {
 	TableSortLabel,
 	CircularProgress,
 	TablePagination,
+	Button,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import CreateIcon from "@mui/icons-material/Create";
 import useArticleList from "../../hooks/useArticleList";
 import { useParams } from "react-router";
+import { getBoardByOrgId } from "../../utils/organization";
 
-// 조직 관리자: 상담 목록 페이지
-export default function OrgAdminCounselPage() {
+// 조직 관리자: 공지 목록 페이지
+export default function OrgAdminNoticePage() {
 	const { t } = useTranslation();
-  const {orgId} = useParams();
+	const {orgId} = useParams();
 	const navigate = useNavigate();
 	const {
 		articles,
@@ -44,7 +47,7 @@ export default function OrgAdminCounselPage() {
 		setSortBy,
 		sortDirection,
 		setSortDirection,
-	} = useArticleList(orgId, "counsel");
+	} = useArticleList(orgId, "notice");
 
 	// 정렬
 	const handleRequestSort = (property) => {
@@ -69,13 +72,32 @@ export default function OrgAdminCounselPage() {
 		navigate(`/orgadmin/counsel/${articleId}`);
 	};
 
+	// 글쓰기 버튼 클릭 시 게시글 작성 페이지로 이동
+	const handleWriteClick = async () => {
+		const board = await getBoardByOrgId(orgId);
+		if (board) {
+			navigate(`/board/${board.id}/write`);
+		}
+	};
+
 	return (
 		<main className="mt-5">
 			<title>{t("pages.orgAdmin.counseling.title")}</title>
 
-			<Typography variant="h4" gutterBottom>
-				상담 목록 관리
-			</Typography>
+			<Box className="flex justify-between items-center mb-4">
+				<Typography variant="h4" gutterBottom>
+					공지 목록 관리
+				</Typography>
+				<Button
+					variant="contained"
+					color="primary"
+					startIcon={<CreateIcon />}
+					onClick={handleWriteClick}
+					sx={{ minWidth: "120px" }}
+				>
+					글쓰기
+				</Button>
+			</Box>
 
 			<Box className="flex gap-5 items-center mb-4">
 				<FormControl size="small" className="min-w-[120px]">
