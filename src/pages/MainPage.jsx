@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import {
   Box,
-  Grid,
   Paper,
   Typography,
   Card,
@@ -141,14 +140,18 @@ export default function MainPage() {
   }
 
   return (
-    <Box className="flex w-full min-h-screen bg-gray-50">
+    <Box className="flex flex-col md:flex-row w-full min-h-screen bg-gray-50">
       <title>{t("pages.main.title")}</title>
 
       {/* Sidebar */}
       <Paper
         elevation={1}
-        className="w-80 bg-white"
-        sx={{ borderRadius: 0, borderRight: "1px solid #e0e0e0" }}
+        className="w-full md:w-80 bg-white"
+        sx={{ 
+          borderRadius: 0, 
+          borderRight: { md: "1px solid #e0e0e0" },
+          borderBottom: { xs: "1px solid #e0e0e0", md: "none" }
+        }}
       >
         <Box className="p-6">
           {/* Profile Section */}
@@ -220,11 +223,28 @@ export default function MainPage() {
         </Typography>
 
         {/* Main Dashboard Content */}
-        <Grid container spacing={3}>
+        <Box 
+          className="flex flex-col xl:flex-row gap-6"
+          sx={{ 
+            display: 'flex',
+            flexDirection: { xs: 'column', xl: 'row' },
+            gap: 3,
+            width: '100%'
+          }}
+        >
           {/* Left Side */}
-          <Grid item xs={12} lg={6}>
+          <Box 
+            className="flex-1 min-w-0"
+            sx={{ 
+              flex: { xs: '1 1 auto', xl: '1 1 50%' },
+              minWidth: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 2
+            }}
+          >
             {/* Enrollment Status - Simplified */}
-            <Paper className="mb-4" elevation={3}>
+            <Paper elevation={3}>
               <CardHeader
                 avatar={<Event color="primary" />}
                 title="Enrollment Status"
@@ -249,7 +269,7 @@ export default function MainPage() {
                   <Button
                     size="small"
                     endIcon={<ArrowForward />}
-                    onClick={() => navigate("/my/task")}
+                    onClick={() => navigate("/my/tasks")}
                   >
                     모두 보기
                   </Button>
@@ -300,12 +320,21 @@ export default function MainPage() {
                 </Box>
               </CardContent>
             </Paper>
-          </Grid>
+          </Box>
 
           {/* Right Side */}
-          <Grid item xs={12} lg={6}>
+          <Box 
+            className="flex-1 min-w-0"
+            sx={{ 
+              flex: { xs: '1 1 auto', xl: '1 1 50%' },
+              minWidth: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 2
+            }}
+          >
             {/* Latest Notices - From API */}
-            <Paper className="mb-4" elevation={3}>
+            <Paper elevation={3}>
               <CardHeader
                 avatar={<Notifications color="primary" />}
                 title="Latest Notices"
@@ -326,11 +355,11 @@ export default function MainPage() {
                             </Typography>
                           }
                           secondary={
-                            <Box>
+                            <span>
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
-                                className="mb-1"
+                                className="mb-1 block"
                               >
                                 {notice.content?.slice(0, 100) || ""}
                                 {notice.content?.length > 100 && "..."}
@@ -338,10 +367,11 @@ export default function MainPage() {
                               <Typography
                                 variant="caption"
                                 color="text.secondary"
+                                className="block"
                               >
                                 {formatDate(notice.createdAt || notice.date)}
                               </Typography>
-                            </Box>
+                            </span>
                           }
                         />
                       </ListItem>
@@ -393,7 +423,7 @@ export default function MainPage() {
                             </Typography>
                           }
                           secondary={
-                            <Box className="flex justify-between items-center">
+                            <span className="flex justify-between items-center">
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
@@ -419,7 +449,7 @@ export default function MainPage() {
                                     : "success"
                                 }
                               />
-                            </Box>
+                            </span>
                           }
                         />
                       </ListItem>
@@ -429,8 +459,8 @@ export default function MainPage() {
                 </List>
               </CardContent>
             </Paper>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );
