@@ -48,7 +48,6 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <Routes>
         <Route index element={<LandingPage />} />
-
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
 
@@ -108,7 +107,6 @@ createRoot(document.getElementById("root")).render(
           <Route path="/task">
             <Route path=":taskId" element={<TaskDetailPage />} />
           </Route>
-
           <Route path="/testauth" element={<AuthTestPage />} />
 
           <Route path="/board">

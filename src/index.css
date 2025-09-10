@@ -2,6 +2,37 @@
 @import "tailwindcss";
 @import "react-quill-new/dist/quill.snow.css";
 
+/* src/index.css 또는 App.css 등에 추가 */
+@keyframes appearAndPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(2);
+  }
+}
+
+.appear-animation {
+  /* 애니메이션이 끝난 후 마지막 상태를 유지합니다. */
+  animation: appearAndPop 0.5s ease-out forwards;
+}
+
+.character-pin {
+    /* 캐릭터 아이콘의 기본 스타일입니다. 크기나 테두리는 여기서 조절하세요. */
+    width: 56px; /* 12 * 4 = 48px */
+    height: 56px; /* 12 * 4 = 48px */
+    border-radius: 9999px; /* 원형 */
+    object-fit: cover;
+    border: 2px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 :root {
   font-family: "Pretendard Variable", Pretendard, system-ui, Avenir, Helvetica,
     Arial, sans-serif;
@@ -12,6 +43,10 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none;
 }
 
 body {
