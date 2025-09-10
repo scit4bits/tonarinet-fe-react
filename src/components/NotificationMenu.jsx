@@ -16,6 +16,7 @@ import {
 } from "@mui/icons-material";
 import {
   getMyNotification,
+  getUnreadNotificationCount,
   readAllNotification,
   readOneNotification,
 } from "../utils/notification";
@@ -23,32 +24,14 @@ import {
 export default function NotificationMenu() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
   const open = Boolean(anchorEl);
 
-  // // Sample notification data
-  // const notifications = [
-  //   {
-  //     id: 1,
-  //     icon: <CircleIcon color="primary" />,
-  //     title: "New Message",
-  //     description: "You have received a new message from John",
-  //     url: "/messages/123",
-  //   },
-  //   {
-  //     id: 2,
-  //     icon: <CircleIcon color="warning" />,
-  //     title: "System Update",
-  //     description: "System maintenance scheduled for tonight",
-  //     url: "/system/updates",
-  //   },
-  //   {
-  //     id: 3,
-  //     icon: <CircleIcon color="error" />,
-  //     title: "Alert",
-  //     description: "Your subscription expires in 3 days",
-  //     url: "/billing",
-  //   },
-  // ];
+  useEffect(() => {
+    getUnreadNotificationCount().then((count) => {
+      setUnreadCount(count);
+    });
+  }, []);
 
   const handleClick = async (event) => {
     const eventCapture = event.currentTarget; // capturing

@@ -49,39 +49,44 @@ export default function MyPageMainPage() {
         setUser(userData);
 
         // Fetch all user-related data in parallel
-        const [tasksResponse, counselsResponse, orgsResponse, teamsResponse, partiesResponse] = await Promise.allSettled([
+        const [
+          tasksResponse,
+          counselsResponse,
+          orgsResponse,
+          teamsResponse,
+          partiesResponse,
+        ] = await Promise.allSettled([
           taxios.get("/task/my"),
           taxios.get("/user/mycounsels"),
           getMyOrganizations(),
           taxios.get("/team/my"),
-          taxios.get("/party/my")
+          taxios.get("/party/my"),
         ]);
 
         // Handle tasks
-        if (tasksResponse.status === 'fulfilled') {
+        if (tasksResponse.status === "fulfilled") {
           setTasks(tasksResponse.value.data || []);
         }
 
         // Handle counsels
-        if (counselsResponse.status === 'fulfilled') {
+        if (counselsResponse.status === "fulfilled") {
           setCounsels(counselsResponse.value.data || []);
         }
 
         // Handle organizations
-        if (orgsResponse.status === 'fulfilled') {
+        if (orgsResponse.status === "fulfilled") {
           setOrganizations(orgsResponse.value || []);
         }
 
         // Handle teams
-        if (teamsResponse.status === 'fulfilled') {
+        if (teamsResponse.status === "fulfilled") {
           setTeams(teamsResponse.value.data || []);
         }
 
         // Handle parties
-        if (partiesResponse.status === 'fulfilled') {
+        if (partiesResponse.status === "fulfilled") {
           setParties(partiesResponse.value.data || []);
         }
-
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       } finally {
@@ -137,7 +142,7 @@ export default function MyPageMainPage() {
     if (counsel.status) return counsel.status;
     const counselDate = new Date(counsel.date || counsel.scheduledDate);
     const now = new Date();
-    
+
     if (counselDate < now) return "완료";
     return "예정";
   };
@@ -242,7 +247,7 @@ export default function MyPageMainPage() {
                 <Button
                   size="small"
                   endIcon={<ArrowForward />}
-                  onClick={() => navigate("/my/task")}
+                  onClick={() => navigate("/my/tasksw")}
                 >
                   모두 보기
                 </Button>
@@ -271,11 +276,16 @@ export default function MyPageMainPage() {
                       <Typography variant="caption" color="text.secondary">
                         마감일: {formatDate(task.dueDate)}
                       </Typography>
-                      {task.score !== undefined && task.maxScore !== undefined && (
-                        <Typography variant="caption" color="text.secondary" className="ml-2">
-                          점수: {task.score}/{task.maxScore}
-                        </Typography>
-                      )}
+                      {task.score !== undefined &&
+                        task.maxScore !== undefined && (
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            className="ml-2"
+                          >
+                            점수: {task.score}/{task.maxScore}
+                          </Typography>
+                        )}
                     </CardContent>
                   </Card>
                 ))}
@@ -339,7 +349,12 @@ export default function MyPageMainPage() {
                         </Typography>
                       )}
                       <Typography variant="caption" color="text.secondary">
-                        일정: {formatDate(counsel.date || counsel.scheduledDate || counsel.createdAt)}
+                        일정:{" "}
+                        {formatDate(
+                          counsel.date ||
+                            counsel.scheduledDate ||
+                            counsel.createdAt
+                        )}
                       </Typography>
                     </CardContent>
                   </Card>

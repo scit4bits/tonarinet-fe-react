@@ -58,23 +58,22 @@ export default function MainPage() {
         // Fetch all data in parallel
         const [tasksResponse, noticesResponse] = await Promise.allSettled([
           taxios.get("/task/my"),
-          taxios.get("/board/0/articles")
+          taxios.get("/board/0/articles"),
         ]);
 
         // Handle tasks
-        if (tasksResponse.status === 'fulfilled') {
+        if (tasksResponse.status === "fulfilled") {
           const tasksData = tasksResponse.value.data || [];
           setTasks(tasksData);
-          setTasksCount(tasksData.length);
+          setTasksCount(tasksData.filter((task) => !task.score).length);
         }
 
         // Handle notices
-        if (noticesResponse.status === 'fulfilled') {
+        if (noticesResponse.status === "fulfilled") {
           const noticesData = noticesResponse.value.data.data || [];
           setNotices(noticesData);
           setNoticesCount(noticesData.length);
         }
-
       } catch (error) {
         console.error("Failed to fetch dashboard data:", error);
       } finally {
@@ -110,7 +109,7 @@ export default function MainPage() {
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
-    return new Date(dateString).toLocaleDateString("ko-KR", {
+    return new Date(dateString).toLocaleTimeString("ko-KR", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -147,10 +146,10 @@ export default function MainPage() {
       <Paper
         elevation={1}
         className="w-full md:w-80 bg-white"
-        sx={{ 
-          borderRadius: 0, 
+        sx={{
+          borderRadius: 0,
           borderRight: { md: "1px solid #e0e0e0" },
-          borderBottom: { xs: "1px solid #e0e0e0", md: "none" }
+          borderBottom: { xs: "1px solid #e0e0e0", md: "none" },
         }}
       >
         <Box className="p-6">
@@ -164,10 +163,7 @@ export default function MainPage() {
                 >
                   <Person sx={{ fontSize: 40 }} />
                 </Avatar>
-                <Typography
-                  variant="h6"
-                  className="font-semibold text-center"
-                >
+                <Typography variant="h6" className="font-semibold text-center">
                   {user?.name || "User"}
                 </Typography>
                 <Typography
@@ -204,7 +200,7 @@ export default function MainPage() {
                 <Box className="flex items-center">
                   <Notifications color="success" className="mr-2" />
                   <Typography variant="body2" className="font-medium">
-                    New Notices
+                    Notices
                   </Typography>
                 </Box>
                 <Typography variant="h6" color="success">
@@ -223,24 +219,24 @@ export default function MainPage() {
         </Typography>
 
         {/* Main Dashboard Content */}
-        <Box 
+        <Box
           className="flex flex-col xl:flex-row gap-6"
-          sx={{ 
-            display: 'flex',
-            flexDirection: { xs: 'column', xl: 'row' },
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", xl: "row" },
             gap: 3,
-            width: '100%'
+            width: "100%",
           }}
         >
           {/* Left Side */}
-          <Box 
+          <Box
             className="flex-1 min-w-0"
-            sx={{ 
-              flex: { xs: '1 1 auto', xl: '1 1 50%' },
+            sx={{
+              flex: { xs: "1 1 auto", xl: "1 1 50%" },
               minWidth: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 2
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
             }}
           >
             {/* Enrollment Status - Simplified */}
@@ -286,24 +282,34 @@ export default function MainPage() {
                     >
                       <CardContent className="pb-2">
                         <Box className="flex justify-between items-start mb-2">
-                          <Typography variant="subtitle2" className="font-medium">
+                          <Typography
+                            variant="subtitle2"
+                            className="font-medium"
+                          >
                             {task.title || task.name}
                           </Typography>
                           <Chip
-                            label={task.status || "진행중"}
+                            label={task.score ? "완료" : "진행중"}
                             size="small"
-                            color={getStatusColor(task.status || "진행중")}
+                            color={getStatusColor(
+                              task.score ? "완료" : "진행중"
+                            )}
                             variant="outlined"
                           />
                         </Box>
                         <Typography variant="caption" color="text.secondary">
                           마감일: {formatDate(task.dueDate)}
                         </Typography>
-                        {task.score !== undefined && task.maxScore !== undefined && (
-                          <Typography variant="caption" color="text.secondary" className="ml-2">
-                            점수: {task.score}/{task.maxScore}
-                          </Typography>
-                        )}
+                        {task.score !== undefined &&
+                          task.maxScore !== undefined && (
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                              className="ml-2"
+                            >
+                              점수: {task.score}/{task.maxScore}
+                            </Typography>
+                          )}
                       </CardContent>
                     </Card>
                   ))}
@@ -323,14 +329,14 @@ export default function MainPage() {
           </Box>
 
           {/* Right Side */}
-          <Box 
+          <Box
             className="flex-1 min-w-0"
-            sx={{ 
-              flex: { xs: '1 1 auto', xl: '1 1 50%' },
+            sx={{
+              flex: { xs: "1 1 auto", xl: "1 1 50%" },
               minWidth: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 2
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
             }}
           >
             {/* Latest Notices - From API */}
@@ -338,41 +344,29 @@ export default function MainPage() {
               <CardHeader
                 avatar={<Notifications color="primary" />}
                 title="Latest Notices"
-                subheader={`${noticesCount} recent announcements`}
+                subheader={`${noticesCount} announcements`}
               />
               <CardContent className="pt-0">
                 <List>
                   {notices.map((notice, index) => (
                     <div key={notice.id}>
-                      <ListItem className="px-0 py-3">
+                      <ListItem
+                        className="px-0 py-3 cursor-pointer hover:bg-gray-50 transition-colors rounded"
+                        onClick={() => navigate(`/board/view/${notice.id}`)}
+                      >
                         <ListItemText
-                          primary={
-                            <Typography
-                              variant="body1"
-                              className="font-medium mb-1"
-                            >
-                              {notice.title}
-                            </Typography>
-                          }
-                          secondary={
-                            <span>
-                              <Typography
-                                variant="body2"
-                                color="text.secondary"
-                                className="mb-1 block"
-                              >
-                                {notice.content?.slice(0, 100) || ""}
-                                {notice.content?.length > 100 && "..."}
-                              </Typography>
-                              <Typography
-                                variant="caption"
-                                color="text.secondary"
-                                className="block"
-                              >
-                                {formatDate(notice.createdAt || notice.date)}
-                              </Typography>
-                            </span>
-                          }
+                          primary={notice.title}
+                          secondary={`${notice.content?.slice(0, 100) || ""}${
+                            notice.content?.length > 100 ? "..." : ""
+                          } • ${formatDate(notice.createdAt || notice.date)}`}
+                          primaryTypographyProps={{
+                            variant: "body1",
+                            className: "font-medium mb-1",
+                          }}
+                          secondaryTypographyProps={{
+                            variant: "body2",
+                            color: "text.secondary",
+                          }}
                         />
                       </ListItem>
                       {index < notices.slice(0, 3).length - 1 && <Divider />}
@@ -417,39 +411,34 @@ export default function MainPage() {
                           </Avatar>
                         </ListItemIcon>
                         <ListItemText
-                          primary={
-                            <Typography variant="body1" className="font-medium">
-                              {event.title}
-                            </Typography>
-                          }
-                          secondary={
-                            <span className="flex justify-between items-center">
-                              <Typography
-                                variant="body2"
-                                color="text.secondary"
-                              >
-                                {new Date(event.date).toLocaleDateString(
-                                  "en-US",
-                                  {
-                                    weekday: "short",
-                                    month: "short",
-                                    day: "numeric",
-                                  }
-                                )}
-                              </Typography>
-                              <Chip
-                                label={event.type}
-                                size="small"
-                                variant="outlined"
-                                color={
-                                  event.type === "deadline"
-                                    ? "error"
-                                    : event.type === "meeting"
-                                    ? "primary"
-                                    : "success"
-                                }
-                              />
-                            </span>
+                          primary={event.title}
+                          secondary={new Date(event.date).toLocaleDateString(
+                            "en-US",
+                            {
+                              weekday: "short",
+                              month: "short",
+                              day: "numeric",
+                            }
+                          )}
+                          primaryTypographyProps={{
+                            variant: "body1",
+                            className: "font-medium",
+                          }}
+                          secondaryTypographyProps={{
+                            variant: "body2",
+                            color: "text.secondary",
+                          }}
+                        />
+                        <Chip
+                          label={event.type}
+                          size="small"
+                          variant="outlined"
+                          color={
+                            event.type === "deadline"
+                              ? "error"
+                              : event.type === "meeting"
+                              ? "primary"
+                              : "success"
                           }
                         />
                       </ListItem>

@@ -40,7 +40,7 @@ import MyPagePartyPage from "./pages/my/MyPagePartyPage.jsx";
 import MyPageTaskPage from "./pages/my/MyPageTaskPage.jsx";
 import OrgAdminNoticePage from "./pages/orgadmin/OrgAdminNoticePage.jsx";
 import MyPageCounselPage from "./pages/my/MyPageCounselPage.jsx";
-import WSTestPage from "./pages/WSTestPage.jsx";
+import PartySearchPage from "./pages/PartySearchPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StyledEngineProvider enableCssLayer>
@@ -58,8 +58,6 @@ createRoot(document.getElementById("root")).render(
           <Route path="google" element={<SignUpPage provider={"google"} />} />
         </Route>
 
-        <Route path="/wstest" element={<WSTestPage />} />
-
         <Route element={<Layout />}>
           <Route path="/main" element={<MainPage />} />
 
@@ -75,6 +73,10 @@ createRoot(document.getElementById("root")).render(
           <Route path="/org">
             <Route path=":orgId" element={<OrgMainPage />} />
             <Route path="list" element={<OrgSearchPage />} />
+          </Route>
+
+          <Route path="/party">
+            <Route path="list" element={<PartySearchPage />} />
           </Route>
 
           <Route path="/localReview" element={<LocalReviewPage />} />

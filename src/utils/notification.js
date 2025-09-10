@@ -30,4 +30,19 @@ async function readAllNotification() {
   }
 }
 
-export { getMyNotification, readOneNotification, readAllNotification };
+async function getUnreadNotificationCount() {
+  try {
+    const response = await taxios.get("/notification/unreadCount");
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch unread notification count:", error);
+    return 0;
+  }
+}
+
+export {
+  getMyNotification,
+  readOneNotification,
+  readAllNotification,
+  getUnreadNotificationCount,
+};

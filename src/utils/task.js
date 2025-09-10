@@ -52,4 +52,31 @@ async function searchOrgTasks(
   }
 }
 
-export { getTaskById, createTask, searchOrgTasks, getTaskGroupById };
+async function checkTaskManagementEligibility(taskId) {
+  try {
+    const response = await taxios.get(`/task/${taskId}/canmgmt`);
+    return response.data;
+  } catch (error) {
+    console.error("Error checking task management eligibility:", error);
+    throw error;
+  }
+}
+
+async function updateTaskScore(taskId, score) {
+  try {
+    const response = await taxios.patch(`/task/${taskId}/score?score=${score}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating task score:", error);
+    throw error;
+  }
+}
+
+export {
+  getTaskById,
+  createTask,
+  searchOrgTasks,
+  getTaskGroupById,
+  checkTaskManagementEligibility,
+  updateTaskScore,
+};

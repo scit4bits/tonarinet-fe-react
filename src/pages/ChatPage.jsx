@@ -34,11 +34,16 @@ export default function ChatPage() {
     error,
     wsConnected,
     selectChatRoom,
-    sendMessage
+    sendMessage,
   } = useChat();
 
   // Message Bubble Component
-  const MessageBubble = ({ msg, isOwnMessage, isFirstInGroup, isLastInGroup }) => {
+  const MessageBubble = ({
+    msg,
+    isOwnMessage,
+    isFirstInGroup,
+    isLastInGroup,
+  }) => {
     return (
       <Box
         sx={{
@@ -50,16 +55,19 @@ export default function ChatPage() {
       >
         {/* Avatar for other users (left side) - only show for last message in group */}
         {!isOwnMessage && (
-          <Avatar 
-            sx={{ 
-              width: 32, 
-              height: 32, 
+          <Avatar
+            sx={{
+              width: 32,
+              height: 32,
               mr: 1,
               mb: 0.5,
-              visibility: isLastInGroup ? "visible" : "hidden"
+              visibility: isLastInGroup ? "visible" : "hidden",
             }}
           >
-            {msg.senderName?.[0] || msg.sender?.name?.[0] || msg.user?.[0] || "U"}
+            {msg.senderName?.[0] ||
+              msg.sender?.name?.[0] ||
+              msg.user?.[0] ||
+              "U"}
           </Avatar>
         )}
 
@@ -75,11 +83,21 @@ export default function ChatPage() {
           {/* Sender name and time (only for other users and first message in group) */}
           {!isOwnMessage && isFirstInGroup && (
             <Box sx={{ display: "flex", alignItems: "center", mb: 0.5, ml: 1 }}>
-              <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 500 }}>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ fontWeight: 500 }}
+              >
                 {msg.senderName || msg.sender?.name || msg.user || "Unknown"}
               </Typography>
-              <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>
-                {msg.createdAt ? new Date(msg.createdAt).toLocaleTimeString() : msg.time}
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ ml: 1 }}
+              >
+                {msg.createdAt
+                  ? new Date(msg.createdAt).toLocaleTimeString()
+                  : msg.time}
               </Typography>
             </Box>
           )}
@@ -90,35 +108,45 @@ export default function ChatPage() {
             sx={{
               p: 1.5,
               borderRadius: 2,
-              backgroundColor: isOwnMessage ? "primary.main" : "background.paper",
+              backgroundColor: isOwnMessage
+                ? "primary.main"
+                : "background.paper",
               color: isOwnMessage ? "primary.contrastText" : "text.primary",
-              borderTopRightRadius: isOwnMessage ? 
-                (isFirstInGroup ? 4 : 16) : 16,
-              borderTopLeftRadius: isOwnMessage ? 
-                16 : (isFirstInGroup ? 4 : 16),
-              borderBottomRightRadius: isOwnMessage ? 
-                (isLastInGroup ? 4 : 16) : 16,
-              borderBottomLeftRadius: isOwnMessage ? 
-                16 : (isLastInGroup ? 4 : 16),
-              boxShadow: isOwnMessage 
-                ? "0 2px 8px rgba(25, 118, 210, 0.15)" 
+              borderTopRightRadius: isOwnMessage
+                ? isFirstInGroup
+                  ? 4
+                  : 16
+                : 16,
+              borderTopLeftRadius: isOwnMessage ? 16 : isFirstInGroup ? 4 : 16,
+              borderBottomRightRadius: isOwnMessage
+                ? isLastInGroup
+                  ? 4
+                  : 16
+                : 16,
+              borderBottomLeftRadius: isOwnMessage
+                ? 16
+                : isLastInGroup
+                ? 4
+                : 16,
+              boxShadow: isOwnMessage
+                ? "0 2px 8px rgba(25, 118, 210, 0.15)"
                 : "0 2px 8px rgba(0, 0, 0, 0.1)",
               transition: "all 0.2s ease",
               "&:hover": {
                 transform: "scale(1.02)",
-                boxShadow: isOwnMessage 
-                  ? "0 4px 12px rgba(25, 118, 210, 0.2)" 
+                boxShadow: isOwnMessage
+                  ? "0 4px 12px rgba(25, 118, 210, 0.2)"
                   : "0 4px 12px rgba(0, 0, 0, 0.15)",
-              }
+              },
             }}
           >
-            <Typography 
-              variant="body1" 
-              sx={{ 
+            <Typography
+              variant="body1"
+              sx={{
                 wordBreak: "break-word",
                 whiteSpace: "pre-wrap",
                 fontSize: "0.95rem",
-                lineHeight: 1.4
+                lineHeight: 1.4,
               }}
             >
               {msg.message || msg.text}
@@ -127,30 +155,32 @@ export default function ChatPage() {
 
           {/* Time for own messages (bottom right) - only show for last in group */}
           {isOwnMessage && isLastInGroup && (
-            <Typography 
-              variant="caption" 
-              color="text.secondary" 
-              sx={{ 
-                mt: 0.5, 
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{
+                mt: 0.5,
                 mr: 1,
-                fontSize: "0.7rem"
+                fontSize: "0.7rem",
               }}
             >
-              {msg.createdAt ? new Date(msg.createdAt).toLocaleTimeString() : msg.time}
+              {msg.createdAt
+                ? new Date(msg.createdAt).toLocaleTimeString()
+                : msg.time}
             </Typography>
           )}
         </Box>
 
         {/* Avatar for own messages (right side) - only show for last message in group */}
         {isOwnMessage && (
-          <Avatar 
-            sx={{ 
-              width: 32, 
-              height: 32, 
+          <Avatar
+            sx={{
+              width: 32,
+              height: 32,
               ml: 1,
               mb: 0.5,
               backgroundColor: "primary.main",
-              visibility: isLastInGroup ? "visible" : "hidden"
+              visibility: isLastInGroup ? "visible" : "hidden",
             }}
           >
             {user?.name?.[0] || "Me"}
@@ -180,13 +210,20 @@ export default function ChatPage() {
   const handleBackToRooms = () => {
     // Just trigger a re-render by setting selected room to null
     // The chat hook will handle the cleanup
-    window.history.pushState(null, '', '/chat');
+    window.history.pushState(null, "", "/chat");
     window.location.reload();
   };
 
   if (loading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -201,32 +238,38 @@ export default function ChatPage() {
   }
 
   return (
-    <Box sx={{ 
-      display: "flex", 
-      width: "100%", 
-      height: "80vh",
-      overflow: "hidden",
-      backgroundColor: "background.default"
-    }}>
+    <Box
+      sx={{
+        display: "flex",
+        width: "100%",
+        height: "80vh",
+        overflow: "hidden",
+        backgroundColor: "background.default",
+      }}
+    >
       <title>{t("pages.chat.title")}</title>
-      
+
       {/* Left side - Chat rooms list */}
-      <Paper sx={{ 
-        width: { xs: "100%", sm: 300 }, 
-        borderRadius: 0, 
-        display: { xs: selectedRoom ? "none" : "flex", sm: "flex" },
-        flexDirection: "column",
-        borderRight: "1px solid #e0e0e0"
-      }}>
-        <Box sx={{ 
-          p: 2, 
-          display: "flex", 
-          alignItems: "center", 
-          gap: 1,
-          borderBottom: "1px solid #e0e0e0",
-          backgroundColor: "primary.main",
-          color: "primary.contrastText"
-        }}>
+      <Paper
+        sx={{
+          width: { xs: "100%", sm: 300 },
+          borderRadius: 0,
+          display: { xs: selectedRoom ? "none" : "flex", sm: "flex" },
+          flexDirection: "column",
+          borderRight: "1px solid #e0e0e0",
+        }}
+      >
+        <Box
+          sx={{
+            p: 2,
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            borderBottom: "1px solid #e0e0e0",
+            backgroundColor: "primary.main",
+            color: "primary.contrastText",
+          }}
+        >
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             {t("pages.chat.chatRooms")}
           </Typography>
@@ -237,10 +280,16 @@ export default function ChatPage() {
               height: 12,
               borderRadius: "50%",
               backgroundColor: wsConnected ? "success.main" : "error.main",
-              boxShadow: wsConnected ? "0 0 8px rgba(76, 175, 80, 0.4)" : "0 0 8px rgba(244, 67, 54, 0.4)",
-              transition: "all 0.3s ease"
+              boxShadow: wsConnected
+                ? "0 0 8px rgba(76, 175, 80, 0.4)"
+                : "0 0 8px rgba(244, 67, 54, 0.4)",
+              transition: "all 0.3s ease",
             }}
-            title={wsConnected ? t("pages.chat.connected") : t("pages.chat.disconnectedStatus")}
+            title={
+              wsConnected
+                ? t("pages.chat.connected")
+                : t("pages.chat.disconnectedStatus")
+            }
           />
         </Box>
         <Divider />
@@ -264,55 +313,55 @@ export default function ChatPage() {
                 },
               }}
             >
-              <Avatar 
-                sx={{ 
+              <Avatar
+                sx={{
                   mr: 2,
-                  backgroundColor: selectedRoom?.id === room.id ? "primary.main" : "grey.400"
+                  backgroundColor:
+                    selectedRoom?.id === room.id ? "primary.main" : "grey.400",
                 }}
               >
                 {room.name?.[0] || "C"}
               </Avatar>
               <ListItemText
-                primary={
-                  <Typography 
-                    variant="subtitle1" 
-                    sx={{ 
-                      fontWeight: selectedRoom?.id === room.id ? 600 : 400,
-                      color: selectedRoom?.id === room.id ? "primary.main" : "text.primary"
-                    }}
-                  >
-                    {room.name}
-                  </Typography>
-                }
-                secondary={
-                  <Typography 
-                    variant="body2" 
-                    color="text.secondary"
-                    sx={{ 
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap"
-                    }}
-                  >
-                    {room.title || t("pages.chat.noMessages")}
-                  </Typography>
-                }
+                primary={room.name}
+                secondary={room.title || t("pages.chat.noMessages")}
+                primaryTypographyProps={{
+                  variant: "subtitle1",
+                  sx: {
+                    fontWeight: selectedRoom?.id === room.id ? 600 : 400,
+                    color:
+                      selectedRoom?.id === room.id
+                        ? "primary.main"
+                        : "text.primary",
+                  },
+                }}
+                secondaryTypographyProps={{
+                  variant: "body2",
+                  color: "text.secondary",
+                  sx: {
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  },
+                }}
               />
             </ListItemButton>
           ))}
           {chatRooms.length === 0 && (
             <ListItem sx={{ py: 4 }}>
-              <ListItemText 
-                primary={
-                  <Typography variant="body1" color="text.secondary" align="center">
-                    {t("pages.chat.noRooms")}
-                  </Typography>
-                }
-                secondary={
-                  <Typography variant="body2" color="text.secondary" align="center">
-                    {t("pages.chat.noRoomsDescription")}
-                  </Typography>
-                }
+              <ListItemText
+                primary={t("pages.chat.noRooms")}
+                secondary={t("pages.chat.noRoomsDescription")}
+                primaryTypographyProps={{
+                  variant: "body1",
+                  color: "text.secondary",
+                  align: "center",
+                }}
+                secondaryTypographyProps={{
+                  variant: "body2",
+                  color: "text.secondary",
+                  align: "center",
+                }}
               />
             </ListItem>
           )}
@@ -331,25 +380,27 @@ export default function ChatPage() {
         {selectedRoom ? (
           <>
             {/* Header */}
-            <Paper sx={{ 
-              p: 2, 
-              borderRadius: 0,
-              borderBottom: "1px solid #e0e0e0",
-              backgroundColor: "background.paper",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-            }}>
+            <Paper
+              sx={{
+                p: 2,
+                borderRadius: 0,
+                borderBottom: "1px solid #e0e0e0",
+                backgroundColor: "background.paper",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+              }}
+            >
               <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                 {/* Back button for mobile */}
                 <IconButton
-                  sx={{ 
+                  sx={{
                     display: { xs: "block", sm: "none" },
-                    color: "primary.main"
+                    color: "primary.main",
                   }}
                   onClick={() => handleBackToRooms()}
                 >
                   <ArrowBackIcon />
                 </IconButton>
-                
+
                 <Avatar sx={{ backgroundColor: "primary.main" }}>
                   {selectedRoom.name?.[0] || "C"}
                 </Avatar>
@@ -358,7 +409,9 @@ export default function ChatPage() {
                     {selectedRoom.name}
                   </Typography>
                   <Typography variant="caption" color="text.secondary">
-                    {wsConnected ? t("pages.chat.connected") : t("pages.chat.disconnectedStatus")}
+                    {wsConnected
+                      ? t("pages.chat.connected")
+                      : t("pages.chat.disconnectedStatus")}
                   </Typography>
                 </Box>
                 {/* Online indicator */}
@@ -367,39 +420,50 @@ export default function ChatPage() {
                     width: 8,
                     height: 8,
                     borderRadius: "50%",
-                    backgroundColor: wsConnected ? "success.main" : "error.main",
+                    backgroundColor: wsConnected
+                      ? "success.main"
+                      : "error.main",
                   }}
                 />
               </Box>
             </Paper>
 
             {/* Messages area */}
-            <Box sx={{ 
-              flex: 1, 
-              p: 2, 
-              overflowY: "auto", 
-              backgroundColor: "#f8f9fa",
-              backgroundImage: "linear-gradient(45deg, #f8f9fa 25%, transparent 25%), linear-gradient(-45deg, #f8f9fa 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f8f9fa 75%), linear-gradient(-45deg, transparent 75%, #f8f9fa 75%)",
-              backgroundSize: "20px 20px",
-              backgroundPosition: "0 0, 0 10px, 10px -10px, -10px 0px"
-            }}>
+            <Box
+              sx={{
+                flex: 1,
+                p: 2,
+                overflowY: "auto",
+                backgroundColor: "#f8f9fa",
+                backgroundImage:
+                  "linear-gradient(45deg, #f8f9fa 25%, transparent 25%), linear-gradient(-45deg, #f8f9fa 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f8f9fa 75%), linear-gradient(-45deg, transparent 75%, #f8f9fa 75%)",
+                backgroundSize: "20px 20px",
+                backgroundPosition: "0 0, 0 10px, 10px -10px, -10px 0px",
+              }}
+            >
               {messages.map((msg, index) => {
-                const isOwnMessage = msg.senderId === user?.id || msg.sender?.id === user?.id;
+                const isOwnMessage =
+                  msg.senderId === user?.id || msg.sender?.id === user?.id;
                 const prevMsg = index > 0 ? messages[index - 1] : null;
-                const nextMsg = index < messages.length - 1 ? messages[index + 1] : null;
-                
-                const prevIsFromSameSender = prevMsg && 
-                  (prevMsg.senderId === msg.senderId || prevMsg.sender?.id === msg.sender?.id);
-                const nextIsFromSameSender = nextMsg && 
-                  (nextMsg.senderId === msg.senderId || nextMsg.sender?.id === msg.sender?.id);
-                
+                const nextMsg =
+                  index < messages.length - 1 ? messages[index + 1] : null;
+
+                const prevIsFromSameSender =
+                  prevMsg &&
+                  (prevMsg.senderId === msg.senderId ||
+                    prevMsg.sender?.id === msg.sender?.id);
+                const nextIsFromSameSender =
+                  nextMsg &&
+                  (nextMsg.senderId === msg.senderId ||
+                    nextMsg.sender?.id === msg.sender?.id);
+
                 const isFirstInGroup = !prevIsFromSameSender;
                 const isLastInGroup = !nextIsFromSameSender;
-                
+
                 return (
-                  <MessageBubble 
-                    key={msg.id || index} 
-                    msg={msg} 
+                  <MessageBubble
+                    key={msg.id || index}
+                    msg={msg}
                     isOwnMessage={isOwnMessage}
                     isFirstInGroup={isFirstInGroup}
                     isLastInGroup={isLastInGroup}
@@ -417,12 +481,14 @@ export default function ChatPage() {
             </Box>
 
             {/* Message input */}
-            <Paper sx={{ 
-              p: 2, 
-              borderRadius: 0, 
-              borderTop: "1px solid #e0e0e0",
-              backgroundColor: "background.paper"
-            }}>
+            <Paper
+              sx={{
+                p: 2,
+                borderRadius: 0,
+                borderTop: "1px solid #e0e0e0",
+                backgroundColor: "background.paper",
+              }}
+            >
               <Box sx={{ display: "flex", gap: 1, alignItems: "flex-end" }}>
                 <TextField
                   fullWidth
@@ -455,8 +521,8 @@ export default function ChatPage() {
                     },
                   }}
                 />
-                <IconButton 
-                  onClick={handleSendMessage} 
+                <IconButton
+                  onClick={handleSendMessage}
                   color="primary"
                   disabled={!wsConnected || !message.trim()}
                   sx={{
@@ -471,7 +537,7 @@ export default function ChatPage() {
                     },
                     width: 48,
                     height: 48,
-                    mb: 0.5
+                    mb: 0.5,
                   }}
                 >
                   <SendIcon />
@@ -485,7 +551,14 @@ export default function ChatPage() {
             </Paper>
           </>
         ) : (
-          <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Box
+            sx={{
+              flex: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <Typography variant="h6" color="text.secondary">
               {t("pages.chat.selectRoom")}
             </Typography>

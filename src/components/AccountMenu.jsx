@@ -75,6 +75,16 @@ export default function AccountMenu() {
             >
               <Typography>마이 페이지</Typography>
             </MenuItem>,
+            user?.isAdmin && (
+              <MenuItem
+                key="admin"
+                onClick={() => {
+                  window.location.href = "/sysadmin";
+                }}
+              >
+                <Typography>관리자 페이지</Typography>
+              </MenuItem>
+            ),
             <MenuItem key="signout" onClick={handleSignOut}>
               Sign out
             </MenuItem>,

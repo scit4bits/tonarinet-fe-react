@@ -26,6 +26,10 @@ import {
   AccordionSummary,
   AccordionDetails,
   Badge,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import {
   ArrowBack as ArrowBackIcon,
@@ -40,8 +44,13 @@ import {
   ExpandMore as ExpandMoreIcon,
   List as ListIcon,
   AttachFile as AttachFileIcon,
+  Edit as EditIcon,
 } from "@mui/icons-material";
-import { getTaskById } from "../utils/task";
+import {
+  getTaskById,
+  checkTaskManagementEligibility,
+  updateTaskScore,
+} from "../utils/task";
 import RichTextEditor from "../components/RichTextEditor";
 import "react-quill-new/dist/quill.snow.css";
 import { createSubmission, getTaskSubmissions } from "../utils/submission";
@@ -54,6 +63,16 @@ export default function TaskDetailPage() {
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Management eligibility state
+  const [canManage, setCanManage] = useState(false);
+  const [managementLoading, setManagementLoading] = useState(false);
+
+  // Edit score state
+  const [editScoreOpen, setEditScoreOpen] = useState(false);
+  const [newScore, setNewScore] = useState("");
+  const [scoreError, setScoreError] = useState("");
+  const [updatingScore, setUpdatingScore] = useState(false);
 
   // Submission state
   const [submissionContent, setSubmissionContent] = useState("");
@@ -91,9 +110,23 @@ export default function TaskDetailPage() {
       }
     };
 
+    const checkManagementEligibility = async () => {
+      try {
+        setManagementLoading(true);
+        const eligibilityData = await checkTaskManagementEligibility(taskId);
+        setCanManage(eligibilityData || false);
+      } catch (error) {
+        console.error("Failed to check management eligibility:", error);
+        setCanManage(false);
+      } finally {
+        setManagementLoading(false);
+      }
+    };
+
     if (taskId) {
       fetchTaskDetails();
       fetchSubmissions();
+      checkManagementEligibility();
     }
   }, [taskId]);
 
@@ -123,6 +156,63 @@ export default function TaskDetailPage() {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  // Handle score editing
+  const handleEditScore = () => {
+    setNewScore(task.score !== null ? task.score.toString() : "");
+    setScoreError("");
+    setEditScoreOpen(true);
+  };
+
+  const handleScoreChange = (event) => {
+    const value = event.target.value;
+    setNewScore(value);
+
+    // Validate score
+    if (value === "") {
+      setScoreError("");
+      return;
+    }
+
+    const numericValue = parseFloat(value);
+    if (isNaN(numericValue)) {
+      setScoreError("Please enter a valid number");
+    } else if (numericValue < 0) {
+      setScoreError("Score cannot be negative");
+    } else if (numericValue > task.maxScore) {
+      setScoreError(`Score cannot exceed max score of ${task.maxScore}`);
+    } else {
+      setScoreError("");
+    }
+  };
+
+  const handleUpdateScore = async () => {
+    if (scoreError || newScore === "") {
+      return;
+    }
+
+    try {
+      setUpdatingScore(true);
+      const numericScore = parseFloat(newScore);
+      await updateTaskScore(taskId, numericScore);
+
+      // Update the local task state
+      setTask((prev) => ({ ...prev, score: numericScore }));
+      setEditScoreOpen(false);
+      setNewScore("");
+    } catch (error) {
+      console.error("Failed to update score:", error);
+      setScoreError("Failed to update score. Please try again.");
+    } finally {
+      setUpdatingScore(false);
+    }
+  };
+
+  const handleCancelScoreEdit = () => {
+    setEditScoreOpen(false);
+    setNewScore("");
+    setScoreError("");
   };
 
   // Date formatting
@@ -265,15 +355,28 @@ export default function TaskDetailPage() {
               >
                 Current Score
               </Typography>
-              <Chip
-                label={
-                  task.score !== null
-                    ? `${task.score} / ${task.maxScore}`
-                    : "Not graded"
-                }
-                color={task.score !== null ? "success" : "default"}
-                size="medium"
-              />
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Chip
+                  label={
+                    task.score !== null
+                      ? `${task.score} / ${task.maxScore}`
+                      : "Not graded"
+                  }
+                  color={task.score !== null ? "success" : "default"}
+                  size="medium"
+                />
+                {canManage && (
+                  <IconButton
+                    size="small"
+                    onClick={handleEditScore}
+                    color="primary"
+                    title="Edit Score"
+                    sx={{ ml: 1 }}
+                  >
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                )}
+              </Box>
             </Box>
           </Grid>
         </Grid>
@@ -804,6 +907,81 @@ export default function TaskDetailPage() {
           )}
         </Box>
       </Paper>
+
+      {/* Edit Score Dialog */}
+      <Dialog
+        open={editScoreOpen}
+        onClose={handleCancelScoreEdit}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          >
+            <EditIcon />
+            Edit Task Score
+          </Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Box sx={{ pt: 2 }}>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Task: {task?.name}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              gutterBottom
+              sx={{ mb: 3 }}
+            >
+              Maximum Score: {task?.maxScore} points
+            </Typography>
+
+            <TextField
+              autoFocus
+              label="Score"
+              type="number"
+              fullWidth
+              variant="outlined"
+              value={newScore}
+              onChange={handleScoreChange}
+              error={!!scoreError}
+              helperText={
+                scoreError || `Enter a score between 0 and ${task?.maxScore}`
+              }
+              inputProps={{
+                min: 0,
+                max: task?.maxScore,
+                step: 0.1,
+              }}
+              disabled={updatingScore}
+            />
+
+            {task?.score !== null && (
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+                Current Score: {task.score} / {task.maxScore}
+              </Typography>
+            )}
+          </Box>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 3 }}>
+          <Button onClick={handleCancelScoreEdit} disabled={updatingScore}>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleUpdateScore}
+            variant="contained"
+            disabled={!!scoreError || newScore === "" || updatingScore}
+            startIcon={
+              updatingScore ? <CircularProgress size={20} /> : <SaveIcon />
+            }
+          >
+            {updatingScore ? "Updating..." : "Update Score"}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
