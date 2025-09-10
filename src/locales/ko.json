@@ -1,5 +1,124 @@
 {
   "home": "홈",
   "localReview": "동네리뷰",
-  "community": "커뮤니티"
+  "community": "커뮤니티",
+  "pages": {
+    "main": {
+      "title": "Tonarinet - 홈",
+      "dashboard": {
+        "selectOrganization": "조직 선택",
+        "allOrganizations": "모든 조직",
+        "enrollmentStatus": "등록 상태",
+        "daysRemaining": "남은 일수",
+        "tasksTitle": "업무 목록",
+        "pendingTasks": "대기 중인 업무",
+        "latestNotices": "최신 공지사항",
+        "recentAnnouncements": "최근 공지",
+        "upcomingEvents": "예정된 이벤트",
+        "importantDates": "중요한 날짜와 마감일",
+        "progress": "진행률",
+        "stepsCompleted": "단계 완료",
+        "nextDeadline": "다음 마감일",
+        "due": "마감일",
+        "high": "높음",
+        "medium": "보통",
+        "low": "낮음",
+        "completed": "완료",
+        "inProgress": "진행중",
+        "pending": "대기중",
+        "deadline": "마감일",
+        "meeting": "회의",
+        "appointment": "약속"
+      }
+    },
+    "landing": {
+      "title": "Tonarinet - 랜딩 페이지"
+    },
+    "notFound": {
+      "title": "Tonarinet - 페이지를 찾을 수 없음"
+    },
+    "chat": {
+      "title": "Tonarinet - 채팅",
+      "chatRooms": "채팅방",
+      "noRooms": "채팅방이 없습니다",
+      "noRoomsDescription": "아직 참여한 채팅방이 없습니다",
+      "noMessages": "메시지가 없습니다",
+      "noMessagesDescription": "대화를 시작해보세요!",
+      "selectRoom": "채팅방을 선택하여 메시지를 시작하세요",
+      "typePlaceholder": "메시지를 입력하세요...",
+      "disconnected": "채팅 서버와의 연결이 끊어졌습니다. 페이지를 새로고침해주세요.",
+      "connected": "연결됨",
+      "disconnectedStatus": "연결 끊김"
+    },
+    "auth": {
+      "signIn": {
+        "title": "Tonarinet - 로그인"
+      },
+      "signUp": {
+        "title": "Tonarinet - 회원가입"
+      },
+      "authTest": {
+        "title": "Tonarinet - 인증 테스트 페이지"
+      }
+    },
+    "board": {
+      "list": {
+        "title": "Tonarinet - 게시판 목록"
+      },
+      "write": {
+        "title": "Tonarinet - 게시글 작성"
+      },
+      "view": {
+        "title": "Tonarinet - 게시글 보기"
+      },
+      "articles": {
+        "title": "Tonarinet - 게시판 글목록"
+      }
+    },
+    "localReview": {
+      "title": "Tonarinet - 동네리뷰"
+    },
+    "organization": {
+      "main": {
+        "title": "Tonarinet - {{orgName}}"
+      }
+    },
+    "orgAdmin": {
+      "members": {
+        "title": "Tonarinet - 조직 멤버 관리"
+      },
+      "teams": {
+        "title": "Tonarinet - 조직 팀 관리"
+      },
+      "tasks": {
+        "title": "Tonarinet - 조직 업무 관리"
+      },
+      "notices": {
+        "title": "Tonarinet - 조직 공지사항"
+      },
+      "counseling": {
+        "title": "Tonarinet - 조직 상담"
+      }
+    },
+    "sysAdmin": {
+      "users": {
+        "title": "Tonarinet - 시스템 관리 - 사용자"
+      },
+      "boards": {
+        "title": "Tonarinet - 시스템 관리 - 게시판"
+      },
+      "notices": {
+        "title": "Tonarinet - 시스템 관리 - 공지사항"
+      },
+      "organizations": {
+        "title": "Tonarinet - 시스템 관리 - 조직"
+      },
+      "parties": {
+        "title": "Tonarinet - 시스템 관리 - 파티"
+      },
+      "reviews": {
+        "title": "Tonarinet - 시스템 관리 - 리뷰"
+      }
+    }
+  }
 }

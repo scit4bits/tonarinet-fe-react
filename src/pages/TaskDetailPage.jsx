@@ -1,0 +1,987 @@
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
+import {
+  Box,
+  Container,
+  Paper,
+  Typography,
+  Chip,
+  Divider,
+  Grid,
+  Button,
+  CircularProgress,
+  Alert,
+  TextField,
+  Card,
+  CardContent,
+  IconButton,
+  Avatar,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Collapse,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Badge,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
+import {
+  ArrowBack as ArrowBackIcon,
+  Person as PersonIcon,
+  Group as GroupIcon,
+  Schedule as ScheduleIcon,
+  Grade as GradeIcon,
+  Assignment as AssignmentIcon,
+  Upload as UploadIcon,
+  Description as DescriptionIcon,
+  Save as SaveIcon,
+  ExpandMore as ExpandMoreIcon,
+  List as ListIcon,
+  AttachFile as AttachFileIcon,
+  Edit as EditIcon,
+} from "@mui/icons-material";
+import {
+  getTaskById,
+  checkTaskManagementEligibility,
+  updateTaskScore,
+} from "../utils/task";
+import RichTextEditor from "../components/RichTextEditor";
+import "react-quill-new/dist/quill.snow.css";
+import { createSubmission, getTaskSubmissions } from "../utils/submission";
+
+export default function TaskDetailPage() {
+  const { taskId } = useParams();
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  const [task, setTask] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // Management eligibility state
+  const [canManage, setCanManage] = useState(false);
+  const [managementLoading, setManagementLoading] = useState(false);
+
+  // Edit score state
+  const [editScoreOpen, setEditScoreOpen] = useState(false);
+  const [newScore, setNewScore] = useState("");
+  const [scoreError, setScoreError] = useState("");
+  const [updatingScore, setUpdatingScore] = useState(false);
+
+  // Submission state
+  const [submissionContent, setSubmissionContent] = useState("");
+  const [submissionFiles, setSubmissionFiles] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
+
+  // Submissions list state
+  const [submissions, setSubmissions] = useState([]);
+  const [submissionsLoading, setSubmissionsLoading] = useState(false);
+
+  // Fetch task details
+  useEffect(() => {
+    const fetchTaskDetails = async () => {
+      try {
+        setLoading(true);
+        const taskData = await getTaskById(taskId);
+        setTask(taskData);
+      } catch (error) {
+        console.error("Failed to fetch task details:", error);
+        setError("Failed to load task details");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchSubmissions = async () => {
+      try {
+        setSubmissionsLoading(true);
+        const submissionsData = await getTaskSubmissions(taskId);
+        setSubmissions(submissionsData);
+      } catch (error) {
+        console.error("Failed to fetch submissions:", error);
+      } finally {
+        setSubmissionsLoading(false);
+      }
+    };
+
+    const checkManagementEligibility = async () => {
+      try {
+        setManagementLoading(true);
+        const eligibilityData = await checkTaskManagementEligibility(taskId);
+        setCanManage(eligibilityData || false);
+      } catch (error) {
+        console.error("Failed to check management eligibility:", error);
+        setCanManage(false);
+      } finally {
+        setManagementLoading(false);
+      }
+    };
+
+    if (taskId) {
+      fetchTaskDetails();
+      fetchSubmissions();
+      checkManagementEligibility();
+    }
+  }, [taskId]);
+
+  // Handle file upload for submission
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    setSubmissionFiles((prev) => [...prev, ...files]);
+  };
+
+  // Remove file from submission
+  const removeFile = (index) => {
+    setSubmissionFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Handle submission
+  const handleSubmission = async () => {
+    try {
+      setSubmitting(true);
+      await createSubmission({
+        taskId,
+        contents: submissionContent,
+        files: submissionFiles,
+      });
+    } catch (error) {
+      console.error("Failed to submit:", error);
+      setError("Failed to submit task");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Handle score editing
+  const handleEditScore = () => {
+    setNewScore(task.score !== null ? task.score.toString() : "");
+    setScoreError("");
+    setEditScoreOpen(true);
+  };
+
+  const handleScoreChange = (event) => {
+    const value = event.target.value;
+    setNewScore(value);
+
+    // Validate score
+    if (value === "") {
+      setScoreError("");
+      return;
+    }
+
+    const numericValue = parseFloat(value);
+    if (isNaN(numericValue)) {
+      setScoreError("Please enter a valid number");
+    } else if (numericValue < 0) {
+      setScoreError("Score cannot be negative");
+    } else if (numericValue > task.maxScore) {
+      setScoreError(`Score cannot exceed max score of ${task.maxScore}`);
+    } else {
+      setScoreError("");
+    }
+  };
+
+  const handleUpdateScore = async () => {
+    if (scoreError || newScore === "") {
+      return;
+    }
+
+    try {
+      setUpdatingScore(true);
+      const numericScore = parseFloat(newScore);
+      await updateTaskScore(taskId, numericScore);
+
+      // Update the local task state
+      setTask((prev) => ({ ...prev, score: numericScore }));
+      setEditScoreOpen(false);
+      setNewScore("");
+    } catch (error) {
+      console.error("Failed to update score:", error);
+      setScoreError("Failed to update score. Please try again.");
+    } finally {
+      setUpdatingScore(false);
+    }
+  };
+
+  const handleCancelScoreEdit = () => {
+    setEditScoreOpen(false);
+    setNewScore("");
+    setScoreError("");
+  };
+
+  // Date formatting
+  const formatDate = (dateString) => {
+    if (!dateString) return "-";
+    return new Date(dateString).toLocaleString();
+  };
+
+  const formatDateOnly = (dateString) => {
+    if (!dateString) return "-";
+    return new Date(dateString).toLocaleDateString();
+  };
+
+  if (loading) {
+    return (
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="400px"
+        >
+          <CircularProgress />
+        </Box>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {error}
+        </Alert>
+        <Button
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate(-1)}
+          variant="outlined"
+        >
+          Go Back
+        </Button>
+      </Container>
+    );
+  }
+
+  if (!task) {
+    return (
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Typography>Task not found</Typography>
+        <Button
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate(-1)}
+          variant="outlined"
+          sx={{ mt: 2 }}
+        >
+          Go Back
+        </Button>
+      </Container>
+    );
+  }
+
+  return (
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      {/* Header */}
+      <Box sx={{ mb: 4, display: "flex", alignItems: "center", gap: 2 }}>
+        <IconButton onClick={() => navigate(-1)} sx={{ color: "primary.main" }}>
+          <ArrowBackIcon fontSize="large" />
+        </IconButton>
+        <Typography
+          variant="h4"
+          component="h1"
+          sx={{ fontWeight: "bold", color: "primary.main", flexGrow: 1 }}
+        >
+          Task Details
+        </Typography>
+      </Box>
+
+      {/* Task Details Section */}
+      <Paper elevation={2} sx={{ p: 4, mb: 4 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+          <AssignmentIcon fontSize="large" color="primary" />
+          <Typography variant="h5" component="h2" fontWeight="bold">
+            {task.name}
+          </Typography>
+        </Box>
+
+        <Divider sx={{ mb: 3 }} />
+
+        {/* Basic Information Grid */}
+        <Grid container spacing={3} sx={{ mb: 3 }}>
+          <Grid item xs={12} sm={6} md={3}>
+            <Box>
+              <Typography
+                variant="subtitle2"
+                color="text.secondary"
+                gutterBottom
+              >
+                Task ID
+              </Typography>
+              <Typography variant="h6">{task.id}</Typography>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <Box>
+              <Typography
+                variant="subtitle2"
+                color="text.secondary"
+                gutterBottom
+              >
+                Task Group ID
+              </Typography>
+              <Typography variant="h6">{task.taskGroupId}</Typography>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <Box>
+              <Typography
+                variant="subtitle2"
+                color="text.secondary"
+                gutterBottom
+              >
+                Max Score
+              </Typography>
+              <Chip
+                label={`${task.maxScore} points`}
+                color="info"
+                size="medium"
+              />
+            </Box>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <Box>
+              <Typography
+                variant="subtitle2"
+                color="text.secondary"
+                gutterBottom
+              >
+                Current Score
+              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Chip
+                  label={
+                    task.score !== null
+                      ? `${task.score} / ${task.maxScore}`
+                      : "Not graded"
+                  }
+                  color={task.score !== null ? "success" : "default"}
+                  size="medium"
+                />
+                {canManage && (
+                  <IconButton
+                    size="small"
+                    onClick={handleEditScore}
+                    color="primary"
+                    title="Edit Score"
+                    sx={{ ml: 1 }}
+                  >
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                )}
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
+
+        <Divider sx={{ mb: 3 }} />
+
+        {/* Assignment Information */}
+        <Grid container spacing={3} sx={{ mb: 3 }}>
+          <Grid item xs={12} md={6}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
+              <PersonIcon color="primary" />
+              <Typography variant="subtitle1" fontWeight="medium">
+                Assignment Information
+              </Typography>
+            </Box>
+            <List dense>
+              <ListItem>
+                <ListItemIcon>
+                  <Avatar
+                    sx={{ width: 32, height: 32, bgcolor: "primary.main" }}
+                  >
+                    {task.assignedUserName
+                      ? task.assignedUserName[0]
+                      : task.teamName
+                      ? "T"
+                      : "?"}
+                  </Avatar>
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    task.assignedUserName
+                      ? `Assigned to: ${task.assignedUserName}`
+                      : task.teamName
+                      ? `Assigned to Team: ${task.teamName}`
+                      : "Unassigned"
+                  }
+                  secondary={
+                    task.assignedUserName
+                      ? "Individual Assignment"
+                      : task.teamName
+                      ? "Team Assignment"
+                      : "No assignment"
+                  }
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <PersonIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={`Created by: ${task.createdByName}`}
+                  secondary={`User ID: ${task.createdById}`}
+                />
+              </ListItem>
+            </List>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
+              <ScheduleIcon color="primary" />
+              <Typography variant="subtitle1" fontWeight="medium">
+                Timeline
+              </Typography>
+            </Box>
+            <List dense>
+              <ListItem>
+                <ListItemIcon>
+                  <ScheduleIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Created"
+                  secondary={formatDate(task.createdAt)}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <ScheduleIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Last Updated"
+                  secondary={formatDate(task.updatedAt)}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <GradeIcon fontSize="small" color="error" />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Due Date"
+                  secondary={
+                    <Chip
+                      label={formatDate(task.dueDate)}
+                      color="warning"
+                      size="small"
+                      variant="outlined"
+                    />
+                  }
+                />
+              </ListItem>
+            </List>
+          </Grid>
+        </Grid>
+
+        <Divider sx={{ mb: 3 }} />
+
+        {/* Task Content */}
+        <Box sx={{ mb: 3 }}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          >
+            <DescriptionIcon />
+            Task Content
+          </Typography>
+          <Card variant="outlined">
+            <CardContent>
+              {task.contents ? (
+                <Box
+                  sx={{
+                    "& .ql-editor": {
+                      border: "none",
+                      padding: 0,
+                      fontSize: "1rem",
+                      lineHeight: 1.6,
+                    },
+                    "& img": {
+                      maxWidth: "100%",
+                      height: "auto",
+                    },
+                  }}
+                >
+                  <div
+                    className="ql-editor"
+                    dangerouslySetInnerHTML={{
+                      __html: task.contents,
+                    }}
+                  />
+                </Box>
+              ) : (
+                <Typography color="text.secondary" fontStyle="italic">
+                  No content provided for this task
+                </Typography>
+              )}
+            </CardContent>
+          </Card>
+        </Box>
+      </Paper>
+
+      {/* Submission Section */}
+      <Paper elevation={2} sx={{ p: 4 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+          <UploadIcon fontSize="large" color="secondary" />
+          <Typography variant="h5" component="h2" fontWeight="bold">
+            Task Submission
+          </Typography>
+        </Box>
+
+        <Divider sx={{ mb: 3 }} />
+
+        {error && (
+          <Alert severity="error" sx={{ mb: 3 }}>
+            {error}
+          </Alert>
+        )}
+
+        {/* Submission Form */}
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            Submission Content
+          </Typography>
+          <RichTextEditor
+            value={submissionContent}
+            onChange={setSubmissionContent}
+            placeholder="Enter your submission content here..."
+            readOnly={submitting}
+            minHeight="300px"
+            showImageUpload={true}
+          />
+        </Box>
+
+        {/* File Upload */}
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            Attachment Files
+          </Typography>
+          <Button
+            component="label"
+            variant="outlined"
+            startIcon={<UploadIcon />}
+            disabled={submitting}
+            sx={{ mb: 2 }}
+          >
+            Upload Files
+            <input type="file" hidden multiple onChange={handleFileChange} />
+          </Button>
+
+          {/* Display attached files */}
+          {submissionFiles.length > 0 && (
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="subtitle2" gutterBottom>
+                Attached Files:
+              </Typography>
+              <List>
+                {submissionFiles.map((file, index) => (
+                  <ListItem key={index}>
+                    <ListItemIcon>
+                      <DescriptionIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={file.name}
+                      secondary={`${(file.size / 1024 / 1024).toFixed(2)} MB`}
+                    />
+                    <Button
+                      size="small"
+                      color="error"
+                      onClick={() => removeFile(index)}
+                      disabled={submitting}
+                    >
+                      Remove
+                    </Button>
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          )}
+        </Box>
+
+        {/* Submit Button */}
+        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+          <Button
+            variant="outlined"
+            onClick={() => navigate(-1)}
+            disabled={submitting}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            startIcon={
+              submitting ? <CircularProgress size={20} /> : <SaveIcon />
+            }
+            onClick={handleSubmission}
+            disabled={submitting || !submissionContent.trim()}
+            size="large"
+          >
+            {submitting ? "Submitting..." : "Submit Task"}
+          </Button>
+        </Box>
+
+        <Divider sx={{ my: 4 }} />
+
+        {/* Submissions List Section */}
+        <Box sx={{ mb: 3 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+            <ListIcon fontSize="large" color="info" />
+            <Typography variant="h5" component="h2" fontWeight="bold">
+              Task Submissions
+            </Typography>
+            <Badge badgeContent={submissions.length} color="primary" showZero>
+              <Chip label="Total" size="small" variant="outlined" />
+            </Badge>
+          </Box>
+
+          {submissionsLoading ? (
+            <Box display="flex" justifyContent="center" p={4}>
+              <CircularProgress />
+            </Box>
+          ) : submissions.length === 0 ? (
+            <Card variant="outlined">
+              <CardContent>
+                <Typography color="text.secondary" textAlign="center">
+                  No submissions found for this task
+                </Typography>
+              </CardContent>
+            </Card>
+          ) : (
+            <Box>
+              {submissions.map((submission) => (
+                <Accordion key={submission.id} sx={{ mb: 2 }}>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls={`submission-${submission.id}-content`}
+                    id={`submission-${submission.id}-header`}
+                    sx={{
+                      bgcolor: "background.paper",
+                      "&:hover": {
+                        bgcolor: "action.hover",
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "100%",
+                      }}
+                    >
+                      <Avatar
+                        sx={{ width: 32, height: 32, bgcolor: "primary.main" }}
+                      >
+                        {submission.createdBy.name[0]}
+                      </Avatar>
+                      <Box sx={{ flexGrow: 1 }}>
+                        <Typography variant="subtitle1" fontWeight="medium">
+                          {submission.createdBy.name}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          Submitted on {formatDate(submission.createdAt)}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                      >
+                        {submission.fileAttachments.length > 0 && (
+                          <Chip
+                            icon={<AttachFileIcon />}
+                            label={`${submission.fileAttachments.length} files`}
+                            size="small"
+                            color="secondary"
+                            variant="outlined"
+                          />
+                        )}
+                        <Chip
+                          label={`ID: ${submission.id}`}
+                          size="small"
+                          color="info"
+                          variant="outlined"
+                        />
+                      </Box>
+                    </Box>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", gap: 3 }}
+                    >
+                      {/* Submission Content */}
+                      <Box>
+                        <Typography
+                          variant="h6"
+                          gutterBottom
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                        >
+                          <DescriptionIcon />
+                          Submission Content
+                        </Typography>
+                        <Card variant="outlined">
+                          <CardContent>
+                            {submission.contents ? (
+                              <Box
+                                sx={{
+                                  "& .ql-editor": {
+                                    border: "none",
+                                    padding: 0,
+                                    fontSize: "0.9rem",
+                                    lineHeight: 1.5,
+                                  },
+                                  "& img": {
+                                    maxWidth: "100%",
+                                    height: "auto",
+                                  },
+                                }}
+                              >
+                                <div
+                                  className="ql-editor"
+                                  dangerouslySetInnerHTML={{
+                                    __html: submission.contents,
+                                  }}
+                                />
+                              </Box>
+                            ) : (
+                              <Typography
+                                color="text.secondary"
+                                fontStyle="italic"
+                              >
+                                No content provided
+                              </Typography>
+                            )}
+                          </CardContent>
+                        </Card>
+                      </Box>
+
+                      {/* File Attachments */}
+                      {submission.fileAttachments.length > 0 && (
+                        <Box>
+                          <Typography
+                            variant="h6"
+                            gutterBottom
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                          >
+                            <AttachFileIcon />
+                            Attached Files ({submission.fileAttachments.length})
+                          </Typography>
+                          <List dense>
+                            {submission.fileAttachments.map((file) => (
+                              <ListItem
+                                key={file.id}
+                                sx={{
+                                  border: "1px solid #e0e0e0",
+                                  borderRadius: 1,
+                                  mb: 1,
+                                }}
+                              >
+                                <ListItemIcon>
+                                  <DescriptionIcon />
+                                </ListItemIcon>
+                                <ListItemText
+                                  primary={file.originalFilename}
+                                  secondary={
+                                    <Box>
+                                      <Typography
+                                        variant="caption"
+                                        color="text.secondary"
+                                      >
+                                        Size:{" "}
+                                        {(file.filesize / 1024 / 1024).toFixed(
+                                          2
+                                        )}{" "}
+                                        MB
+                                      </Typography>
+                                      <br />
+                                      <Typography
+                                        variant="caption"
+                                        color="text.secondary"
+                                      >
+                                        Uploaded by: {file.uploadedByName} on{" "}
+                                        {formatDateOnly(file.uploadedAt)}
+                                      </Typography>
+                                    </Box>
+                                  }
+                                />
+                                <Button
+                                  size="small"
+                                  variant="outlined"
+                                  href={`${
+                                    import.meta.env.VITE_API_BASE_URL ||
+                                    "http://localhost:8999/api"
+                                  }/files/${file.id}/download`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  Download
+                                </Button>
+                              </ListItem>
+                            ))}
+                          </List>
+                        </Box>
+                      )}
+
+                      {/* Submitter Details */}
+                      <Box>
+                        <Typography
+                          variant="h6"
+                          gutterBottom
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                        >
+                          <PersonIcon />
+                          Submitter Details
+                        </Typography>
+                        <Card variant="outlined">
+                          <CardContent>
+                            <Grid container spacing={2}>
+                              <Grid item xs={12} sm={6}>
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                >
+                                  Name
+                                </Typography>
+                                <Typography variant="body1">
+                                  {submission.createdBy.name}
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={12} sm={6}>
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                >
+                                  Email
+                                </Typography>
+                                <Typography variant="body1">
+                                  {submission.createdBy.email}
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={12} sm={6}>
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                >
+                                  Nickname
+                                </Typography>
+                                <Typography variant="body1">
+                                  {submission.createdBy.nickname ||
+                                    "Not provided"}
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={12} sm={6}>
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                >
+                                  Role
+                                </Typography>
+                                <Chip
+                                  label={submission.createdBy.role || "Member"}
+                                  size="small"
+                                  color={
+                                    submission.createdBy.isAdmin
+                                      ? "error"
+                                      : "default"
+                                  }
+                                />
+                              </Grid>
+                            </Grid>
+                          </CardContent>
+                        </Card>
+                      </Box>
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+              ))}
+            </Box>
+          )}
+        </Box>
+      </Paper>
+
+      {/* Edit Score Dialog */}
+      <Dialog
+        open={editScoreOpen}
+        onClose={handleCancelScoreEdit}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          >
+            <EditIcon />
+            Edit Task Score
+          </Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Box sx={{ pt: 2 }}>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Task: {task?.name}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              gutterBottom
+              sx={{ mb: 3 }}
+            >
+              Maximum Score: {task?.maxScore} points
+            </Typography>
+
+            <TextField
+              autoFocus
+              label="Score"
+              type="number"
+              fullWidth
+              variant="outlined"
+              value={newScore}
+              onChange={handleScoreChange}
+              error={!!scoreError}
+              helperText={
+                scoreError || `Enter a score between 0 and ${task?.maxScore}`
+              }
+              inputProps={{
+                min: 0,
+                max: task?.maxScore,
+                step: 0.1,
+              }}
+              disabled={updatingScore}
+            />
+
+            {task?.score !== null && (
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+                Current Score: {task.score} / {task.maxScore}
+              </Typography>
+            )}
+          </Box>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 3 }}>
+          <Button onClick={handleCancelScoreEdit} disabled={updatingScore}>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleUpdateScore}
+            variant="contained"
+            disabled={!!scoreError || newScore === "" || updatingScore}
+            startIcon={
+              updatingScore ? <CircularProgress size={20} /> : <SaveIcon />
+            }
+          >
+            {updatingScore ? "Updating..." : "Update Score"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Container>
+  );
+}

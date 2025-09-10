@@ -1,0 +1,421 @@
+import { useParams } from "react-router";
+import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  Container,
+  Box,
+  Typography,
+  Paper,
+  Divider,
+  Button,
+  IconButton,
+  TextField,
+  Stack,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  CircularProgress,
+  Skeleton,
+  Chip,
+} from "@mui/material";
+import {
+  ThumbUpOutlined,
+  ChatBubbleOutline,
+  AttachFile,
+  Link as LinkIcon,
+  ReportProblemOutlined,
+  Send,
+  DeleteOutline,
+  ArrowBackIos,
+  ArrowBackIosNew,
+} from "@mui/icons-material";
+import {
+  getArticleInformation,
+  increaseViewCount,
+  toggleArticleLike,
+} from "../../utils/article";
+import { addReplyToArticle, getRepliesOfArticle } from "../../utils/reply";
+import useAuth from "../../hooks/useAuth";
+import { downloadFile } from "../../utils/fileattachment";
+
+export default function BoardArticleViewPage() {
+  const { t } = useTranslation();
+  const { articleId } = useParams();
+  const { user } = useAuth();
+  const [article, setArticle] = useState(null);
+  const [replies, setReplies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [replyLoading, setReplyLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [newComment, setNewComment] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [reportReason, setReportReason] = useState("");
+
+  useEffect(() => {
+    increaseViewCount(articleId);
+
+    getArticleInformation(articleId).then((data) => {
+      setArticle(data);
+      setLoading(false);
+    });
+
+    getRepliesOfArticle(articleId).then((data) => {
+      setReplies(data);
+      setReplyLoading(false);
+    });
+  }, []);
+
+  const handleCopyClipBoard = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      alert("클립보드에 링크가 복사되었습니다.");
+    } catch (err) {
+      // Fix: Added missing opening brace
+      console.error("클립보드 복사 실패:", err);
+      alert("링크 복사에 실패했습니다.");
+    }
+  };
+
+  const handleArticleLike = async () => {
+    try {
+      const currentLike = await toggleArticleLike(articleId);
+      setArticle((prevArticle) => ({
+        ...prevArticle,
+        likedByUsers: currentLike,
+      }));
+    } catch (error) {
+      console.error("추천 오류:", error);
+      alert("추천 처리에 실패했습니다.");
+    }
+  };
+
+  const handleReportSubmit = () => {
+    // TODO: 실제 신고 로직을 여기에 구현합니다 (예: 백엔드 API 호출).
+    console.log("신고 사유:", reportReason);
+    alert("신고가 접수되었습니다.");
+    setIsReportModalOpen(false);
+    setReportReason(""); // 신고 사유 초기화
+  };
+
+  const handleCommentSubmit = async () => {
+    if (!newComment.trim()) {
+      alert("댓글을 입력해주세요.");
+      return;
+    }
+    setIsSubmitting(true);
+
+    try {
+      await addReplyToArticle(articleId, newComment);
+      setNewComment(""); // 입력창 초기화
+      setReplies(await getRepliesOfArticle(articleId));
+    } catch (error) {
+      console.error("댓글 등록 오류:", error);
+      alert(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleFileDownload = async (file) => {
+    try {
+      const success = await downloadFile(file.id);
+      if (!success) {
+        alert("파일 다운로드에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("파일 다운로드 오류:", error);
+      alert("파일 다운로드에 실패했습니다.");
+    }
+  };
+
+  // 로딩 중 UI
+  if (loading) {
+    return (
+      <Container maxWidth="lg">
+        <Box sx={{ my: 4 }}>
+          <Typography variant="h3" component="h1" gutterBottom>
+            <Skeleton width={300} />
+          </Typography>
+          <Paper
+            elevation={3}
+            sx={{
+              p: 3,
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Box sx={{ pb: 2, mb: 2 }}>
+              <Typography variant="h4" component="h2" gutterBottom>
+                <Skeleton />
+              </Typography>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Skeleton width="40%" />
+                <Skeleton width="30%" />
+              </Box>
+            </Box>
+            <Divider />
+            <Box sx={{ my: 3, flexGrow: 1 }}>
+              <Skeleton variant="rectangular" width="100%" height={240} />
+            </Box>
+          </Paper>
+        </Box>
+      </Container>
+    );
+  }
+
+  // 에러 발생 UI
+  if (error) {
+    return (
+      <Container maxWidth="lg">
+        <Box sx={{ my: 4, textAlign: "center" }}>
+          <Typography variant="h5" color="error">
+            오류: {error}
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={() => window.location.reload()}
+            sx={{ mt: 2 }}
+          >
+            새로고침
+          </Button>
+        </Box>
+      </Container>
+    );
+  }
+
+  return (
+    <Container maxWidth="lg">
+      <Box sx={{ my: 4 }}>
+        <Typography variant="h3" component="h1" gutterBottom>
+          {article.schoolName}
+        </Typography>
+        <Paper
+          elevation={3}
+          sx={{
+            p: 3,
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {/* 상단 제목 */}
+          <Box sx={{ pb: 2, mb: 2 }}>
+            <Box className="flex mb-4">
+              <IconButton onClick={() => window.history.back()} sx={{ mr: 1 }}>
+                <ArrowBackIosNew />
+              </IconButton>
+              <Typography variant="h4" component="h2">
+                {article.title}
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                color: "text.secondary",
+              }}
+            >
+              <Typography variant="body2">
+                {article.writer} | {article.createdAt.replace("T", " ")}
+              </Typography>
+              <Typography variant="body2">
+                조회 {article.views || 0} | 추천 {article.likedByUsers || 0} |
+                댓글 {replies.length || 0}
+              </Typography>
+            </Box>
+          </Box>
+          <Divider />
+          <Box
+            sx={{
+              minHeight: "240px",
+              my: 3,
+              p: 2,
+              backgroundColor: "grey.100",
+              borderRadius: 1,
+              flexGrow: 1,
+            }}
+          >
+            <Typography
+              variant="body1"
+              component="div"
+              className="ql-editor ql-editor-readonly"
+              dangerouslySetInnerHTML={{ __html: article.contents }}
+            />
+          </Box>
+          {/* Tag list (use chips) */}
+          <Box sx={{ my: 2 }}>
+            {article.tags &&
+              article.tags.length > 0 &&
+              article.tags.map((tag) => (
+                <Chip key={tag} label={"#" + tag} sx={{ mr: 1, mb: 1 }} />
+              ))}
+          </Box>
+
+          {/* 버튼 영역 */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Button
+                startIcon={<ThumbUpOutlined />}
+                onClick={handleArticleLike}
+                color="secondary"
+              >
+                {article.likedByUsers}
+              </Button>
+              <Button
+                startIcon={<ChatBubbleOutline />}
+                disabled
+                color="secondary"
+              >
+                {replies.length}
+              </Button>
+            </Stack>
+            <Stack direction="row" spacing={1}>
+              <Button startIcon={<LinkIcon />} onClick={handleCopyClipBoard}>
+                링크복사
+              </Button>
+              <Button
+                startIcon={<ReportProblemOutlined />}
+                onClick={() => setIsReportModalOpen(true)}
+                color="error"
+              >
+                신고
+              </Button>
+            </Stack>
+          </Box>
+          <Divider />
+          {/* 첨부파일 목록 */}
+          <Box sx={{ display: "flex", flexDirection: "row" }}>
+            {article.files &&
+              article.files.length > 0 &&
+              article.files.map((file) => (
+                <Button
+                  key={file.id}
+                  startIcon={<AttachFile />}
+                  onClick={() => handleFileDownload(file)}
+                >
+                  {file.originalFilename}
+                </Button>
+              ))}
+          </Box>
+          <Divider />
+          {/* 댓글 입력 */}
+          <Box
+            sx={{ display: "flex", alignItems: "center", gap: 1, mt: 3, mb: 3 }}
+          >
+            <TextField
+              fullWidth
+              variant="outlined"
+              size="small"
+              placeholder="댓글을 입력하세요..."
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              onKeyDown={(e) =>
+                e.key === "Enter" && !isSubmitting && handleCommentSubmit()
+              }
+              disabled={isSubmitting}
+            />
+            <IconButton
+              color="primary"
+              onClick={handleCommentSubmit}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? <CircularProgress size={24} /> : <Send />}
+            </IconButton>
+          </Box>
+          {/* 댓글 목록 */}
+          <Stack spacing={1}>
+            {replies.map((reply) => (
+              <Paper
+                key={reply.id}
+                variant="outlined"
+                sx={{
+                  py: 1,
+                  px: 2,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  bgcolor: "grey.100",
+                }}
+              >
+                <Box>
+                  <Typography
+                    variant="subtitle2"
+                    component="span"
+                    sx={{ mr: 1, fontWeight: "bold" }}
+                  >
+                    {reply.createdByName}
+                  </Typography>
+                  <Typography variant="body2" component="span">
+                    {reply.contents}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    color: "text.secondary",
+                  }}
+                >
+                  <Typography variant="caption" sx={{ mr: 1 }}>
+                    {reply.createdAt.replace("T", " ")}
+                  </Typography>
+                  {user && user.id === reply.createdById && (
+                    <IconButton
+                      size="small"
+                      aria-label={`delete comment by ${reply.createdByName}`}
+                    >
+                      <DeleteOutline />
+                    </IconButton>
+                  )}
+                </Box>
+              </Paper>
+            ))}
+          </Stack>
+        </Paper>
+      </Box>
+
+      {/* 신고 모달 */}
+      <Dialog
+        open={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle sx={{ textAlign: "center" }}>게시물 신고</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="report"
+            label="신고 사유"
+            type="text"
+            fullWidth
+            multiline
+            rows={4}
+            variant="outlined"
+            placeholder="신고 사유를 자세히 입력해주세요."
+            value={reportReason}
+            onChange={(e) => setReportReason(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsReportModalOpen(false)}>취소</Button>
+          <Button onClick={handleReportSubmit} color="error">
+            신고
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Container>
+  );
+}

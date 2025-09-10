@@ -1,32 +1,31 @@
 import { useState } from "react";
-import { IconButton, Menu, MenuItem } from "@mui/material";
-import taxios from "../utils/taxios";
+import {
+  Box,
+  CircularProgress,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 import { Link } from "react-router";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { getMe } from "../utils/user";
+import { signOut } from "../utils/auth";
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [userInfo, setUserInfo] = useState(null);
+  const [user, setUser] = useState(null);
 
   const handleClick = async (event) => {
-    const accessToken = localStorage.getItem("accessToken");
-    const eventCapture = event.currentTarget;
+    const eventCurrentTarget = event.currentTarget; // capturing
+    setAnchorEl(eventCurrentTarget);
 
-    if (!accessToken) {
+    const data = await getMe();
+    if (!data) {
       window.location.href = "/signin";
+      return;
     }
-
-    try {
-      const response = await taxios.get("/user/getMe");
-
-      if (response.status === 200) {
-        console.log(response.data);
-        setUserInfo(response.data);
-        setAnchorEl(eventCapture);
-      }
-    } catch (error) {
-      console.error("Auth check failed:", error);
-    }
+    setUser(data);
   };
 
   const handleClose = () => {
@@ -34,9 +33,8 @@ export default function AccountMenu() {
   };
 
   const handleSignOut = () => {
-    localStorage.removeItem("accessToken");
     setAnchorEl(null);
-    setUserInfo(null);
+    signOut();
   };
 
   return (
@@ -56,12 +54,42 @@ export default function AccountMenu() {
           vertical: "top",
           horizontal: "right",
         }}
+        disableScrollLock={true}
       >
-        <MenuItem disabled>{userInfo?.email || "User"}</MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Link to="/mypage">MyPage</Link>
-        </MenuItem>
-        <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
+        {!user ? (
+          <MenuItem disabled>
+            <Box sx={{ display: "flex", justifyContent: "center", py: 1 }}>
+              <CircularProgress size={20} />
+            </Box>
+          </MenuItem>
+        ) : (
+          [
+            <MenuItem key="email" disabled>
+              {user?.email || "User"}
+            </MenuItem>,
+            <MenuItem
+              key="mypage"
+              onClick={() => {
+                window.location.href = "/my";
+              }}
+            >
+              <Typography>마이 페이지</Typography>
+            </MenuItem>,
+            user?.isAdmin && (
+              <MenuItem
+                key="admin"
+                onClick={() => {
+                  window.location.href = "/sysadmin";
+                }}
+              >
+                <Typography>관리자 페이지</Typography>
+              </MenuItem>
+            ),
+            <MenuItem key="signout" onClick={handleSignOut}>
+              Sign out
+            </MenuItem>,
+          ]
+        )}
       </Menu>
     </>
   );

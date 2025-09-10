@@ -1,0 +1,19 @@
+{
+	"data": [
+		{
+			"kCountryName": "한국",
+			"eCountryName": "south korea",
+			"countryCode": "kor"
+		},
+		{
+			"kCountryName": "일본",
+			"eCountryName": "japan",
+			"countryCode": "jpn"
+		},
+		{
+			"kCountryName": "미국",
+			"eCountryName": "united states",
+			"countryCode": "usa"
+		}
+	]
+}
