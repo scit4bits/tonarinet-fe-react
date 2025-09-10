@@ -6,7 +6,6 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import "./i18n.js";
 import { GlobalStyles, StyledEngineProvider } from "@mui/material";
 import Layout from "./components/Layout.jsx";
-import LandingPage from "./pages/LandingPage.jsx";
 import OAuthTestPage from "./pages/OAuthTestPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import LanguageSelector from "./components/LanguageSelector.jsx";
@@ -15,14 +14,16 @@ import SignInPage from "./pages/SignInPage.jsx";
 import AuthTestPage from "./pages/AuthTestPage.jsx";
 import BoardListPage from "./pages/BoardListPage.jsx";
 import BoardArticleListPage from "./pages/BoardArticleListPage.jsx";
+import MyPage from "./pages/MyPage.jsx";
+import LandingPage from "./pages/LandingPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StyledEngineProvider enableCssLayer>
     <GlobalStyles styles="@layer theme, base, mui, components, utilities;" />
     <BrowserRouter>
       <Routes>
-        <Route index element={<LandingPage />} />
         <Route path="/signin" element={<SignInPage />} />
+        <Route index element={<LandingPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/logincb">
           <Route path="line" element={<SignUpPage provider={"line"} />} />
@@ -31,7 +32,7 @@ createRoot(document.getElementById("root")).render(
         </Route>
         <Route path="/oauthtest" element={<OAuthTestPage />} />
         <Route element={<Layout />}>
-          <Route path="/hello" element={<h1>hello</h1>} />
+          <Route path="/mypage" element={<MyPage />} />
           <Route path="/testauth" element={<AuthTestPage />} />
           <Route path="/board">
             <Route path="list" element={<BoardListPage />} />
