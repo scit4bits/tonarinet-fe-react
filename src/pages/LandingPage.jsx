@@ -8,6 +8,7 @@ import heroImageEvaluation from "../assets/thdMain.png";
 import globalCommunityMap from "../assets/map.png";
 import postImageKorea from "../assets/post-korea.png";
 import postImageJapan from "../assets/post-japan.png";
+import logoWithTitle from "../assets/logoWithTitle.png";
 
 // ✨ 여러 캐릭터 파일을 import 합니다.
 import char1 from "../assets/char1.png";
@@ -105,45 +106,43 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-gray-100">
+    <div className="h-screen w-screen overflow-hidden">
       {/* ========== 상단 고정 헤더 ========== */}
       <header className="fixed top-0 left-0 right-0 bg-white shadow-md z-20 px-8 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div
-            className="text-2xl font-bold text-gray-800 cursor-pointer"
-            onClick={() => scrollToPage(0)}
-          >
-            tonarinet
+          <div className="flex gap-10">
+            <img src={logoWithTitle} alt="Logo" className="h-10" />
+            <nav className="hidden md:flex items-center gap-6 text-gray-600 font-semibold">
+              <button
+                onClick={() => scrollToPage(0)}
+                className="hover:text-[#3E8BDC]"
+              >
+                소개
+              </button>
+              <button
+                onClick={() => scrollToPage(1)}
+                className="hover:text-[#3E8BDC]"
+              >
+                유학생/직장인
+              </button>
+              <button
+                onClick={() => scrollToPage(2)}
+                className="hover:text-[#3E8BDC]"
+              >
+                동네 평가
+              </button>
+              <button
+                onClick={() => scrollToPage(3)}
+                className="hover:text-[#3E8BDC]"
+              >
+                커뮤니티
+              </button>
+            </nav>
           </div>
-          <nav className="hidden md:flex items-center gap-6 text-gray-600 font-semibold">
-            <button
-              onClick={() => scrollToPage(0)}
-              className="hover:text-[#3E8BDC]"
-            >
-              홈
-            </button>
-            <button
-              onClick={() => scrollToPage(1)}
-              className="hover:text-[#3E8BDC]"
-            >
-              유학생/직장인
-            </button>
-            <button
-              onClick={() => scrollToPage(2)}
-              className="hover:text-[#3E8BDC]"
-            >
-              동네 평가
-            </button>
-            <button
-              onClick={() => scrollToPage(3)}
-              className="hover:text-[#3E8BDC]"
-            >
-              커뮤니티
-            </button>
-          </nav>
+
           <div className="flex items-center gap-4">
             <button
-              onClick={() => setLoginModalOpen(true)}
+              onClick={() => (window.location.href = "/signin")}
               className="bg-[#3E8BDC] text-white font-bold px-6 py-2 rounded-md hover:bg-[#3577BE]"
             >
               로그인
@@ -178,7 +177,7 @@ export default function LandingPage() {
       {/* ========== 메인 세로 스크롤 컨테이너 ========== */}
       <main
         ref={mainContainerRef}
-        className="w-full h-full snap-y snap-mandatory overflow-y-auto scrollbar-hide"
+        className="w-full max-w-[1200px] self-center h-full snap-y snap-mandatory overflow-y-auto scrollbar-hide mx-auto"
       >
         {/* 페이지 1, 2, 3은 이전과 동일 */}
         <section
@@ -276,7 +275,7 @@ export default function LandingPage() {
 
         <section
           ref={(el) => (pageRefs.current[1] = el)}
-          className="w-full h-screen snap-start overflow-y-auto pt-20 bg-gray-50 scrollbar-hide"
+          className="w-full h-screen snap-start overflow-y-auto pt-20 scrollbar-hide"
         >
           <div className="flex w-full items-center p-12 text-left bg-white">
             <div className="w-full md:w-1/2">
