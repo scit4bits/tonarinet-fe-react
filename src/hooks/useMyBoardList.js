@@ -6,6 +6,9 @@ export default function useMyBoardList() {
 
   useEffect(() => {
     getMyAccessibleBoards().then((data) => {
+      if (data.length === 0) {
+        window.location.href = "/org/list";
+      }
       setBoards(data);
     });
   }, []);

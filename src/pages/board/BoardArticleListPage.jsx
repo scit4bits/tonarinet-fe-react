@@ -63,10 +63,6 @@ export default function BoardArticleListPage() {
 
   useEffect(() => {
     console.log(boards);
-    if (!boards) {
-      window.location.href = "/org/list";
-    }
-
     if (boards && (boardId === "undefined" || boardId === undefined)) {
       const fallbackBoardId = boardId ?? getLastVisitedBoard() ?? boards[0]?.id;
       console.log(fallbackBoardId);
