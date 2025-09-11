@@ -73,7 +73,7 @@ export default function SignUpPage({ provider }) {
             });
             if (authResponse.status === 200) {
               localStorage.setItem("accessToken", authResponse.data.data);
-              window.location.href = "/testauth";
+              window.location.href = "/main";
               return;
             }
           } catch (error) {
