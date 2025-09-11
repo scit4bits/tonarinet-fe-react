@@ -452,11 +452,11 @@ export default function LocalReviewPage() {
       position: { lat, lng },
       latitude: lat,
       longitude: lng,
-      name: "새로운 제보",
+      name: t("common.newReport"),
       rating: 0,
       reviewCount: 0,
       category: "liveReport",
-      contents: "클릭한 위치에 제보를 남깁니다.",
+      contents: t("common.clickToReport"),
       isNewReview: true,
     };
 
@@ -587,16 +587,16 @@ export default function LocalReviewPage() {
       <title>{t("pages.localReview.title")}</title>
       {/* Header */}
       <Paper elevation={2} sx={{ p: 2, mb: 2 }}>
-        <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+        <Box sx={{ display: "flex", gap: 1 }}>
           <Chip
-            label="Town Review"
+            label={t("common.townReview")}
             variant={isTownReviewActive ? "filled" : "outlined"}
             clickable
             color="primary"
             onClick={() => setIsTownReviewActive(!isTownReviewActive)}
           />
           <Chip
-            label="Live Report"
+            label={t("common.liveReport")}
             variant={isLiveReportActive ? "filled" : "outlined"}
             clickable
             color="primary"
@@ -604,10 +604,10 @@ export default function LocalReviewPage() {
           />
           {/* <Chip label="Shopping" variant="outlined" clickable color="primary" /> */}
         </Box>
-        <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+        {/* <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
           <TextField
             variant="outlined"
-            placeholder="Search places..."
+            placeholder={t("common.searchPlacesPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             sx={{ flexGrow: 1 }}
@@ -620,9 +620,9 @@ export default function LocalReviewPage() {
             onClick={handleSearch}
             startIcon={<Search />}
           >
-            Search
+            {t("common.search")}
           </Button>
-        </Box>
+        </Box> */}
       </Paper>
 
       {/* Main Content Area with Sidebar and Map */}
@@ -644,7 +644,7 @@ export default function LocalReviewPage() {
                 {selectedPlace.name || `Live Report #${selectedPlace.id}`}
                 {selectedPlace.isNewReview && (
                   <Chip
-                    label="New"
+                    label={t("common.new")}
                     size="small"
                     color="success"
                     sx={{ ml: 1 }}
@@ -673,7 +673,7 @@ export default function LocalReviewPage() {
                   color="text.secondary"
                   sx={{ mb: 2 }}
                 >
-                  Coordinates: {selectedPlace.latitude},{" "}
+                  {t("common.coordinates")} {selectedPlace.latitude},{" "}
                   {selectedPlace.longitude}
                 </Typography>
               )}
@@ -686,7 +686,7 @@ export default function LocalReviewPage() {
                     color="text.secondary"
                     sx={{ mb: 2 }}
                   >
-                    👍 {selectedPlace.likeCount} likes
+                    👍 {selectedPlace.likeCount} {t("common.likes")}
                   </Typography>
                 )}
 
@@ -694,11 +694,11 @@ export default function LocalReviewPage() {
               {selectedPlace.category === "Region" && (
                 <Box sx={{ mb: 2, flexGrow: 1 }}>
                   <Typography variant="h6" gutterBottom>
-                    Town Reviews
+                    {t("common.townReviews")}
                   </Typography>
                   {loadingTownReviews ? (
                     <Typography variant="body2" color="text.secondary">
-                      Loading reviews...
+                      {t("common.loadingReviews")}
                     </Typography>
                   ) : townReviews.length > 0 ? (
                     <List>
@@ -735,7 +735,8 @@ export default function LocalReviewPage() {
                                   }}
                                 >
                                   <Typography variant="subtitle2">
-                                    Review #{review.id}
+                                    {t("common.reviewNumber")}
+                                    {review.id}
                                   </Typography>
                                   <Rating
                                     size="small"
@@ -794,7 +795,8 @@ export default function LocalReviewPage() {
                                     variant="caption"
                                     color="text.secondary"
                                   >
-                                    Transportation ({review.transportation}/5)
+                                    {t("common.reviewTransportation")} (
+                                    {review.transportation}/5)
                                   </Typography>
                                   <Rating
                                     value={review.transportation}
@@ -807,7 +809,8 @@ export default function LocalReviewPage() {
                                     variant="caption"
                                     color="text.secondary"
                                   >
-                                    Safety ({review.safety}/5)
+                                    {t("common.reviewSafety")} ({review.safety}
+                                    /5)
                                   </Typography>
                                   <Rating
                                     value={review.safety}
@@ -820,7 +823,8 @@ export default function LocalReviewPage() {
                                     variant="caption"
                                     color="text.secondary"
                                   >
-                                    Infrastructure ({review.infra}/5)
+                                    {t("common.reviewInfrastructure")} (
+                                    {review.infra}/5)
                                   </Typography>
                                   <Rating
                                     value={review.infra}
@@ -833,7 +837,8 @@ export default function LocalReviewPage() {
                                     variant="caption"
                                     color="text.secondary"
                                   >
-                                    Population ({review.population}/5)
+                                    {t("common.reviewPopulation")} (
+                                    {review.population}/5)
                                   </Typography>
                                   <Rating
                                     value={review.population}
@@ -846,7 +851,8 @@ export default function LocalReviewPage() {
                                     variant="caption"
                                     color="text.secondary"
                                   >
-                                    Education ({review.education}/5)
+                                    {t("common.reviewEducation")} (
+                                    {review.education}/5)
                                   </Typography>
                                   <Rating
                                     value={review.education}
@@ -863,7 +869,7 @@ export default function LocalReviewPage() {
                     </List>
                   ) : (
                     <Typography variant="body2" color="text.secondary">
-                      No reviews available for this region.
+                      {t("common.noReviewsAvailable")}
                     </Typography>
                   )}
                 </Box>
@@ -876,7 +882,7 @@ export default function LocalReviewPage() {
                   fullWidth
                   onClick={handleOpenDialog}
                 >
-                  Write Review
+                  {t("common.writeReview")}
                 </Button>
               ) : selectedPlace.category === "Region" ? (
                 <Button
@@ -886,7 +892,7 @@ export default function LocalReviewPage() {
                   fullWidth
                   onClick={handleOpenDialog}
                 >
-                  Add New Town Review
+                  {t("common.addNewTownReview")}
                 </Button>
               ) : selectedPlace.category === "liveReport" ? (
                 <Button
@@ -896,7 +902,7 @@ export default function LocalReviewPage() {
                   fullWidth
                   onClick={handleLikeLiveReport}
                 >
-                  Like This Report
+                  {t("common.likeThisReport")}
                 </Button>
               ) : (
                 <Button
@@ -906,7 +912,7 @@ export default function LocalReviewPage() {
                   sx={{ mt: "auto" }}
                   fullWidth
                 >
-                  View Full Details
+                  {t("common.viewFullDetails")}
                 </Button>
               )}
               <Button
@@ -920,7 +926,7 @@ export default function LocalReviewPage() {
                   setExpandedReview(null);
                 }}
               >
-                Clear Selection
+                {t("common.clearSelection")}
               </Button>
             </>
           ) : (
@@ -928,14 +934,16 @@ export default function LocalReviewPage() {
               <LocationOn sx={{ fontSize: 64, mb: 2, opacity: 0.5 }} />
               <Typography variant="h6" gutterBottom>
                 {nearbyData.liveReports.length > 0
-                  ? "Nearby Live Reports"
-                  : "Select a Location"}
+                  ? t("common.nearbyLiveReports")
+                  : t("common.selectLocation")}
               </Typography>
 
               {nearbyData.liveReports.length > 0 ? (
                 <Box sx={{ textAlign: "left", mt: 2 }}>
                   <Typography variant="body2" sx={{ mb: 2 }}>
-                    Found {nearbyData.liveReports.length} live reports nearby:
+                    {t("common.foundLiveReportsNearby", {
+                      count: nearbyData.liveReports.length,
+                    })}
                   </Typography>
                   {nearbyData.liveReports.map((report, index) => (
                     <Card
@@ -948,7 +956,7 @@ export default function LocalReviewPage() {
                           variant="subtitle2"
                           sx={{ fontWeight: "bold" }}
                         >
-                          {`Live Report ${report.id}`}
+                          {`${t("common.liveReportPrefix")} ${report.id}`}
                         </Typography>
                         <Typography variant="caption" color="text.secondary">
                           ⭐ {report.likeCount}
@@ -958,14 +966,14 @@ export default function LocalReviewPage() {
                   ))}
                   {nearbyData.liveReports.length > 5 && (
                     <Typography variant="caption" color="text.secondary">
-                      + {nearbyData.liveReports.length - 5} more reports
+                      + {nearbyData.liveReports.length - 5}{" "}
+                      {t("common.moreReports")}
                     </Typography>
                   )}
                 </Box>
               ) : (
                 <Typography variant="body2">
-                  Click on a marker or anywhere on the map to select a location
-                  and write a review.
+                  {t("common.clickMarkerInstruction")}
                 </Typography>
               )}
             </Box>
@@ -1038,8 +1046,8 @@ export default function LocalReviewPage() {
       >
         <DialogTitle>
           {selectedPlace?.category === "Region"
-            ? "Add Town Review"
-            : "Write Review"}
+            ? t("common.addTownReview")
+            : t("common.writeReview")}
         </DialogTitle>
 
         <DialogContent>
@@ -1047,12 +1055,13 @@ export default function LocalReviewPage() {
             {selectedPlace?.category === "Region" && (
               <>
                 <Typography variant="h6" gutterBottom>
-                  Rate this region (0-5 scale):
+                  {t("common.rateRegionInstruction")}
                 </Typography>
 
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" gutterBottom>
-                    Transportation: {reviewForm.transportation}
+                    {t("common.reviewTransportation")}:{" "}
+                    {reviewForm.transportation}
                   </Typography>
                   <Slider
                     value={reviewForm.transportation}
@@ -1069,7 +1078,7 @@ export default function LocalReviewPage() {
 
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" gutterBottom>
-                    Safety: {reviewForm.safety}
+                    {t("common.reviewSafety")}: {reviewForm.safety}
                   </Typography>
                   <Slider
                     value={reviewForm.safety}
@@ -1084,7 +1093,7 @@ export default function LocalReviewPage() {
 
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" gutterBottom>
-                    Infrastructure: {reviewForm.infra}
+                    {t("common.reviewInfrastructure")}: {reviewForm.infra}
                   </Typography>
                   <Slider
                     value={reviewForm.infra}
@@ -1099,7 +1108,7 @@ export default function LocalReviewPage() {
 
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" gutterBottom>
-                    Population: {reviewForm.population}
+                    {t("common.reviewPopulation")}: {reviewForm.population}
                   </Typography>
                   <Slider
                     value={reviewForm.population}
@@ -1116,7 +1125,7 @@ export default function LocalReviewPage() {
 
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" gutterBottom>
-                    Education: {reviewForm.education}
+                    {t("common.reviewEducation")}: {reviewForm.education}
                   </Typography>
                   <Slider
                     value={reviewForm.education}
@@ -1134,7 +1143,7 @@ export default function LocalReviewPage() {
             )}
 
             <TextField
-              label="Review Content"
+              label={t("common.reviewContent")}
               multiline
               rows={6}
               fullWidth
@@ -1142,8 +1151,8 @@ export default function LocalReviewPage() {
               onChange={(e) => handleFormChange("content", e.target.value)}
               placeholder={
                 selectedPlace?.category === "Region"
-                  ? "Share your thoughts about living in this region..."
-                  : "Share your experience about this place..."
+                  ? t("common.shareTownThoughts")
+                  : t("common.shareExperience")
               }
               autoFocus={selectedPlace?.category !== "Region"}
             />
@@ -1151,15 +1160,15 @@ export default function LocalReviewPage() {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleCloseDialog}>{t("common.cancel")}</Button>
           <Button
             onClick={handleSubmitReview}
             variant="contained"
             disabled={!reviewForm.content.trim()}
           >
             {selectedPlace?.category === "Region"
-              ? "Submit Town Review"
-              : "Submit Review"}
+              ? t("common.submitTownReview")
+              : t("common.submitReview")}
           </Button>
         </DialogActions>
       </Dialog>

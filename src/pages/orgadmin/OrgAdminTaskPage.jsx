@@ -222,7 +222,9 @@ export default function OrgAdminTaskPage() {
       <title>{t("pages.orgAdmin.tasks.title")}</title>
 
       <Box className="flex justify-between items-center mb-4">
-        <Typography variant="h4">과제 관리</Typography>
+        <Typography variant="h4">
+          {t("pages.orgAdmin.task.taskManagementTitle")}
+        </Typography>
 
         <Button
           variant="contained"
@@ -236,21 +238,21 @@ export default function OrgAdminTaskPage() {
 
       <Box className="flex gap-5 items-center">
         <FormControl size="small" className="min-w-[120px]">
-          <InputLabel>검색 키워드</InputLabel>
+          <InputLabel>{t("common.searchKeyword")}</InputLabel>
           <Select
             value={searchBy}
             onChange={(e) => setSearchBy(e.target.value)}
-            label="검색 키워드"
+            label={t("common.searchKeyword")}
           >
-            <MenuItem value="all">전체</MenuItem>
-            <MenuItem value="id">ID</MenuItem>
-            <MenuItem value="title">제목</MenuItem>
+            <MenuItem value="all">{t("common.all")}</MenuItem>
+            <MenuItem value="id">{t("common.id")}</MenuItem>
+            <MenuItem value="title">{t("common.title")}</MenuItem>
           </Select>
         </FormControl>
 
         <TextField
-          placeholder={`Search ${
-            searchBy === "all" ? "tasks" : `by ${searchBy}`
+          placeholder={`${t("common.search")} ${
+            searchBy === "all" ? t("common.tasks") : `by ${searchBy}`
           }`}
           variant="outlined"
           size="small"
@@ -277,7 +279,9 @@ export default function OrgAdminTaskPage() {
                 <Box display="flex" alignItems="center" gap={1}>
                   <InfoIcon fontSize="small" color="action" />
                   <Typography variant="caption" color="text.secondary">
-                    Click on any row to view task details
+                    {t("pages.orgAdmin.task.searchInfo", {
+                      total: totalTasks,
+                    })}
                   </Typography>
                 </Box>
               </TableCell>
@@ -289,7 +293,7 @@ export default function OrgAdminTaskPage() {
                   direction={sortBy === "id" ? sortDirection : "asc"}
                   onClick={() => handleRequestSort("id")}
                 >
-                  ID
+                  {t("common.id")}
                 </TableSortLabel>
               </TableCell>
 
@@ -299,7 +303,7 @@ export default function OrgAdminTaskPage() {
                   direction={sortBy === "title" ? sortDirection : "asc"}
                   onClick={() => handleRequestSort("title")}
                 >
-                  제목
+                  {t("common.title")}
                 </TableSortLabel>
               </TableCell>
 
@@ -309,7 +313,7 @@ export default function OrgAdminTaskPage() {
                   direction={sortBy === "createdAt" ? sortDirection : "asc"}
                   onClick={() => handleRequestSort("createdAt")}
                 >
-                  생성일
+                  {t("common.createdAt")}
                 </TableSortLabel>
               </TableCell>
 
@@ -319,7 +323,7 @@ export default function OrgAdminTaskPage() {
                   direction={sortBy === "dueDate" ? sortDirection : "asc"}
                   onClick={() => handleRequestSort("dueDate")}
                 >
-                  마감일
+                  {t("common.dueDate")}
                 </TableSortLabel>
               </TableCell>
 
@@ -329,7 +333,7 @@ export default function OrgAdminTaskPage() {
                   direction={sortBy === "maxScore" ? sortDirection : "asc"}
                   onClick={() => handleRequestSort("maxScore")}
                 >
-                  최대 점수
+                  {t("common.maxScore")}
                 </TableSortLabel>
               </TableCell>
             </TableRow>
@@ -398,7 +402,7 @@ export default function OrgAdminTaskPage() {
               <RichTextEditor
                 value={formData.contents}
                 onChange={(content) => handleInputChange("contents", content)}
-                placeholder="과제 내용을 입력하세요..."
+                placeholder={t("common.enterTaskContent")}
                 readOnly={creating}
                 minHeight="200px"
                 showImageUpload={true}

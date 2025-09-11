@@ -71,11 +71,11 @@ export default function BoardArticleViewPage() {
   const handleCopyClipBoard = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      alert("클립보드에 링크가 복사되었습니다.");
+      alert(t("common.linkCopied"));
     } catch (err) {
       // Fix: Added missing opening brace
       console.error("클립보드 복사 실패:", err);
-      alert("링크 복사에 실패했습니다.");
+      alert(t("common.linkCopyFailed"));
     }
   };
 
@@ -88,21 +88,21 @@ export default function BoardArticleViewPage() {
       }));
     } catch (error) {
       console.error("추천 오류:", error);
-      alert("추천 처리에 실패했습니다.");
+      alert(t("common.recommendationError"));
     }
   };
 
   const handleReportSubmit = () => {
     // TODO: 실제 신고 로직을 여기에 구현합니다 (예: 백엔드 API 호출).
     console.log("신고 사유:", reportReason);
-    alert("신고가 접수되었습니다.");
+    alert(t("common.reportSubmitted"));
     setIsReportModalOpen(false);
     setReportReason(""); // 신고 사유 초기화
   };
 
   const handleCommentSubmit = async () => {
     if (!newComment.trim()) {
-      alert("댓글을 입력해주세요.");
+      alert(t("common.enterComment"));
       return;
     }
     setIsSubmitting(true);
@@ -123,11 +123,11 @@ export default function BoardArticleViewPage() {
     try {
       const success = await downloadFile(file.id);
       if (!success) {
-        alert("파일 다운로드에 실패했습니다.");
+        alert(t("common.fileDownloadFailed"));
       }
     } catch (error) {
       console.error("파일 다운로드 오류:", error);
-      alert("파일 다운로드에 실패했습니다.");
+      alert(t("common.fileDownloadFailed"));
     }
   };
 
@@ -173,14 +173,14 @@ export default function BoardArticleViewPage() {
       <Container maxWidth="lg">
         <Box sx={{ my: 4, textAlign: "center" }}>
           <Typography variant="h5" color="error">
-            오류: {error}
+            {t("common.error")}: {error}
           </Typography>
           <Button
             variant="contained"
             onClick={() => window.location.reload()}
             sx={{ mt: 2 }}
           >
-            새로고침
+            {t("common.refresh")}
           </Button>
         </Box>
       </Container>
@@ -223,8 +223,10 @@ export default function BoardArticleViewPage() {
                 {article.writer} | {article.createdAt.replace("T", " ")}
               </Typography>
               <Typography variant="body2">
-                조회 {article.views || 0} | 추천 {article.likedByUsers || 0} |
-                댓글 {replies.length || 0}
+                {t("common.views")} {article.views || 0} |{" "}
+                {t("pages.board.articles.tableHeaders.likes")}{" "}
+                {article.likedByUsers || 0} |{t("common.comment")}{" "}
+                {replies.length || 0}
               </Typography>
             </Box>
           </Box>
@@ -282,14 +284,14 @@ export default function BoardArticleViewPage() {
             </Stack>
             <Stack direction="row" spacing={1}>
               <Button startIcon={<LinkIcon />} onClick={handleCopyClipBoard}>
-                링크복사
+                {t("common.copyLink")}
               </Button>
               <Button
                 startIcon={<ReportProblemOutlined />}
                 onClick={() => setIsReportModalOpen(true)}
                 color="error"
               >
-                신고
+                {t("common.report")}
               </Button>
             </Stack>
           </Box>
@@ -317,7 +319,7 @@ export default function BoardArticleViewPage() {
               fullWidth
               variant="outlined"
               size="small"
-              placeholder="댓글을 입력하세요..."
+              placeholder={t("common.enterCommentPlaceholder")}
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               onKeyDown={(e) =>
@@ -392,27 +394,31 @@ export default function BoardArticleViewPage() {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle sx={{ textAlign: "center" }}>게시물 신고</DialogTitle>
+        <DialogTitle sx={{ textAlign: "center" }}>
+          {t("common.reportPost")}
+        </DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
             id="report"
-            label="신고 사유"
+            label={t("common.reportReason")}
             type="text"
             fullWidth
             multiline
             rows={4}
             variant="outlined"
-            placeholder="신고 사유를 자세히 입력해주세요."
+            placeholder={t("common.reportReasonPlaceholder")}
             value={reportReason}
             onChange={(e) => setReportReason(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setIsReportModalOpen(false)}>취소</Button>
+          <Button onClick={() => setIsReportModalOpen(false)}>
+            {t("common.cancel")}
+          </Button>
           <Button onClick={handleReportSubmit} color="error">
-            신고
+            {t("common.report")}
           </Button>
         </DialogActions>
       </Dialog>

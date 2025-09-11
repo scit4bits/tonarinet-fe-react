@@ -92,7 +92,7 @@ export default function TaskDetailPage() {
         setTask(taskData);
       } catch (error) {
         console.error("Failed to fetch task details:", error);
-        setError("Failed to load task details");
+        setError(t("common.failedToLoadTaskDetails"));
       } finally {
         setLoading(false);
       }
@@ -152,7 +152,7 @@ export default function TaskDetailPage() {
       });
     } catch (error) {
       console.error("Failed to submit:", error);
-      setError("Failed to submit task");
+      setError(t("common.failedToSubmitTask"));
     } finally {
       setSubmitting(false);
     }
@@ -177,11 +177,13 @@ export default function TaskDetailPage() {
 
     const numericValue = parseFloat(value);
     if (isNaN(numericValue)) {
-      setScoreError("Please enter a valid number");
+      setScoreError(t("common.pleaseEnterValidNumber"));
     } else if (numericValue < 0) {
-      setScoreError("Score cannot be negative");
+      setScoreError(t("common.scoreCannotBeNegative"));
     } else if (numericValue > task.maxScore) {
-      setScoreError(`Score cannot exceed max score of ${task.maxScore}`);
+      setScoreError(
+        `${t("common.scoreCannotExceedMax", { maxScore: task.maxScore })}`
+      );
     } else {
       setScoreError("");
     }
@@ -203,7 +205,7 @@ export default function TaskDetailPage() {
       setNewScore("");
     } catch (error) {
       console.error("Failed to update score:", error);
-      setScoreError("Failed to update score. Please try again.");
+      setScoreError(t("common.failedToUpdateScore"));
     } finally {
       setUpdatingScore(false);
     }
@@ -252,7 +254,7 @@ export default function TaskDetailPage() {
           onClick={() => navigate(-1)}
           variant="outlined"
         >
-          Go Back
+          {t("common.goBack")}
         </Button>
       </Container>
     );
@@ -261,14 +263,14 @@ export default function TaskDetailPage() {
   if (!task) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Typography>Task not found</Typography>
+        <Typography>{t("common.taskNotFound")}</Typography>
         <Button
           startIcon={<ArrowBackIcon />}
           onClick={() => navigate(-1)}
           variant="outlined"
           sx={{ mt: 2 }}
         >
-          Go Back
+          {t("common.goBack")}
         </Button>
       </Container>
     );
@@ -286,7 +288,7 @@ export default function TaskDetailPage() {
           component="h1"
           sx={{ fontWeight: "bold", color: "primary.main", flexGrow: 1 }}
         >
-          Task Details
+          {t("common.taskDetails")}
         </Typography>
       </Box>
 
@@ -310,7 +312,7 @@ export default function TaskDetailPage() {
                 color="text.secondary"
                 gutterBottom
               >
-                Task ID
+                {t("common.taskId")}
               </Typography>
               <Typography variant="h6">{task.id}</Typography>
             </Box>
@@ -323,7 +325,7 @@ export default function TaskDetailPage() {
                 color="text.secondary"
                 gutterBottom
               >
-                Task Group ID
+                {t("common.taskGroupId")}
               </Typography>
               <Typography variant="h6">{task.taskGroupId}</Typography>
             </Box>
@@ -336,10 +338,10 @@ export default function TaskDetailPage() {
                 color="text.secondary"
                 gutterBottom
               >
-                Max Score
+                {t("common.maxScore")}
               </Typography>
               <Chip
-                label={`${task.maxScore} points`}
+                label={`${task.maxScore} ${t("common.points")}`}
                 color="info"
                 size="medium"
               />
@@ -353,14 +355,14 @@ export default function TaskDetailPage() {
                 color="text.secondary"
                 gutterBottom
               >
-                Current Score
+                {t("common.currentScore")}
               </Typography>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Chip
                   label={
                     task.score !== null
                       ? `${task.score} / ${task.maxScore}`
-                      : "Not graded"
+                      : t("common.notGraded")
                   }
                   color={task.score !== null ? "success" : "default"}
                   size="medium"
@@ -370,7 +372,7 @@ export default function TaskDetailPage() {
                     size="small"
                     onClick={handleEditScore}
                     color="primary"
-                    title="Edit Score"
+                    title={t("common.editScore")}
                     sx={{ ml: 1 }}
                   >
                     <EditIcon fontSize="small" />
@@ -389,7 +391,7 @@ export default function TaskDetailPage() {
             <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
               <PersonIcon color="primary" />
               <Typography variant="subtitle1" fontWeight="medium">
-                Assignment Information
+                {t("common.assignmentInformation")}
               </Typography>
             </Box>
             <List dense>
@@ -408,17 +410,17 @@ export default function TaskDetailPage() {
                 <ListItemText
                   primary={
                     task.assignedUserName
-                      ? `Assigned to: ${task.assignedUserName}`
+                      ? `${t("common.assignedTo")}: ${task.assignedUserName}`
                       : task.teamName
-                      ? `Assigned to Team: ${task.teamName}`
-                      : "Unassigned"
+                      ? `${t("common.assignedToTeam")}: ${task.teamName}`
+                      : t("common.unassigned")
                   }
                   secondary={
                     task.assignedUserName
-                      ? "Individual Assignment"
+                      ? t("common.individualAssignment")
                       : task.teamName
-                      ? "Team Assignment"
-                      : "No assignment"
+                      ? t("common.teamAssignment")
+                      : t("common.noAssignment")
                   }
                 />
               </ListItem>
@@ -427,8 +429,8 @@ export default function TaskDetailPage() {
                   <PersonIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary={`Created by: ${task.createdByName}`}
-                  secondary={`User ID: ${task.createdById}`}
+                  primary={`${t("common.createdBy")}: ${task.createdByName}`}
+                  secondary={`${t("common.userId")}: ${task.createdById}`}
                 />
               </ListItem>
             </List>
@@ -438,7 +440,7 @@ export default function TaskDetailPage() {
             <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
               <ScheduleIcon color="primary" />
               <Typography variant="subtitle1" fontWeight="medium">
-                Timeline
+                {t("common.timeline")}
               </Typography>
             </Box>
             <List dense>
@@ -447,7 +449,7 @@ export default function TaskDetailPage() {
                   <ScheduleIcon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText
-                  primary="Created"
+                  primary={t("common.created")}
                   secondary={formatDate(task.createdAt)}
                 />
               </ListItem>
@@ -456,7 +458,7 @@ export default function TaskDetailPage() {
                   <ScheduleIcon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText
-                  primary="Last Updated"
+                  primary={t("common.lastUpdated")}
                   secondary={formatDate(task.updatedAt)}
                 />
               </ListItem>
@@ -465,7 +467,7 @@ export default function TaskDetailPage() {
                   <GradeIcon fontSize="small" color="error" />
                 </ListItemIcon>
                 <ListItemText
-                  primary="Due Date"
+                  primary={t("common.dueDate")}
                   secondary={
                     <Chip
                       label={formatDate(task.dueDate)}
@@ -490,7 +492,7 @@ export default function TaskDetailPage() {
             sx={{ display: "flex", alignItems: "center", gap: 1 }}
           >
             <DescriptionIcon />
-            Task Content
+            {t("common.taskContent")}
           </Typography>
           <Card variant="outlined">
             <CardContent>
@@ -518,7 +520,7 @@ export default function TaskDetailPage() {
                 </Box>
               ) : (
                 <Typography color="text.secondary" fontStyle="italic">
-                  No content provided for this task
+                  {t("common.noContentProvided")}
                 </Typography>
               )}
             </CardContent>
@@ -531,7 +533,7 @@ export default function TaskDetailPage() {
         <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
           <UploadIcon fontSize="large" color="secondary" />
           <Typography variant="h5" component="h2" fontWeight="bold">
-            Task Submission
+            {t("common.taskSubmission")}
           </Typography>
         </Box>
 
@@ -546,12 +548,12 @@ export default function TaskDetailPage() {
         {/* Submission Form */}
         <Box sx={{ mb: 3 }}>
           <Typography variant="h6" gutterBottom>
-            Submission Content
+            {t("common.submissionContent")}
           </Typography>
           <RichTextEditor
             value={submissionContent}
             onChange={setSubmissionContent}
-            placeholder="Enter your submission content here..."
+            placeholder={t("common.enterSubmissionContent")}
             readOnly={submitting}
             minHeight="300px"
             showImageUpload={true}
@@ -561,7 +563,7 @@ export default function TaskDetailPage() {
         {/* File Upload */}
         <Box sx={{ mb: 3 }}>
           <Typography variant="h6" gutterBottom>
-            Attachment Files
+            {t("common.attachmentFiles")}
           </Typography>
           <Button
             component="label"
@@ -570,7 +572,7 @@ export default function TaskDetailPage() {
             disabled={submitting}
             sx={{ mb: 2 }}
           >
-            Upload Files
+            {t("common.uploadFiles")}
             <input type="file" hidden multiple onChange={handleFileChange} />
           </Button>
 
@@ -578,7 +580,7 @@ export default function TaskDetailPage() {
           {submissionFiles.length > 0 && (
             <Box sx={{ mt: 2 }}>
               <Typography variant="subtitle2" gutterBottom>
-                Attached Files:
+                {t("common.attachedFiles")}:
               </Typography>
               <List>
                 {submissionFiles.map((file, index) => (
@@ -596,7 +598,7 @@ export default function TaskDetailPage() {
                       onClick={() => removeFile(index)}
                       disabled={submitting}
                     >
-                      Remove
+                      {t("common.remove")}
                     </Button>
                   </ListItem>
                 ))}
@@ -612,7 +614,7 @@ export default function TaskDetailPage() {
             onClick={() => navigate(-1)}
             disabled={submitting}
           >
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button
             variant="contained"
@@ -623,7 +625,7 @@ export default function TaskDetailPage() {
             disabled={submitting || !submissionContent.trim()}
             size="large"
           >
-            {submitting ? "Submitting..." : "Submit Task"}
+            {submitting ? t("common.submitting") : t("common.submitTask")}
           </Button>
         </Box>
 
@@ -634,10 +636,10 @@ export default function TaskDetailPage() {
           <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
             <ListIcon fontSize="large" color="info" />
             <Typography variant="h5" component="h2" fontWeight="bold">
-              Task Submissions
+              {t("common.taskSubmissions")}
             </Typography>
             <Badge badgeContent={submissions.length} color="primary" showZero>
-              <Chip label="Total" size="small" variant="outlined" />
+              <Chip label={t("common.total")} size="small" variant="outlined" />
             </Badge>
           </Box>
 
@@ -649,7 +651,7 @@ export default function TaskDetailPage() {
             <Card variant="outlined">
               <CardContent>
                 <Typography color="text.secondary" textAlign="center">
-                  No submissions found for this task
+                  {t("common.noSubmissionsFound")}
                 </Typography>
               </CardContent>
             </Card>
@@ -686,7 +688,8 @@ export default function TaskDetailPage() {
                           {submission.createdBy.name}
                         </Typography>
                         <Typography variant="caption" color="text.secondary">
-                          Submitted on {formatDate(submission.createdAt)}
+                          {t("common.submittedOn")}{" "}
+                          {formatDate(submission.createdAt)}
                         </Typography>
                       </Box>
                       <Box
@@ -695,7 +698,9 @@ export default function TaskDetailPage() {
                         {submission.fileAttachments.length > 0 && (
                           <Chip
                             icon={<AttachFileIcon />}
-                            label={`${submission.fileAttachments.length} files`}
+                            label={`${submission.fileAttachments.length} ${t(
+                              "common.files"
+                            )}`}
                             size="small"
                             color="secondary"
                             variant="outlined"
@@ -722,7 +727,7 @@ export default function TaskDetailPage() {
                           sx={{ display: "flex", alignItems: "center", gap: 1 }}
                         >
                           <DescriptionIcon />
-                          Submission Content
+                          {t("common.submissionContent")}
                         </Typography>
                         <Card variant="outlined">
                           <CardContent>
@@ -753,7 +758,7 @@ export default function TaskDetailPage() {
                                 color="text.secondary"
                                 fontStyle="italic"
                               >
-                                No content provided
+                                {t("common.noContentProvided")}
                               </Typography>
                             )}
                           </CardContent>
@@ -773,7 +778,8 @@ export default function TaskDetailPage() {
                             }}
                           >
                             <AttachFileIcon />
-                            Attached Files ({submission.fileAttachments.length})
+                            {t("common.attachedFiles")} (
+                            {submission.fileAttachments.length})
                           </Typography>
                           <List dense>
                             {submission.fileAttachments.map((file) => (
@@ -796,7 +802,7 @@ export default function TaskDetailPage() {
                                         variant="caption"
                                         color="text.secondary"
                                       >
-                                        Size:{" "}
+                                        {t("common.size")}:{" "}
                                         {(file.filesize / 1024 / 1024).toFixed(
                                           2
                                         )}{" "}
@@ -807,7 +813,9 @@ export default function TaskDetailPage() {
                                         variant="caption"
                                         color="text.secondary"
                                       >
-                                        Uploaded by: {file.uploadedByName} on{" "}
+                                        {t("common.uploadedBy")}:{" "}
+                                        {file.uploadedByName}{" "}
+                                        {t("common.createdAt")}{" "}
                                         {formatDateOnly(file.uploadedAt)}
                                       </Typography>
                                     </Box>
@@ -823,7 +831,7 @@ export default function TaskDetailPage() {
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
-                                  Download
+                                  {t("common.downloadFile")}
                                 </Button>
                               </ListItem>
                             ))}
@@ -839,7 +847,7 @@ export default function TaskDetailPage() {
                           sx={{ display: "flex", alignItems: "center", gap: 1 }}
                         >
                           <PersonIcon />
-                          Submitter Details
+                          {t("common.submitterDetails")}
                         </Typography>
                         <Card variant="outlined">
                           <CardContent>
@@ -849,7 +857,7 @@ export default function TaskDetailPage() {
                                   variant="body2"
                                   color="text.secondary"
                                 >
-                                  Name
+                                  {t("common.name")}
                                 </Typography>
                                 <Typography variant="body1">
                                   {submission.createdBy.name}
@@ -860,7 +868,7 @@ export default function TaskDetailPage() {
                                   variant="body2"
                                   color="text.secondary"
                                 >
-                                  Email
+                                  {t("common.email")}
                                 </Typography>
                                 <Typography variant="body1">
                                   {submission.createdBy.email}
@@ -871,11 +879,11 @@ export default function TaskDetailPage() {
                                   variant="body2"
                                   color="text.secondary"
                                 >
-                                  Nickname
+                                  {t("common.nickname")}
                                 </Typography>
                                 <Typography variant="body1">
                                   {submission.createdBy.nickname ||
-                                    "Not provided"}
+                                    t("common.notProvided")}
                                 </Typography>
                               </Grid>
                               <Grid item xs={12} sm={6}>
@@ -883,10 +891,13 @@ export default function TaskDetailPage() {
                                   variant="body2"
                                   color="text.secondary"
                                 >
-                                  Role
+                                  {t("common.status")}
                                 </Typography>
                                 <Chip
-                                  label={submission.createdBy.role || "Member"}
+                                  label={
+                                    submission.createdBy.role ||
+                                    t("common.member")
+                                  }
                                   size="small"
                                   color={
                                     submission.createdBy.isAdmin
@@ -922,13 +933,13 @@ export default function TaskDetailPage() {
             sx={{ display: "flex", alignItems: "center", gap: 1 }}
           >
             <EditIcon />
-            Edit Task Score
+            {t("common.editTaskScore")}
           </Typography>
         </DialogTitle>
         <DialogContent>
           <Box sx={{ pt: 2 }}>
             <Typography variant="body2" color="text.secondary" gutterBottom>
-              Task: {task?.name}
+              {t("common.task")}: {task?.name}
             </Typography>
             <Typography
               variant="body2"
@@ -936,12 +947,12 @@ export default function TaskDetailPage() {
               gutterBottom
               sx={{ mb: 3 }}
             >
-              Maximum Score: {task?.maxScore} points
+              {t("common.maxScore")}: {task?.maxScore} {t("common.points")}
             </Typography>
 
             <TextField
               autoFocus
-              label="Score"
+              label={t("common.score")}
               type="number"
               fullWidth
               variant="outlined"
@@ -949,7 +960,8 @@ export default function TaskDetailPage() {
               onChange={handleScoreChange}
               error={!!scoreError}
               helperText={
-                scoreError || `Enter a score between 0 and ${task?.maxScore}`
+                scoreError ||
+                t("common.enterScoreBetween", { maxScore: task?.maxScore })
               }
               inputProps={{
                 min: 0,
@@ -961,14 +973,14 @@ export default function TaskDetailPage() {
 
             {task?.score !== null && (
               <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-                Current Score: {task.score} / {task.maxScore}
+                {t("common.currentScore")}: {task.score} / {task.maxScore}
               </Typography>
             )}
           </Box>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 3 }}>
           <Button onClick={handleCancelScoreEdit} disabled={updatingScore}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button
             onClick={handleUpdateScore}
@@ -978,7 +990,7 @@ export default function TaskDetailPage() {
               updatingScore ? <CircularProgress size={20} /> : <SaveIcon />
             }
           >
-            {updatingScore ? "Updating..." : "Update Score"}
+            {updatingScore ? t("common.updating") : t("common.updateScore")}
           </Button>
         </DialogActions>
       </Dialog>

@@ -108,12 +108,7 @@ export default function MainPage() {
   };
 
   const formatDate = (dateString) => {
-    if (!dateString) return "";
-    return new Date(dateString).toLocaleTimeString("ko-KR", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
+    return dateString.replace("T", " ");
   };
 
   const formatDaysRemaining = (days) => {
@@ -133,7 +128,7 @@ export default function MainPage() {
   if (loading) {
     return (
       <Box className="flex justify-center items-center min-h-96">
-        <Typography>로딩 중...</Typography>
+        <Typography>{t("common.loading")}</Typography>
       </Box>
     );
   }
@@ -186,7 +181,7 @@ export default function MainPage() {
                 <Box className="flex items-center">
                   <Assignment color="warning" className="mr-2" />
                   <Typography variant="body2" className="font-medium">
-                    Pending Tasks
+                    {t("common.pendingTasks")}
                   </Typography>
                 </Box>
                 <Typography variant="h6" color="warning">
@@ -200,7 +195,7 @@ export default function MainPage() {
                 <Box className="flex items-center">
                   <Notifications color="success" className="mr-2" />
                   <Typography variant="body2" className="font-medium">
-                    Notices
+                    {t("common.notices")}
                   </Typography>
                 </Box>
                 <Typography variant="h6" color="success">
@@ -215,7 +210,7 @@ export default function MainPage() {
       {/* Main Content */}
       <Box className="flex-1 p-6">
         <Typography variant="h4" className="font-bold text-gray-800 mb-6">
-          Dashboard
+          {t("common.dashboard")}
         </Typography>
 
         {/* Main Dashboard Content */}
@@ -243,14 +238,14 @@ export default function MainPage() {
             <Paper elevation={3}>
               <CardHeader
                 avatar={<Event color="primary" />}
-                title="Enrollment Status"
+                title={t("common.enrollmentStatus")}
                 subheader={`${formatDaysRemaining(
                   enrollmentStatus.daysRemaining
-                )} days remaining`}
+                )} ${t("common.daysRemaining")}`}
               />
               <CardContent>
                 <Typography variant="body1" color="text.secondary">
-                  Have a good day.
+                  {t("common.haveGoodDay")}
                 </Typography>
               </CardContent>
             </Paper>
@@ -259,15 +254,15 @@ export default function MainPage() {
             <Paper elevation={3}>
               <CardHeader
                 avatar={<Assignment color="primary" />}
-                title="My Tasks"
-                subheader={`${tasksCount} pending tasks`}
+                title={t("common.myTasks")}
+                subheader={t("common.pendingTasksCount", { count: tasksCount })}
                 action={
                   <Button
                     size="small"
                     endIcon={<ArrowForward />}
                     onClick={() => navigate("/my/tasks")}
                   >
-                    모두 보기
+                    {t("common.viewAll")}
                   </Button>
                 }
               />
@@ -289,16 +284,20 @@ export default function MainPage() {
                             {task.title || task.name}
                           </Typography>
                           <Chip
-                            label={task.score ? "완료" : "진행중"}
+                            label={
+                              task.score
+                                ? t("common.completed")
+                                : t("common.inProgress")
+                            }
                             size="small"
                             color={getStatusColor(
-                              task.score ? "완료" : "진행중"
+                              task.score ? "completed" : "inProgress"
                             )}
                             variant="outlined"
                           />
                         </Box>
                         <Typography variant="caption" color="text.secondary">
-                          마감일: {formatDate(task.dueDate)}
+                          {t("common.deadline")}: {formatDate(task.dueDate)}
                         </Typography>
                         {task.score !== undefined &&
                           task.maxScore !== undefined && (
@@ -307,7 +306,7 @@ export default function MainPage() {
                               color="text.secondary"
                               className="ml-2"
                             >
-                              점수: {task.score}/{task.maxScore}
+                              {t("common.score")}: {task.score}/{task.maxScore}
                             </Typography>
                           )}
                       </CardContent>
@@ -320,7 +319,7 @@ export default function MainPage() {
                       color="text.secondary"
                       className="text-center py-4"
                     >
-                      등록된 과제가 없습니다.
+                      {t("common.noTasksRegistered")}
                     </Typography>
                   )}
                 </Box>
@@ -343,8 +342,8 @@ export default function MainPage() {
             <Paper elevation={3}>
               <CardHeader
                 avatar={<Notifications color="primary" />}
-                title="Latest Notices"
-                subheader={`${noticesCount} announcements`}
+                title={t("common.latestNotices")}
+                subheader={`${noticesCount} ${t("common.announcements")}`}
               />
               <CardContent className="pt-0">
                 <List>
@@ -378,7 +377,7 @@ export default function MainPage() {
                       color="text.secondary"
                       className="text-center py-4"
                     >
-                      공지사항이 없습니다.
+                      {t("common.noNoticesAvailable")}
                     </Typography>
                   )}
                 </List>
@@ -389,8 +388,8 @@ export default function MainPage() {
             <Paper elevation={3}>
               <CardHeader
                 avatar={<Event color="primary" />}
-                title="Upcoming Events"
-                subheader="Important dates and deadlines"
+                title={t("common.upcomingEvents")}
+                subheader={t("pages.main.dashboard.importantDates")}
               />
               <CardContent className="pt-0">
                 <List>

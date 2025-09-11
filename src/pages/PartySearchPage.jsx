@@ -18,8 +18,10 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import usePartyList from "../hooks/usePartyList";
 import taxios from "../utils/taxios";
+import { useTranslation } from "react-i18next";
 
 export default function PartySearchPage() {
+  const { t } = useTranslation();
   const { parties, loading, search, setSearch } = usePartyList("name");
 
   // Dialog state for entry message form
@@ -46,7 +48,7 @@ export default function PartySearchPage() {
 
   const handleSubmitJoin = async () => {
     if (!selectedPartyId || !entryMessage.trim()) {
-      alert("메시지를 입력해주세요.");
+      alert(t("common.pleaseEnterMessage"));
       return;
     }
 
@@ -56,11 +58,11 @@ export default function PartySearchPage() {
         message: entryMessage.trim(),
       });
 
-      alert("파티 가입 신청이 완료되었습니다.");
+      alert(t("common.partyJoinApplicationCompleted"));
       handleCloseDialog();
     } catch (error) {
       console.error("Error joining party:", error);
-      alert("가입 신청 도중 오류가 발생했습니다.");
+      alert(t("common.partyJoinApplicationError"));
     } finally {
       setSubmitting(false);
     }
@@ -75,7 +77,7 @@ export default function PartySearchPage() {
           variant="outlined"
           value={search}
           onChange={handleInputChange}
-          placeholder="Search parties..."
+          placeholder={t("common.partySearchPlaceholder")}
           slotProps={{
             htmlInput: {
               startAdornment: (
@@ -126,7 +128,7 @@ export default function PartySearchPage() {
                     color="primary"
                     onClick={() => handleJoinClick(party.id)}
                   >
-                    Join
+                    {t("common.join")}
                   </Button>
                 </Box>
               </CardContent>
@@ -138,7 +140,7 @@ export default function PartySearchPage() {
       {!loading && parties.data.length === 0 && (
         <Box textAlign="center" sx={{ mt: 5 }}>
           <Typography variant="body1" color="text.secondary">
-            No parties found
+            {t("common.noPartiesFound")}
           </Typography>
         </Box>
       )}
@@ -150,26 +152,28 @@ export default function PartySearchPage() {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle sx={{ textAlign: "center" }}>파티 가입 신청</DialogTitle>
+        <DialogTitle sx={{ textAlign: "center" }}>
+          {t("common.partyJoinApplication")}
+        </DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
             id="entryMessage"
-            label="가입 메시지"
+            label={t("common.partyEntryMessage")}
             type="text"
             fullWidth
             multiline
             rows={4}
             variant="outlined"
-            placeholder="파티에 가입하고 싶은 이유나 자기소개를 입력해주세요."
+            placeholder={t("common.partyEntryMessagePlaceholder")}
             value={entryMessage}
             onChange={(e) => setEntryMessage(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} disabled={submitting}>
-            취소
+            {t("common.cancel")}
           </Button>
           <Button
             onClick={handleSubmitJoin}
@@ -177,7 +181,7 @@ export default function PartySearchPage() {
             variant="contained"
             disabled={submitting || !entryMessage.trim()}
           >
-            {submitting ? "신청 중..." : "가입 신청"}
+            {submitting ? t("common.applying") : t("common.joinApplication")}
           </Button>
         </DialogActions>
       </Dialog>

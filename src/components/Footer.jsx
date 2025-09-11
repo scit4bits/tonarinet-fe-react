@@ -3,6 +3,7 @@ import LogoWithTitle from "../assets/logoWithTitle.png";
 import TeamLogo from "../assets/4bits.png";
 import { Link } from "react-router";
 import Developers from "../data/developers.json";
+import React, { useState } from "react";
 import {
   Button,
   Dialog,
@@ -15,7 +16,6 @@ import {
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ChatIcon from "@mui/icons-material/Chat";
-import { useState } from "react";
 
 export default function Footer() {
   const { t, i18n } = useTranslation();
@@ -48,15 +48,13 @@ export default function Footer() {
             </div>
           </div>
           <div className="flex flex-col text-left">
-            <Typography variant="h6">About us</Typography>
-            <Typography variant="body2">
-              SMART Cloud IT Master 47기 팀 프로젝트
-            </Typography>
-            <Typography variant="body2">B반 4조 Team 4bits</Typography>
-            <Typography variant="body2">조장 현진섭</Typography>
+            <Typography variant="h6">{t("common.aboutUs")}</Typography>
+            <Typography variant="body2">{t("common.projectTitle")}</Typography>
+            <Typography variant="body2">{t("common.teamTitle")}</Typography>
+            <Typography variant="body2">{t("common.teamLeader")}</Typography>
           </div>
           <div className="flex flex-col text-left">
-            <Typography variant="h6">Members</Typography>
+            <Typography variant="h6">{t("common.members")}</Typography>
             {Developers.map((member) => (
               <Typography
                 key={member.id}
@@ -74,7 +72,7 @@ export default function Footer() {
           </div>
         </div>
         <br />
-        <p>© 2025 Team 4bits. All Rights Reserved.</p>
+        <p>{t("common.copyright")}</p>
       </footer>
 
       <Dialog open={dialogOpen} onClose={handleCloseDialog}>
@@ -85,14 +83,14 @@ export default function Footer() {
               : selectedMember.name.ja)}
         </DialogTitle>
         <DialogContent>
-          <Typography variant="h6">Profile</Typography>
+          <Typography variant="h6">{t("common.profile")}</Typography>
           <Typography variant="body2">
             {selectedMember &&
               (i18n.language === "ko"
                 ? selectedMember.profile.ko
                 : selectedMember.profile.ja)}
           </Typography>
-          <Typography variant="h6">Contacts</Typography>
+          <Typography variant="h6">{t("common.contacts")}</Typography>
           <Typography variant="body2">
             {selectedMember && selectedMember.phone}
           </Typography>
@@ -101,7 +99,7 @@ export default function Footer() {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>Close</Button>
+          <Button onClick={handleCloseDialog}>{t("common.close")}</Button>
         </DialogActions>
       </Dialog>
     </>

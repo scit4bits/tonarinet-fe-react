@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
+import i18n from "../../i18n";
 import {
   Box,
   Typography,
@@ -32,6 +34,7 @@ import taxios from "../../utils/taxios";
 import { getMyOrganizations } from "../../utils/organization";
 
 export default function MyPageMainPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
@@ -99,19 +102,19 @@ export default function MyPageMainPage() {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "완료":
+      case t("common.statusCompleted"):
       case "COMPLETED":
       case "completed":
         return "success";
-      case "진행중":
+      case t("common.statusInProgress"):
       case "IN_PROGRESS":
       case "in_progress":
         return "primary";
-      case "대기":
+      case t("common.statusPending"):
       case "PENDING":
       case "pending":
         return "warning";
-      case "예정":
+      case t("common.statusScheduled"):
       case "SCHEDULED":
       case "scheduled":
         return "info";
@@ -122,7 +125,13 @@ export default function MyPageMainPage() {
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
-    return new Date(dateString).toLocaleDateString("ko-KR", {
+    const locale =
+      i18n.language === "ko"
+        ? "ko-KR"
+        : i18n.language === "ja"
+        ? "ja-JP"
+        : "en-US";
+    return new Date(dateString).toLocaleDateString(locale, {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -132,9 +141,10 @@ export default function MyPageMainPage() {
   const getTaskStatus = (task) => {
     // Check if task has a specific status field, otherwise derive from dates
     if (task.status) return task.status;
-    if (task.submissionTime) return "완료";
-    if (task.dueDate && new Date(task.dueDate) < new Date()) return "지연";
-    return "진행중";
+    if (task.submissionTime) return t("common.statusCompleted");
+    if (task.dueDate && new Date(task.dueDate) < new Date())
+      return t("common.statusOverdue");
+    return t("common.statusInProgress");
   };
 
   const getCounselStatus = (counsel) => {
@@ -143,8 +153,8 @@ export default function MyPageMainPage() {
     const counselDate = new Date(counsel.date || counsel.scheduledDate);
     const now = new Date();
 
-    if (counselDate < now) return "완료";
-    return "예정";
+    if (counselDate < now) return t("common.statusCompleted");
+    return t("common.statusScheduled");
   };
 
   const handleTaskClick = (taskId) => {
@@ -158,7 +168,7 @@ export default function MyPageMainPage() {
   if (loading) {
     return (
       <Box className="flex justify-center items-center min-h-96">
-        <Typography>로딩 중...</Typography>
+        <Typography>{t("common.loading")}</Typography>
       </Box>
     );
   }
@@ -166,27 +176,26 @@ export default function MyPageMainPage() {
   return (
     <Box className="flex-1 p-6">
       <Box className="max-w-4xl">
-        {/* User Description */}
+        {/* 
         <Paper elevation={1} className="p-6 mb-6">
           <Typography variant="h5" className="mb-4 font-semibold">
-            프로필
+            {t("pages.myPage.profileTitle")}
           </Typography>
           <Typography
             variant="body1"
             color="text.secondary"
             className="leading-relaxed"
           >
-            {user?.description ||
-              "아직 자기소개가 작성되지 않았습니다. 프로필을 수정하여 자신을 소개해보세요."}
+            {user?.description || t("pages.myPage.noDescription")}
           </Typography>
-        </Paper>
+        </Paper> */}
 
         <Grid container spacing={3}>
           {/* Summary Stats Section */}
           <Grid xs={12}>
             <Paper elevation={1} className="p-6 mb-6">
               <Typography variant="h6" className="font-semibold mb-4">
-                활동 요약
+                {t("common.activitySummary")}
               </Typography>
               <Grid container spacing={3}>
                 <Grid xs={12} sm={6} md={3}>
@@ -196,7 +205,7 @@ export default function MyPageMainPage() {
                       {organizations.length}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      소속 조직
+                      {t("common.affiliatedOrganizations")}
                     </Typography>
                   </Card>
                 </Grid>
@@ -207,7 +216,7 @@ export default function MyPageMainPage() {
                       {teams.length}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      참여 팀
+                      {t("common.participatingTeams")}
                     </Typography>
                   </Card>
                 </Grid>
@@ -218,7 +227,7 @@ export default function MyPageMainPage() {
                       {parties.length}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      참여 파티
+                      {t("common.participatingParties")}
                     </Typography>
                   </Card>
                 </Grid>
@@ -229,7 +238,7 @@ export default function MyPageMainPage() {
                       {tasks.length}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      할당된 과제
+                      {t("common.assignedTasks")}
                     </Typography>
                   </Card>
                 </Grid>
@@ -242,14 +251,14 @@ export default function MyPageMainPage() {
             <Paper elevation={1} className="p-6">
               <Box className="flex justify-between items-center mb-4">
                 <Typography variant="h6" className="font-semibold">
-                  내 과제
+                  {t("common.myTasks")}
                 </Typography>
                 <Button
                   size="small"
                   endIcon={<ArrowForward />}
-                  onClick={() => navigate("/my/tasksw")}
+                  onClick={() => navigate("/my/tasks")}
                 >
-                  모두 보기
+                  {t("common.viewAll")}
                 </Button>
               </Box>
 
@@ -274,7 +283,7 @@ export default function MyPageMainPage() {
                         />
                       </Box>
                       <Typography variant="caption" color="text.secondary">
-                        마감일: {formatDate(task.dueDate)}
+                        {t("common.dueDate")}: {formatDate(task.dueDate)}
                       </Typography>
                       {task.score !== undefined &&
                         task.maxScore !== undefined && (
@@ -283,7 +292,8 @@ export default function MyPageMainPage() {
                             color="text.secondary"
                             className="ml-2"
                           >
-                            점수: {task.score}/{task.maxScore}
+                            {t("common.scoreLabel")}: {task.score}/
+                            {task.maxScore}
                           </Typography>
                         )}
                     </CardContent>
@@ -296,7 +306,7 @@ export default function MyPageMainPage() {
                     color="text.secondary"
                     className="text-center py-4"
                   >
-                    등록된 과제가 없습니다.
+                    {t("common.noTasksRegistered")}
                   </Typography>
                 )}
               </Box>
@@ -308,14 +318,14 @@ export default function MyPageMainPage() {
             <Paper elevation={1} className="p-6">
               <Box className="flex justify-between items-center mb-4">
                 <Typography variant="h6" className="font-semibold">
-                  내 상담
+                  {t("common.myCounsel")}
                 </Typography>
                 <Button
                   size="small"
                   endIcon={<ArrowForward />}
-                  onClick={() => navigate("/my/counsel")}
+                  onClick={() => navigate("/my/counsels")}
                 >
-                  모두 보기
+                  {t("common.viewAll")}
                 </Button>
               </Box>
 
@@ -345,11 +355,11 @@ export default function MyPageMainPage() {
                           color="text.secondary"
                           className="mb-1"
                         >
-                          상담사: {counsel.counselor}
+                          {t("common.counselor")}: {counsel.counselor}
                         </Typography>
                       )}
                       <Typography variant="caption" color="text.secondary">
-                        일정:{" "}
+                        {t("common.schedule")}:{" "}
                         {formatDate(
                           counsel.date ||
                             counsel.scheduledDate ||
@@ -366,7 +376,7 @@ export default function MyPageMainPage() {
                     color="text.secondary"
                     className="text-center py-4"
                   >
-                    예정된 상담이 없습니다.
+                    {t("common.noCounselsScheduled")}
                   </Typography>
                 )}
               </Box>

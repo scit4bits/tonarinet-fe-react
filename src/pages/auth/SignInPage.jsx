@@ -1,7 +1,6 @@
 import taxios from "../../utils/taxios";
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
-import CountryData from "../../data/country.json";
 import { useTranslation } from "react-i18next";
 import LogoWithTitle from "../../assets/logoWithTitle.png";
 import {
@@ -20,6 +19,7 @@ import {
 import LineLogo from "../../assets/line.png";
 import KakaoLogo from "../../assets/kakao.png";
 import GoogleLogo from "../../assets/google.png";
+import LanguageSelector from "../../components/LanguageSelector";
 
 export default function SignInPage({}) {
   const [t, i18n] = useTranslation();
@@ -63,7 +63,7 @@ export default function SignInPage({}) {
     const formData = new FormData(event.target);
 
     if (!email || !password) {
-      alert("All fields are required");
+      alert(t("common.allFieldsRequired"));
       return;
     }
 
@@ -78,12 +78,15 @@ export default function SignInPage({}) {
       window.location.href = "/main";
     } catch (error) {
       console.error("Sign in error:", error);
-      alert("Sign in failed. Please try again.");
+      alert(t("common.signInFailed"));
     }
   }
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-10">
+      <Box sx={{ position: "absolute", top: 16, right: 16 }}>
+        <LanguageSelector />
+      </Box>
       <title>{t("pages.auth.signIn.title")}</title>
       <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
         <Link to="/">
@@ -93,14 +96,14 @@ export default function SignInPage({}) {
       <Container maxWidth="sm">
         <Paper elevation={10} sx={{ p: 4 }}>
           <Typography variant="h4" component="h1" gutterBottom align="center">
-            {t("signIn", "Sign In")}
+            {t("signIn")}
           </Typography>
 
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <TextField
               fullWidth
               id="email"
-              label="Email"
+              label={t("email")}
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -113,7 +116,7 @@ export default function SignInPage({}) {
             <TextField
               fullWidth
               id="password"
-              label={t("password", "Password")}
+              label={t("password")}
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -127,7 +130,7 @@ export default function SignInPage({}) {
               style={{ textDecoration: "none", textAlign: "left" }}
             >
               <Typography variant="body2" color="primary">
-                {t("forgotPassword", "Forgot Password?")}
+                {t("forgotPassword")}
               </Typography>
             </Link>
 
@@ -137,25 +140,25 @@ export default function SignInPage({}) {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              {t("signIn", "Sign In")}
+              {t("signIn")}
             </Button>
 
             <Box sx={{ textAlign: "center", mb: 2 }}>
               <Link to="/signup" style={{ textDecoration: "none" }}>
                 <Typography variant="body2" color="primary">
-                  {t("signUp", "Sign Up")}
+                  {t("signUp")}
                 </Typography>
               </Link>
             </Box>
 
             <Divider sx={{ my: 2 }}>
               <Typography variant="body2" color="text.secondary">
-                {t("orSignInWith", "Or sign in with")}
+                {t("orSignInWith")}
               </Typography>
             </Divider>
 
             <Stack direction="row" spacing={2} justifyContent="center">
-              <Tooltip title="Sign in with Google">
+              <Tooltip title={t("common.signInWithGoogle")}>
                 <IconButton
                   onClick={onClickLoginGoogle}
                   sx={{
@@ -172,7 +175,7 @@ export default function SignInPage({}) {
                 </IconButton>
               </Tooltip>
 
-              <Tooltip title="Sign in with Line">
+              <Tooltip title={t("common.signInWithLine")}>
                 <IconButton
                   onClick={onClickLoginLine}
                   sx={{
@@ -189,7 +192,7 @@ export default function SignInPage({}) {
                 </IconButton>
               </Tooltip>
 
-              <Tooltip title="Sign in with Kakao">
+              <Tooltip title={t("common.signInWithKakao")}>
                 <IconButton
                   onClick={onClickLoginKakao}
                   sx={{

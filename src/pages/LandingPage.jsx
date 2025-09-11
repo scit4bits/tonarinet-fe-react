@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
+import { useTranslation } from "react-i18next";
 
 // 이미지 import
 import heroImageStudent from "../assets/tona-hero-illustration.png";
@@ -24,16 +25,18 @@ import bookIcon from "../assets/book-icon.png";
 import networkIcon from "../assets/network.png";
 import pingIcon from "../assets/ping.png";
 import safeIcon from "../assets/safe.png";
+import LanguageSelector from "../components/LanguageSelector";
 
 export default function LandingPage() {
+  const { t } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
 
   const navPages = [
-    { id: "neighbor", label: "이웃과 소통" },
-    { id: "student", label: "유학생/직장인" },
-    { id: "evaluation", label: "동네 평가" },
-    { id: "community", label: "글로벌 커뮤니티" },
+    { id: "neighbor", label: t("landing.neighborCommunication") },
+    { id: "student", label: t("common.studentsWorkers") },
+    { id: "evaluation", label: t("common.localEvaluation") },
+    { id: "community", label: t("common.globalCommunity") },
   ];
 
   const mainContainerRef = useRef(null);
@@ -117,25 +120,25 @@ export default function LandingPage() {
                 onClick={() => scrollToPage(0)}
                 className="hover:text-[#3E8BDC]"
               >
-                소개
+                {t("common.introduction")}
               </button>
               <button
                 onClick={() => scrollToPage(1)}
                 className="hover:text-[#3E8BDC]"
               >
-                유학생/직장인
+                {t("common.studentsWorkers")}
               </button>
               <button
                 onClick={() => scrollToPage(2)}
                 className="hover:text-[#3E8BDC]"
               >
-                동네 평가
+                {t("common.localEvaluation")}
               </button>
               <button
                 onClick={() => scrollToPage(3)}
                 className="hover:text-[#3E8BDC]"
               >
-                커뮤니티
+                {t("community")}
               </button>
             </nav>
           </div>
@@ -145,8 +148,9 @@ export default function LandingPage() {
               onClick={() => (window.location.href = "/signin")}
               className="bg-[#3E8BDC] text-white font-bold px-6 py-2 rounded-md hover:bg-[#3577BE]"
             >
-              로그인
+              {t("common.login")}
             </button>
+            <LanguageSelector />
           </div>
         </div>
       </header>
@@ -187,24 +191,25 @@ export default function LandingPage() {
           <div className="flex w-full items-center p-12 text-left">
             <div className="w-full md:w-1/2">
               <h1 className="text-5xl font-black leading-normal">
-                이웃과 소통하는
+                {t("landing.neighborCommunication")}
                 <br />
-                가장 가까운 네트워크
+                {t("landing.closestNetwork")}
               </h1>
               <p className="mt-6 text-xl text-gray-600">
-                토나리넷은 가까운 이웃과
-                <br />
-                편리하게 소통하는 플랫폼입니다.
+                {t("landing.neighborDescription")}
               </p>
               <button
                 onClick={() => scrollToPage(1)}
                 className="mt-8 inline-block rounded-full bg-[#3E8BDC] px-10 py-4 text-lg font-bold text-white transition-colors hover:bg-[#3577BE]"
               >
-                유학생・직장인 서비스 보기
+                {t("landing.viewStudentWorkerService")}
               </button>
             </div>
             <div className="hidden md:block md:w-1/2 pl-20 -mt-8">
-              <img src={heroImageNeighbor} alt="네트워크로 연결된 사람들" />
+              <img
+                src={heroImageNeighbor}
+                alt={t("landing.networkConnectedPeople")}
+              />
             </div>
           </div>
           <div ref={neighborRef} className="px-4 py-24 bg-white">
@@ -218,12 +223,14 @@ export default function LandingPage() {
               >
                 <img
                   src={messageIcon}
-                  alt="소통 아이콘"
+                  alt={t("common.communication")}
                   className="w-27 h-27 mb-4"
                 />
-                <h3 className="text-2xl font-bold mb-2">소통</h3>
+                <h3 className="text-2xl font-bold mb-2">
+                  {t("common.communication")}
+                </h3>
                 <p className="text-gray-600">
-                  이웃과 빠르게 정보를 공유하고 소통해요
+                  {t("landing.communicationDescription")}
                 </p>
               </div>
               <div
@@ -235,12 +242,14 @@ export default function LandingPage() {
               >
                 <img
                   src={connectIcon}
-                  alt="연결 아이콘"
+                  alt={t("common.connection")}
                   className="w-27 h-27 mb-4"
                 />
-                <h3 className="text-2xl font-bold mb-2">연결</h3>
+                <h3 className="text-2xl font-bold mb-2">
+                  {t("common.connection")}
+                </h3>
                 <p className="text-gray-600">
-                  지도를 기반으로 믿을 수 있는 네트워크를 형성해요
+                  {t("landing.connectionDescription")}
                 </p>
               </div>
               <div
@@ -252,23 +261,27 @@ export default function LandingPage() {
               >
                 <img
                   src={searchIcon}
-                  alt="발견 아이콘"
+                  alt={t("common.discovery")}
                   className="w-27 h-27 mb-4"
                 />
-                <h3 className="text-2xl font-bold mb-2">발견</h3>
-                <p className="text-gray-600">이웃을 쉽게 찾을 수 있어요</p>
+                <h3 className="text-2xl font-bold mb-2">
+                  {t("common.discovery")}
+                </h3>
+                <p className="text-gray-600">
+                  {t("landing.discoveryDescription")}
+                </p>
               </div>
             </div>
           </div>
           <div className="px-4 py-24 bg-white text-center">
             <h2 className="text-4xl font-bold mb-8">
-              우리 동네 사람들과 연결되고 싶나요?
+              {t("landing.connectWithNeighbors")}
             </h2>
             <a
               href="#"
               className="inline-block rounded-full bg-[#3E8BDC] px-12 py-5 text-xl font-bold text-white hover:bg-[#3577BE]"
             >
-              커뮤니티 살펴보기
+              {t("landing.exploreCommunity")}
             </a>
           </div>
         </section>
@@ -280,26 +293,22 @@ export default function LandingPage() {
           <div className="flex w-full items-center p-12 text-left bg-white">
             <div className="w-full md:w-1/2">
               <h1 className="text-5xl font-black leading-tight">
-                유학생과 직장인을 위한
-                <br />
-                맞춤 관리
+                {t("landing.customizedManagement")}
               </h1>
               <p className="mt-6 text-xl text-gray-600">
-                새로운 도시에서도 쉽게 적응하고
-                <br />
-                생활 정보를 빠르게 얻을 수 있습니다
+                {t("landing.adaptEasily")}
               </p>
               <button
                 onClick={() => scrollToPage(2)}
                 className="mt-8 inline-block rounded-full bg-[#3E8BDC] px-10 py-4 text-lg font-bold text-white transition-colors hover:bg-[#3577BE]"
               >
-                동네평가 보기
+                {t("landing.viewLocalEvaluation")}
               </button>
             </div>
             <div className="hidden md:block md:w-1/2 pl-20">
               <img
                 src={heroImageStudent}
-                alt="노트북을 사용하는 사람"
+                alt={t("landing.laptopUser")}
                 className="w-full"
               />
             </div>
@@ -315,12 +324,14 @@ export default function LandingPage() {
               >
                 <img
                   src={bookIcon}
-                  alt="북 아이콘"
+                  alt={t("common.mutualHelp")}
                   className="w-27 h-27 mb-4"
                 />
-                <h3 className="text-2xl font-bold mb-2">상호 도움</h3>
+                <h3 className="text-2xl font-bold mb-2">
+                  {t("common.mutualHelp")}
+                </h3>
                 <p className="text-gray-600">
-                  나에게 맞는 멘토·멘티를 찾아보세요
+                  {t("landing.mutualHelpDescription")}
                 </p>
               </div>
               <div
@@ -332,33 +343,35 @@ export default function LandingPage() {
               >
                 <img
                   src={networkIcon}
-                  alt="네트워크 아이콘"
+                  alt={t("common.network")}
                   className="w-27 h-27 mb-4"
                 />
-                <h3 className="text-2xl font-bold mb-2">네트워크</h3>
+                <h3 className="text-2xl font-bold mb-2">
+                  {t("common.network")}
+                </h3>
                 <p className="text-gray-600">
-                  같은 관심사를 가진 사람들과 소통해요
+                  {t("landing.networkDescription")}
                 </p>
               </div>
             </div>
           </div>
           <div className="px-4 py-24 bg-white text-center">
-            <h2 className="text-3xl font-bold mb-6">이용자 후기</h2>
+            <h2 className="text-3xl font-bold mb-6">
+              {t("landing.userReviews")}
+            </h2>
             <p className="text-xl text-gray-700">
-              "토나리넷에서 유학생들과 다양한 정보를 주고 받을 수 있어요"
+              "{t("landing.userTestimonial")}"
             </p>
           </div>
           <div className="px-4 py-20 bg-[#DDEBFF] text-center">
             <h2 className="text-4xl font-bold text-gray-800 mb-8">
-              나와 같은 상황의 사람들과
-              <br />
-              연결되어 보세요
+              {t("landing.connectWithSimilar")}
             </h2>
             <button
               onClick={() => scrollToPage(3)}
               className="inline-block rounded-lg bg-[#3E8BDC] px-12 py-5 text-xl font-bold text-white hover:bg-[#3577BE] shadow-md"
             >
-              커뮤니티 바로가기
+              {t("landing.goCommunity")}
             </button>
           </div>
         </section>
@@ -369,21 +382,23 @@ export default function LandingPage() {
         >
           <div className="flex w-full items-center p-12 text-left">
             <div className="w-full md:w-1/2">
-              <h1 className="text-5xl font-black leading-normal">동네 평가</h1>
+              <h1 className="text-5xl font-black leading-normal">
+                {t("landing.localEvaluationTitle")}
+              </h1>
               <p className="mt-6 text-xl text-gray-600">
-                우리 동네 최적의 장소를 찾아봐요
+                {t("landing.findOptimalPlace")}
               </p>
               <button
                 onClick={() => scrollToPage(3)}
                 className="mt-8 inline-block rounded-full bg-[#3E8BDC] px-10 py-4 text-lg font-bold text-white transition-colors hover:bg-[#3577BE]"
               >
-                글로벌 커뮤니티 가기
+                {t("landing.goGlobalCommunity")}
               </button>
             </div>
             <div className="hidden md:block md:w-1/2 pl-8">
               <img
                 src={heroImageEvaluation}
-                alt="동네를 평가하는 사람들"
+                alt={t("landing.evaluatingPeople")}
                 className="w-full"
               />
             </div>
@@ -399,12 +414,14 @@ export default function LandingPage() {
               >
                 <img
                   src={pingIcon}
-                  alt="핑 아이콘"
+                  alt={t("common.location")}
                   className="w-27 h-27 mb-4"
                 />
-                <h3 className="text-2xl font-bold mb-2">위치</h3>
+                <h3 className="text-2xl font-bold mb-2">
+                  {t("common.location")}
+                </h3>
                 <p className="text-gray-600">
-                  내가 사는 동네의 다양한 평가와 후기를 확인할 수 있어요
+                  {t("landing.locationDescription")}
                 </p>
               </div>
               <div
@@ -416,12 +433,14 @@ export default function LandingPage() {
               >
                 <img
                   src={safeIcon}
-                  alt="안전 아이콘"
+                  alt={t("common.safety")}
                   className="w-27 h-27 mb-4"
                 />
-                <h3 className="text-2xl font-bold mb-2">안전</h3>
+                <h3 className="text-2xl font-bold mb-2">
+                  {t("common.safety")}
+                </h3>
                 <p className="text-gray-600">
-                  실제 거주민들의 검증된 안전 정보를 확인하세요
+                  {t("landing.safetyDescription")}
                 </p>
               </div>
             </div>
@@ -445,10 +464,10 @@ export default function LandingPage() {
           >
             <header className="text-center mb-6">
               <h1 className="text-4xl md:text-5xl font-bold text-gray-800">
-                글로벌 커뮤니티
+                {t("landing.globalCommunityTitle")}
               </h1>
               <p className="mt-3 text-lg text-gray-600">
-                전 세계 사람들과 연결하세요
+                {t("landing.connectWorldwide")}
               </p>
             </header>
 
@@ -457,7 +476,7 @@ export default function LandingPage() {
               {/* 지도 이미지 */}
               <img
                 src={globalCommunityMap}
-                alt="Global community map"
+                alt={t("landing.globalCommunityMap")}
                 className={`w-4/5 mx-auto transition-opacity duration-700 ease-out ${
                   communityMapInView ? "opacity-100" : "opacity-0"
                 }`}
@@ -471,7 +490,7 @@ export default function LandingPage() {
                     <img
                       key={index}
                       src={char.src} // ✨ 각 캐릭터에 맞는 src 사용
-                      alt={`캐릭터 아이콘 ${index + 1}`}
+                      alt={`${t("landing.characterIcon")} ${index + 1}`}
                       className="absolute character-pin appear-animation"
                       style={{
                         top: char.top,
@@ -486,32 +505,36 @@ export default function LandingPage() {
 
             <div className="mt-6">
               <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
-                최근 게시물
+                {t("landing.recentPosts")}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                 <div className="bg-white border border-gray-200 rounded-lg shadow-md p-4 flex items-center gap-4 transition-transform duration-300 hover:-translate-y-1">
                   <img
                     src={postImageKorea}
-                    alt="한국 소개"
+                    alt={t("landing.koreaIntroduction")}
                     className="w-24 h-24 object-cover rounded-md"
                   />
                   <div>
-                    <h3 className="font-bold text-lg">한국을 소개합니다</h3>
+                    <h3 className="font-bold text-lg">
+                      {t("landing.introduceKorea")}
+                    </h3>
                     <p className="text-gray-600 text-sm">
-                      지난 주에 다녀왔는데 너무 좋아서 추천...
+                      {t("landing.koreaDescription")}
                     </p>
                   </div>
                 </div>
                 <div className="bg-white border border-gray-200 rounded-lg shadow-md p-4 flex items-center gap-4 transition-transform duration-300 hover:-translate-y-1">
                   <img
                     src={postImageJapan}
-                    alt="일본 소개"
+                    alt={t("landing.japanIntroduction")}
                     className="w-24 h-24 object-cover rounded-md"
                   />
                   <div>
-                    <h3 className="font-bold text-lg">일본을 소개합니다</h3>
+                    <h3 className="font-bold text-lg">
+                      {t("landing.introduceJapan")}
+                    </h3>
                     <p className="text-gray-600 text-sm">
-                      아사쿠사 절쪽에서 오른쪽으로 가면 나오...
+                      {t("landing.japanDescription")}
                     </p>
                   </div>
                 </div>

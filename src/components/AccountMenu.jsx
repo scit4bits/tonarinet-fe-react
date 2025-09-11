@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Box,
   CircularProgress,
@@ -13,6 +14,7 @@ import { getMe } from "../utils/user";
 import { signOut } from "../utils/auth";
 
 export default function AccountMenu() {
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [user, setUser] = useState(null);
 
@@ -73,7 +75,7 @@ export default function AccountMenu() {
                 window.location.href = "/my";
               }}
             >
-              <Typography>마이 페이지</Typography>
+              <Typography>{t("common.myPage")}</Typography>
             </MenuItem>,
             user?.isAdmin && (
               <MenuItem
@@ -82,11 +84,11 @@ export default function AccountMenu() {
                   window.location.href = "/sysadmin";
                 }}
               >
-                <Typography>관리자 페이지</Typography>
+                <Typography>{t("common.adminPage")}</Typography>
               </MenuItem>
             ),
             <MenuItem key="signout" onClick={handleSignOut}>
-              Sign out
+              {t("common.signOut")}
             </MenuItem>,
           ]
         )}

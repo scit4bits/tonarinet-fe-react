@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router";
 import {
@@ -46,21 +46,26 @@ export default function BoardWritePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [tagInput, setTagInput] = useState("");
-  const [categories, setCategories] = useState([
-    { value: "general", label: "일반" },
-    { value: "question", label: "질문" },
-    { value: "tip", label: "팁" },
-    { value: "counsel", label: "상담" },
-  ]);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const categories = useMemo(() => {
+    const baseCategories = [
+      { value: "general", label: t("common.general") },
+      { value: "question", label: t("common.question") },
+      { value: "tip", label: t("common.tip") },
+      { value: "counsel", label: t("common.counsel") },
+    ];
+
+    if (isAdmin) {
+      baseCategories.push({ value: "notice", label: t("common.notice") });
+    }
+
+    return baseCategories;
+  }, [t, isAdmin]);
 
   useEffect(() => {
     getMe().then((data) => {
-      if (data.isAdmin) {
-        setCategories((prev) => [
-          ...prev,
-          { value: "notice", label: "공지사항" },
-        ]);
-      }
+      setIsAdmin(data.isAdmin);
     });
   }, []);
 
@@ -119,17 +124,17 @@ export default function BoardWritePage() {
     event.preventDefault();
 
     if (!formData.title.trim()) {
-      setError("제목을 입력해주세요.");
+      setError(t("pages.board.write.validation.titleRequired"));
       return;
     }
 
     if (!formData.content.trim()) {
-      setError("내용을 입력해주세요.");
+      setError(t("pages.board.write.validation.contentRequired"));
       return;
     }
 
     if (!formData.category) {
-      setError("카테고리를 선택해주세요.");
+      setError(t("pages.board.write.validation.categoryRequired"));
       return;
     }
 
@@ -145,7 +150,7 @@ export default function BoardWritePage() {
 
       navigate(`/board/view/${response.id}`);
     } catch (err) {
-      setError("게시글 작성 중 오류가 발생했습니다.");
+      setError(t("pages.board.write.validation.writeError"));
     } finally {
       setLoading(false);
     }
@@ -181,7 +186,7 @@ export default function BoardWritePage() {
               }}
             >
               <CreateIcon fontSize="large" />
-              {t("pages.board.write.title", "게시글 작성")}
+              {t("pages.board.write.writePost")}
             </Typography>
           </Box>
         </Box>
@@ -213,11 +218,11 @@ export default function BoardWritePage() {
                 disabled={loading}
                 required
               >
-                <InputLabel>카테고리</InputLabel>
+                <InputLabel>{t("common.category")}</InputLabel>
                 <Select
                   value={formData.category}
                   onChange={handleCategoryChange}
-                  label="카테고리"
+                  label={t("common.category")}
                   startAdornment={
                     <CategoryIcon sx={{ mr: 1, color: "text.secondary" }} />
                   }
@@ -231,13 +236,13 @@ export default function BoardWritePage() {
               </FormControl>
 
               <TextField
-                label="제목"
+                label={t("common.title")}
                 variant="outlined"
                 fullWidth
                 required
                 value={formData.title}
                 onChange={handleTitleChange}
-                placeholder="제목을 입력하세요"
+                placeholder={t("pages.board.write.titlePlaceholder")}
                 disabled={loading}
                 sx={{
                   "& .MuiOutlinedInput-root": {
@@ -254,7 +259,7 @@ export default function BoardWritePage() {
               <RichTextEditor
                 value={formData.content}
                 onChange={handleContentChange}
-                placeholder="내용을 입력하세요..."
+                placeholder={t("pages.board.write.contentPlaceholder")}
                 readOnly={loading}
                 minHeight="300px"
                 showImageUpload={true}
@@ -265,20 +270,20 @@ export default function BoardWritePage() {
             {/* Tags Input */}
             <Box>
               <TextField
-                label="태그"
+                label={t("common.tags")}
                 variant="outlined"
                 fullWidth
                 value={tagInput}
                 onChange={handleTagInputChange}
                 onKeyDown={handleTagInputKeyDown}
-                placeholder="태그를 입력하고 Enter를 누르세요"
+                placeholder={t("pages.board.write.tagPlaceholder")}
                 disabled={loading}
                 InputProps={{
                   startAdornment: (
                     <TagIcon sx={{ mr: 1, color: "text.secondary" }} />
                   ),
                 }}
-                helperText="Enter 키를 누르면 태그가 추가됩니다"
+                helperText={t("common.addTagHelper")}
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     "&:hover fieldset": {
@@ -325,7 +330,7 @@ export default function BoardWritePage() {
                 disabled={loading}
                 sx={{ mb: 2 }}
               >
-                파일 첨부
+                {t("common.fileAttachment")}
                 <input
                   type="file"
                   hidden
@@ -338,7 +343,7 @@ export default function BoardWritePage() {
               {formData.files.length > 0 && (
                 <Box sx={{ mt: 2 }}>
                   <Typography variant="subtitle2" gutterBottom>
-                    첨부된 파일:
+                    {t("common.attachedFiles")}
                   </Typography>
                   <Stack direction="row" spacing={1} flexWrap="wrap">
                     {formData.files.map((file, index) => (
@@ -380,7 +385,7 @@ export default function BoardWritePage() {
                   minWidth: 120,
                 }}
               >
-                {loading ? "등록 중..." : "등록"}
+                {loading ? t("common.uploading") : t("common.register")}
               </Button>
             </Box>
           </Stack>

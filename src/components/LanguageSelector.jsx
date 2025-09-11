@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 
 export default function LanguageSelector() {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -31,8 +31,15 @@ export default function LanguageSelector() {
         onClose={handleClose}
         disableScrollLock={true}
       >
-        <MenuItem onClick={() => handleLanguageChange("ko")}>한국어</MenuItem>
-        <MenuItem onClick={() => handleLanguageChange("ja")}>日本語</MenuItem>
+        <MenuItem onClick={() => handleLanguageChange("ko")}>
+          {t("common.korean")}
+        </MenuItem>
+        <MenuItem onClick={() => handleLanguageChange("ja")}>
+          {t("common.japanese")}
+        </MenuItem>
+        <MenuItem onClick={() => handleLanguageChange("en")}>
+          {t("common.english")}
+        </MenuItem>
       </Menu>
     </>
   );

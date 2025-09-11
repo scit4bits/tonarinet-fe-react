@@ -11,7 +11,6 @@ import SignUpPage from "./pages/auth/SignUpPage.jsx";
 import LanguageSelector from "./components/LanguageSelector.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 import SignInPage from "./pages/auth/SignInPage.jsx";
-import AuthTestPage from "./pages/auth/AuthTestPage.jsx";
 import BoardArticleListPage from "./pages/board/BoardArticleListPage.jsx";
 import BoardArticleViewPage from "./pages/board/BoardArticleViewPage.jsx";
 import BoardWritePage from "./pages/board/BoardWritePage.jsx";
@@ -107,8 +106,6 @@ createRoot(document.getElementById("root")).render(
           <Route path="/task">
             <Route path=":taskId" element={<TaskDetailPage />} />
           </Route>
-          <Route path="/testauth" element={<AuthTestPage />} />
-
           <Route path="/board">
             <Route index element={<BoardArticleListPage />} />
             <Route path=":boardId">

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router";
 import {
   Container,
   Typography,
@@ -38,11 +40,14 @@ import {
   Check,
   Close,
   PersonAdd,
+  Search,
 } from "@mui/icons-material";
 import taxios from "../../utils/taxios";
 import useAuth from "../../hooks/useAuth";
 
 export default function MyPagePartyPage() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const [parties, setParties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -61,7 +66,7 @@ export default function MyPagePartyPage() {
         const response = await taxios.get("/party/my");
         setParties(response.data);
       } catch (err) {
-        setError("Failed to load parties");
+        setError(t("common.failedToLoadParties"));
         console.error("Error fetching parties:", err);
       } finally {
         setLoading(false);
@@ -97,7 +102,7 @@ export default function MyPagePartyPage() {
       setOpenDialog(false);
       setPartyName("");
     } catch (err) {
-      setError("Failed to create party");
+      setError(t("common.failedToCreateParty"));
       console.error("Error creating party:", err);
     } finally {
       setCreating(false);
@@ -137,7 +142,7 @@ export default function MyPagePartyPage() {
       }
     } catch (err) {
       console.error("Error granting user:", err);
-      setError("Failed to grant user access");
+      setError(t("common.failedToGrantUser"));
     }
   };
 
@@ -158,7 +163,7 @@ export default function MyPagePartyPage() {
       }
     } catch (err) {
       console.error("Error rejecting user:", err);
-      setError("Failed to reject user");
+      setError(t("common.failedToRejectUser"));
     }
   };
 
@@ -167,7 +172,7 @@ export default function MyPagePartyPage() {
       <Container maxWidth="lg" sx={{ py: 4, textAlign: "center" }}>
         <CircularProgress size={60} />
         <Typography variant="h6" sx={{ mt: 2 }}>
-          Loading parties...
+          {t("common.loadingParties")}
         </Typography>
       </Container>
     );
@@ -195,25 +200,44 @@ export default function MyPagePartyPage() {
               sx={{ mr: 2, color: "secondary.main", fontSize: 32 }}
             />
             <Typography variant="h4" component="h1" fontWeight="bold">
-              My Parties
+              {t("common.myParties")}
             </Typography>
           </Box>
-          <Button
-            variant="contained"
-            startIcon={<Add />}
-            onClick={() => setOpenDialog(true)}
-            sx={{ ml: 2 }}
-          >
-            Create New Party
-          </Button>
+          <Box display="flex" gap={2}>
+            <Button
+              variant="outlined"
+              startIcon={<Search />}
+              onClick={() => navigate("/party/list")}
+            >
+              {t("common.searchParties")}
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<Add />}
+              onClick={() => setOpenDialog(true)}
+            >
+              {t("common.createNewParty")}
+            </Button>
+          </Box>
         </Box>
 
         {parties.length === 0 ? (
           <Box textAlign="center" py={4}>
             <Celebration sx={{ fontSize: 64, color: "text.disabled", mb: 2 }} />
-            <Typography variant="h6" color="text.secondary">
-              You are not a member of any parties yet
+            <Typography variant="h6" color="text.secondary" gutterBottom>
+              {t("common.notMemberOfAnyParties")}
             </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+              {t("common.searchAndJoinParties")}
+            </Typography>
+            <Button
+              variant="contained"
+              startIcon={<Search />}
+              onClick={() => navigate("/party/list")}
+              sx={{ px: 3, py: 1 }}
+            >
+              {t("common.searchParties")}
+            </Button>
           </Box>
         ) : (
           <Grid container spacing={3}>
@@ -239,7 +263,7 @@ export default function MyPagePartyPage() {
                           onClick={() => handleManageParty(party)}
                           sx={{ ml: 1 }}
                         >
-                          Manage
+                          {t("common.manage")}
                         </Button>
                       )}
                     </Box>
@@ -248,7 +272,7 @@ export default function MyPagePartyPage() {
                     <Grid container spacing={2} sx={{ mb: 2 }}>
                       <Grid item xs={6}>
                         <Typography variant="body2" color="text.secondary">
-                          Party Leader
+                          {t("common.partyLeaderLabel")}
                         </Typography>
                         <Box display="flex" alignItems="center">
                           <Star
@@ -265,7 +289,7 @@ export default function MyPagePartyPage() {
                       </Grid>
                       <Grid item xs={6}>
                         <Typography variant="body2" color="text.secondary">
-                          Members
+                          {t("common.membersLabel")}
                         </Typography>
                         <Box display="flex" alignItems="center">
                           <Group
@@ -276,8 +300,10 @@ export default function MyPagePartyPage() {
                             }}
                           />
                           <Typography variant="body1" fontWeight="medium">
-                            {party.userCount} member
-                            {party.userCount !== 1 ? "s" : ""}
+                            {party.userCount}{" "}
+                            {party.userCount !== 1
+                              ? t("common.memberPlural")
+                              : t("common.memberSingular")}
                           </Typography>
                         </Box>
                       </Grid>
@@ -287,7 +313,7 @@ export default function MyPagePartyPage() {
 
                     {/* Party Members */}
                     <Typography variant="subtitle2" fontWeight="bold" mb={1}>
-                      Party Members
+                      {t("common.partyMembersTitle")}
                     </Typography>
                     <AvatarGroup max={4} sx={{ justifyContent: "flex-start" }}>
                       {party.users.map((user) => (
@@ -297,7 +323,9 @@ export default function MyPagePartyPage() {
                           title={`${user.name}${
                             user.nickname ? ` (${user.nickname})` : ""
                           }${
-                            user.id === party.leaderUserId ? " - Leader" : ""
+                            user.id === party.leaderUserId
+                              ? ` - ${t("common.leaderSuffix")}`
+                              : ""
                           }`}
                         />
                       ))}
@@ -311,7 +339,7 @@ export default function MyPagePartyPage() {
                           color="text.secondary"
                           mb={1}
                         >
-                          Member Roles
+                          {t("common.memberRoles")}
                         </Typography>
                         <Box display="flex" flexWrap="wrap" gap={1}>
                           {party.users
@@ -336,7 +364,7 @@ export default function MyPagePartyPage() {
                               label={`+${
                                 party.users.filter((user) => user.role).length -
                                 3
-                              } more`}
+                              } ${t("common.moreRoles")}`}
                               size="small"
                               variant="outlined"
                               color="default"
@@ -359,28 +387,28 @@ export default function MyPagePartyPage() {
           maxWidth="sm"
           fullWidth
         >
-          <DialogTitle>Create New Party</DialogTitle>
+          <DialogTitle>{t("common.createNewParty")}</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
               margin="dense"
-              label="Party Name"
+              label={t("common.partyNameLabel")}
               fullWidth
               variant="outlined"
               value={partyName}
               onChange={(e) => setPartyName(e.target.value)}
-              placeholder="Enter party name"
+              placeholder={t("common.enterPartyNamePlaceholder")}
               sx={{ mt: 2 }}
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseDialog}>Cancel</Button>
+            <Button onClick={handleCloseDialog}>{t("common.cancel")}</Button>
             <Button
               onClick={handleCreateParty}
               variant="contained"
               disabled={!partyName.trim() || creating}
             >
-              {creating ? "Creating..." : "Create"}
+              {creating ? t("common.creating") : t("common.create")}
             </Button>
           </DialogActions>
         </Dialog>
@@ -396,7 +424,7 @@ export default function MyPagePartyPage() {
           <DialogTitle>
             <Box display="flex" alignItems="center">
               <Settings sx={{ mr: 1 }} />
-              Manage Party: {selectedParty?.name}
+              {t("common.managePartyTitle")} {selectedParty?.name}
             </Box>
           </DialogTitle>
           <DialogContent>
@@ -405,8 +433,8 @@ export default function MyPagePartyPage() {
               onChange={(e, newValue) => setTabValue(newValue)}
               sx={{ mb: 2 }}
             >
-              <Tab label="Granted Members" />
-              <Tab label="Pending Requests" />
+              <Tab label={t("common.grantedMembers")} />
+              <Tab label={t("common.pendingRequests")} />
             </Tabs>
 
             {/* Granted Members Tab */}
@@ -431,7 +459,7 @@ export default function MyPagePartyPage() {
                             </Typography>
                             {partyUser.id === selectedParty?.leaderUserId && (
                               <Chip
-                                label="Leader"
+                                label={t("common.leaderSuffix")}
                                 size="small"
                                 color="warning"
                                 sx={{ ml: 1 }}
@@ -446,7 +474,8 @@ export default function MyPagePartyPage() {
                                 variant="body2"
                                 color="text.secondary"
                               >
-                                Nickname: {partyUser.nickname}
+                                {t("common.nicknameLabel")}:{" "}
+                                {partyUser.nickname}
                               </Typography>
                             )}
                             {partyUser.role && (
@@ -454,7 +483,7 @@ export default function MyPagePartyPage() {
                                 variant="body2"
                                 color="text.secondary"
                               >
-                                Role: {partyUser.role}
+                                {t("common.roleLabel")}: {partyUser.role}
                               </Typography>
                             )}
                           </Box>
@@ -467,7 +496,7 @@ export default function MyPagePartyPage() {
                     .length === 0) && (
                   <Box textAlign="center" py={4}>
                     <Typography variant="body2" color="text.secondary">
-                      No granted members found
+                      {t("common.noGrantedMembersFound")}
                     </Typography>
                   </Box>
                 )}
@@ -493,7 +522,8 @@ export default function MyPagePartyPage() {
                                 variant="body2"
                                 color="text.secondary"
                               >
-                                Nickname: {partyUser.nickname}
+                                {t("common.nicknameLabel")}:{" "}
+                                {partyUser.nickname}
                               </Typography>
                             )}
                             {partyUser.entryMessage && (
@@ -502,7 +532,8 @@ export default function MyPagePartyPage() {
                                 color="text.secondary"
                                 sx={{ mt: 1 }}
                               >
-                                Entry Message: "{partyUser.entryMessage}"
+                                {t("common.entryMessage")}: "
+                                {partyUser.entryMessage}"
                               </Typography>
                             )}
                           </Box>
@@ -514,7 +545,7 @@ export default function MyPagePartyPage() {
                             color="success"
                             size="small"
                             onClick={() => handleGrantUser(partyUser.id)}
-                            title="Grant access"
+                            title={t("common.grantAccess")}
                           >
                             <Check />
                           </IconButton>
@@ -522,7 +553,7 @@ export default function MyPagePartyPage() {
                             color="error"
                             size="small"
                             onClick={() => handleRejectUser(partyUser.id)}
-                            title="Reject request"
+                            title={t("common.rejectRequest")}
                           >
                             <Close />
                           </IconButton>
@@ -538,7 +569,7 @@ export default function MyPagePartyPage() {
                       sx={{ fontSize: 48, color: "text.disabled", mb: 1 }}
                     />
                     <Typography variant="body2" color="text.secondary">
-                      No pending requests
+                      {t("common.noPendingRequests")}
                     </Typography>
                   </Box>
                 )}
@@ -546,7 +577,9 @@ export default function MyPagePartyPage() {
             )}
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseManageDialog}>Close</Button>
+            <Button onClick={handleCloseManageDialog}>
+              {t("common.closeDialog")}
+            </Button>
           </DialogActions>
         </Dialog>
       </Paper>

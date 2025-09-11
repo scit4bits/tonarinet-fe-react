@@ -18,37 +18,49 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router";
 import { getMe } from "../utils/user";
 
 export default function MyPageLayout() {
+  const { t } = useTranslation();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const sidebarMenuItems = [
     {
       key: "my-profile",
-      label: "대시보드",
+      label: t("sidebar.dashboard"),
       icon: <Person />,
       path: "/my",
     },
     {
       key: "my-organization",
-      label: "내 조직",
+      label: t("sidebar.myOrganization"),
       icon: <Business />,
       path: "/my/org",
     },
-    { key: "my-team", label: "내 팀", icon: <Group />, path: "/my/team" },
-    { key: "my-party", label: "내 파티", icon: <Groups />, path: "/my/party" },
+    {
+      key: "my-team",
+      label: t("sidebar.myTeam"),
+      icon: <Group />,
+      path: "/my/team",
+    },
+    {
+      key: "my-party",
+      label: t("sidebar.myParty"),
+      icon: <Groups />,
+      path: "/my/party",
+    },
     {
       key: "my-tasks",
-      label: "내 과제",
+      label: t("sidebar.myTasks"),
       icon: <Assignment />,
       path: "/my/tasks",
     },
     {
       key: "my-counsels",
-      label: "내 상담",
+      label: t("sidebar.myCounsel"),
       icon: <Psychology />,
       path: "/my/counsels",
     },
@@ -91,7 +103,7 @@ export default function MyPageLayout() {
               <Person sx={{ fontSize: 40 }} />
             </Avatar>
             <Typography variant="h6" className="font-semibold text-center">
-              {user?.name || "사용자"}
+              {user?.name || t("sidebar.user")}
             </Typography>
             <Typography
               variant="body2"

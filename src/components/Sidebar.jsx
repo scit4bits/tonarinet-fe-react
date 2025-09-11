@@ -6,19 +6,22 @@ import {
   Box,
   ListItemButton,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 export default function Sidebar({ role, orgId }) {
+  const { t } = useTranslation();
+
   const systemAdmin = [
-    { key: "유저관리", url: "/sysadmin/user" },
-    { key: "조직관리", url: "/sysadmin/org" },
-    { key: "공지관리", url: "/sysadmin/notice" },
+    { key: t("sidebar.userManagement"), url: "/sysadmin/user" },
+    { key: t("sidebar.orgManagement"), url: "/sysadmin/org" },
+    { key: t("sidebar.noticeManagement"), url: "/sysadmin/notice" },
   ];
   const orgAdmin = [
-    { key: "멤버관리", url: `/orgadmin/${orgId}/member` },
-    { key: "팀관리", url: `/orgadmin/${orgId}/team` },
-    { key: "과제관리", url: `/orgadmin/${orgId}/task` },
-    { key: "상담관리", url: `/orgadmin/${orgId}/counsel` },
-    { key: "공지관리", url: `/orgadmin/${orgId}/notice` },
+    { key: t("sidebar.memberManagement"), url: `/orgadmin/${orgId}/member` },
+    { key: t("sidebar.teamManagement"), url: `/orgadmin/${orgId}/team` },
+    { key: t("sidebar.taskManagement"), url: `/orgadmin/${orgId}/task` },
+    { key: t("sidebar.counselManagement"), url: `/orgadmin/${orgId}/counsel` },
+    { key: t("sidebar.noticeManagement"), url: `/orgadmin/${orgId}/notice` },
   ];
 
   let menuItems =

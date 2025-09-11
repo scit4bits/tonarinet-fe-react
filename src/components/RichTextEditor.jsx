@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { Box } from "@mui/material";
 import ReactQuill, { Quill } from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
@@ -7,13 +8,17 @@ import { uploadOneImage } from "../utils/fileattachment";
 const RichTextEditor = ({
   value,
   onChange,
-  placeholder = "내용을 입력하세요...",
+  placeholder,
   readOnly = false,
   minHeight = "200px",
   showImageUpload = true,
   onError,
 }) => {
+  const { t } = useTranslation();
   const quillRef = useRef(null);
+
+  // Use provided placeholder or default translated one
+  const actualPlaceholder = placeholder || t("common.enterContent");
 
   // Image upload handler for ReactQuill
   const imageHandler = () => {
@@ -29,7 +34,7 @@ const RichTextEditor = ({
       if (file) {
         // Validate file size (limit to 5MB)
         if (file.size > 5 * 1024 * 1024) {
-          const errorMessage = "이미지 파일 크기는 5MB 이하로 제한됩니다.";
+          const errorMessage = t("common.imageSizeError");
           console.log(errorMessage);
           if (onError) onError(errorMessage);
           return;
@@ -37,7 +42,7 @@ const RichTextEditor = ({
 
         // Validate file type
         if (!file.type.startsWith("image/")) {
-          const errorMessage = "이미지 파일만 업로드 가능합니다.";
+          const errorMessage = t("common.imageTypeError");
           console.log(errorMessage);
           if (onError) onError(errorMessage);
           return;
@@ -75,7 +80,7 @@ const RichTextEditor = ({
             }
           }
         } catch (error) {
-          const errorMessage = "이미지 업로드 중 오류가 발생했습니다.";
+          const errorMessage = t("common.imageUploadError");
           console.error("Image upload error:", error);
           if (onError) onError(errorMessage);
         }
@@ -145,7 +150,7 @@ const RichTextEditor = ({
         onChange={onChange}
         modules={quillModules}
         formats={quillFormats}
-        placeholder={placeholder}
+        placeholder={actualPlaceholder}
         readOnly={readOnly}
       />
     </Box>

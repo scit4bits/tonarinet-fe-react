@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   IconButton,
@@ -22,6 +23,7 @@ import {
 } from "../utils/notification";
 
 export default function NotificationMenu() {
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -60,16 +62,53 @@ export default function NotificationMenu() {
     const result = await readAllNotification();
     if (result) {
       setNotifications(await getMyNotification());
+      setUnreadCount(0);
+    }
+  };
+
+  const convertJSONtoMessage = (jsonString) => {
+    try {
+      const obj = JSON.parse(jsonString);
+      switch (obj.messageType) {
+        case "newNotice":
+        case "newOrgNotice":
+          return t("notification.newNotice", { title: obj.title });
+        case "incomingPartyRequest":
+          return t("notification.incomingPartyRequest", {
+            partyName: obj.partyName,
+            userName: obj.userName,
+          });
+        case "approvedPartyRequest":
+          return t("notification.approvedPartyRequest", {
+            partyName: obj.partyName,
+          });
+        case "rejectedPartyRequest":
+          return t("notification.rejectedPartyRequest", {
+            partyName: obj.partyName,
+          });
+        case "newReplyToArticle":
+          return t("notification.newReplyToArticle", {
+            articleTitle: obj.articleTitle,
+            userName: obj.userName,
+          });
+        case "taskScoreUpdated":
+          return t("notification.taskScoreUpdated", {
+            taskTitle: obj.taskTitle,
+            score: obj.score,
+          });
+        default:
+          return jsonString;
+      }
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+      return jsonString;
     }
   };
 
   return (
     <>
       <IconButton onClick={handleClick} size="large" aria-label="notifications">
-        <Badge
-          badgeContent={notifications.filter((n) => !n.isRead).length}
-          color="error"
-        >
+        <Badge badgeContent={unreadCount} color="error">
           <NotificationsIcon />
         </Badge>
       </IconButton>
@@ -126,7 +165,7 @@ export default function NotificationMenu() {
                       overflowWrap: "anywhere",
                     }}
                   >
-                    {notification.contents}
+                    {convertJSONtoMessage(notification.contents)}
                   </Typography>
                 </Box>
               </Box>
@@ -135,13 +174,13 @@ export default function NotificationMenu() {
         ) : (
           <MenuItem disabled>
             <Typography variant="body2" color="text.secondary">
-              There is no notifications
+              {t("common.noNotifications")}
             </Typography>
           </MenuItem>
         )}
         <MenuItem onClick={handleMarkAllAsRead}>
           <Typography variant="body1" color="text.primary">
-            Mark all as read
+            {t("common.markAllAsRead")}
           </Typography>
         </MenuItem>
       </Menu>

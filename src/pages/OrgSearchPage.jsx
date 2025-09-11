@@ -15,9 +15,11 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import useOrganizationList from "../hooks/useOrganizationList";
 import { applyToOrganization } from "../utils/organization";
+import { useTranslation } from "react-i18next";
 
 // Custom hook for organization search
 export default function OrgSearchPage() {
+  const { t } = useTranslation();
   const { organizations, loading, search, setSearch } =
     useOrganizationList("name");
 
@@ -30,10 +32,10 @@ export default function OrgSearchPage() {
     try {
       await applyToOrganization(organizationId);
 
-      alert("가입 완료");
+      alert(t("common.registrationCompleted"));
     } catch (error) {
       console.error(error);
-      alert("가입 신청 도중 오류 발생");
+      alert(t("common.registrationError"));
     }
     console.log("Applying to organization:", organizationId);
   };
@@ -47,7 +49,7 @@ export default function OrgSearchPage() {
           variant="outlined"
           value={search}
           onChange={handleInputChange}
-          placeholder="Search organizations..."
+          placeholder={t("common.organizationSearchPlaceholder")}
           slotProps={{
             htmlInput: {
               startAdornment: (
@@ -87,7 +89,7 @@ export default function OrgSearchPage() {
                     color="primary"
                     onClick={() => handleApply(org.id)}
                   >
-                    Apply
+                    {t("common.apply")}
                   </Button>
                 </Box>
               </CardContent>
@@ -99,7 +101,7 @@ export default function OrgSearchPage() {
       {!loading && organizations.length === 0 && (
         <Box textAlign="center" sx={{ mt: 5 }}>
           <Typography variant="body1" color="text.secondary">
-            No organizations found
+            {t("common.noOrganizationsFound")}
           </Typography>
         </Box>
       )}

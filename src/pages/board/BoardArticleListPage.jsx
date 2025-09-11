@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
@@ -63,6 +63,10 @@ export default function BoardArticleListPage() {
 
   useEffect(() => {
     console.log(boards);
+    if (!boards) {
+      window.location.href = "/org/list";
+    }
+
     if (boards && (boardId === "undefined" || boardId === undefined)) {
       const fallbackBoardId = boardId ?? getLastVisitedBoard() ?? boards[0]?.id;
       console.log(fallbackBoardId);
@@ -99,12 +103,15 @@ export default function BoardArticleListPage() {
 
   // ===== 상수 및 함수들 =====
   // 카테고리 목록
-  const [categories, setCategories] = useState([
-    { value: "general", label: "일반" },
-    { value: "question", label: "질문" },
-    { value: "tip", label: "팁" },
-    { value: "notice", label: "공지사항" },
-  ]);
+  const categories = useMemo(
+    () => [
+      { value: "general", label: t("common.general") },
+      { value: "question", label: t("common.question") },
+      { value: "tip", label: t("common.tip") },
+      { value: "notice", label: t("common.notice") },
+    ],
+    [t]
+  );
 
   // 게시판 변경 핸들러
   const handleBoardChange = (event) => {
@@ -153,7 +160,7 @@ export default function BoardArticleListPage() {
     setHotPage((p) => Math.min(hotArticles.totalPages, p + 1));
 
   if (!boards || !articles || !hotArticles || !notice)
-    return <div>Loading...</div>;
+    return <div>{t("common.loading")}</div>;
 
   return (
     <Box className="max-w-[1400px] mx-auto mt-10 px-4 mb-8 overflow-hidden rounded p-4 shadow flex-1">
@@ -161,11 +168,13 @@ export default function BoardArticleListPage() {
       {/* 게시판 선택 드롭다운과 제목 */}
       <div className="flex items-center gap-3 mb-6 justify-between">
         <FormControl size="small" className="min-w-[200px]">
-          <InputLabel id="board-select-label">게시판 선택</InputLabel>
+          <InputLabel id="board-select-label">
+            {t("pages.board.articles.boardSelection")}
+          </InputLabel>
           <Select
             labelId="board-select-label"
             value={selectedBoard}
-            label="게시판 선택"
+            label={t("pages.board.articles.boardSelection")}
             onChange={handleBoardChange}
             IconComponent={KeyboardArrowDownIcon}
             MenuProps={{
@@ -186,7 +195,7 @@ export default function BoardArticleListPage() {
         <Typography variant="h4" className="font-bold">
           <FlagIcon sx={{ mr: 1, verticalAlign: "middle" }} />
           {boards.filter((board) => board.id == boardId)[0]?.title ||
-            "존재하지 않는 게시판"}
+            t("pages.board.articles.boardNotFound")}
         </Typography>
         <div />
         <div />
@@ -195,16 +204,18 @@ export default function BoardArticleListPage() {
       {/* 카테고리 선택과 글쓰기 버튼 */}
       <div className="flex justify-between items-center mb-4">
         <FormControl size="small" className="min-w-[150px]">
-          <InputLabel id="category-select-label">카테고리</InputLabel>
+          <InputLabel id="category-select-label">
+            {t("pages.board.articles.categoryFilter")}
+          </InputLabel>
           <Select
             labelId="category-select-label"
             value={selectedCategory}
-            label="카테고리"
+            label={t("pages.board.articles.categoryFilter")}
             onChange={handleCategoryChange}
             IconComponent={KeyboardArrowDownIcon}
           >
             <MenuItem value="all">
-              <em>전체</em>
+              <em>{t("pages.board.articles.allCategories")}</em>
             </MenuItem>
             {categories.map((category) => (
               <MenuItem key={category.value} value={category.value}>
@@ -216,26 +227,36 @@ export default function BoardArticleListPage() {
 
         <div className="flex items-center gap-2">
           <FormControl size="small" className="min-w-[120px]">
-            <InputLabel id="searchby-select-label">검색 기준</InputLabel>
+            <InputLabel id="searchby-select-label">
+              {t("pages.board.articles.searchCriteria")}
+            </InputLabel>
             <Select
               labelId="searchby-select-label"
               value={searchBy}
-              label="검색 기준"
+              label={t("pages.board.articles.searchCriteria")}
               onChange={(e) => setSearchBy(e.target.value)}
               IconComponent={KeyboardArrowDownIcon}
             >
-              <MenuItem value="all">통합검색</MenuItem>
-              <MenuItem value="id">글 ID</MenuItem>
-              <MenuItem value="title">제목</MenuItem>
-              <MenuItem value="contents">내용</MenuItem>
-              <MenuItem value="creator">작성자 ID</MenuItem>
+              <MenuItem value="all">
+                {t("pages.board.articles.integratedSearch")}
+              </MenuItem>
+              <MenuItem value="id">{t("pages.board.articles.postId")}</MenuItem>
+              <MenuItem value="title">
+                {t("pages.board.articles.postTitle")}
+              </MenuItem>
+              <MenuItem value="contents">
+                {t("pages.board.articles.postContent")}
+              </MenuItem>
+              <MenuItem value="creator">
+                {t("pages.board.articles.authorId")}
+              </MenuItem>
             </Select>
           </FormControl>
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="검색어를 입력하세요"
+            placeholder={t("pages.board.articles.searchPlaceholder")}
             className="px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             style={{ minWidth: "200px" }}
           />
@@ -247,7 +268,7 @@ export default function BoardArticleListPage() {
           startIcon={<EditIcon />}
           onClick={() => navigate(`/board/${boardId}/write`)}
         >
-          글쓰기
+          {t("pages.board.articles.writePost")}
         </Button>
       </div>
 
@@ -258,25 +279,25 @@ export default function BoardArticleListPage() {
             <TableHead>
               <TableRow>
                 <TableCell align="center" className="min-w-[40px]">
-                  번호
+                  {t("pages.board.articles.tableHeaders.number")}
                 </TableCell>
                 <TableCell align="center" className="min-w-[80px]">
-                  카테고리
+                  {t("pages.board.articles.tableHeaders.category")}
                 </TableCell>
                 <TableCell align="center" className="min-w-[300px]">
-                  제목
+                  {t("pages.board.articles.tableHeaders.title")}
                 </TableCell>
                 <TableCell align="center" className="min-w-[100px]">
-                  작성자
+                  {t("pages.board.articles.tableHeaders.author")}
                 </TableCell>
                 <TableCell align="center" className="min-w-[120px]">
-                  작성일
+                  {t("pages.board.articles.tableHeaders.createdDate")}
                 </TableCell>
                 <TableCell align="center" className="min-w-[80px]">
-                  조회
+                  {t("pages.board.articles.tableHeaders.views")}
                 </TableCell>
                 <TableCell align="center" className="min-w-[80px]">
-                  추천
+                  {t("pages.board.articles.tableHeaders.likes")}
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -340,7 +361,8 @@ export default function BoardArticleListPage() {
           <Box className="rounded p-4 shadow mb-6 flex-1">
             <div className="flex justify-between items-center mb-2">
               <Typography variant="h6" className="flex items-center gap-1">
-                <AnnouncementIcon fontSize="small" /> 공지사항
+                <AnnouncementIcon fontSize="small" />{" "}
+                {t("pages.board.articles.notices")}
               </Typography>
               <div className="flex items-center space-x-1 text-sm text-gray-600">
                 <span>
@@ -393,7 +415,8 @@ export default function BoardArticleListPage() {
           <Box className="rounded p-4 shadow flex-1">
             <div className="flex justify-between items-center mb-2">
               <Typography variant="h6" className="flex items-center gap-1">
-                <WhatshotIcon fontSize="small" /> HOT 게시물
+                <WhatshotIcon fontSize="small" />{" "}
+                {t("pages.board.articles.hotPosts")}
               </Typography>
               <div className="flex items-center space-x-1 text-sm text-gray-600">
                 <span>

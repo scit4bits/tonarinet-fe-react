@@ -88,7 +88,10 @@ export default function ChatPage() {
                 color="text.secondary"
                 sx={{ fontWeight: 500 }}
               >
-                {msg.senderName || msg.sender?.name || msg.user || "Unknown"}
+                {msg.senderName ||
+                  msg.sender?.name ||
+                  msg.user ||
+                  t("common.unknown")}
               </Typography>
               <Typography
                 variant="caption"
@@ -183,7 +186,7 @@ export default function ChatPage() {
               visibility: isLastInGroup ? "visible" : "hidden",
             }}
           >
-            {user?.name?.[0] || "Me"}
+            {user?.name?.[0] || t("common.me")}
           </Avatar>
         )}
       </Box>
@@ -439,6 +442,7 @@ export default function ChatPage() {
                   "linear-gradient(45deg, #f8f9fa 25%, transparent 25%), linear-gradient(-45deg, #f8f9fa 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f8f9fa 75%), linear-gradient(-45deg, transparent 75%, #f8f9fa 75%)",
                 backgroundSize: "20px 20px",
                 backgroundPosition: "0 0, 0 10px, 10px -10px, -10px 0px",
+                textAlign: "left",
               }}
             >
               {messages.map((msg, index) => {
