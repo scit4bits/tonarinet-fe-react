@@ -91,6 +91,7 @@ export default function ChatPage() {
                 {msg.senderName ||
                   msg.sender?.name ||
                   msg.user ||
+                  msg.senderName ||
                   t("common.unknown")}
               </Typography>
               <Typography
