@@ -60,7 +60,7 @@ const MapCenterTracker = ({ onCenterChange, onMapReady }) => {
     if (!map) return;
 
     // Notify parent that map is ready
-    onMapReady(map);
+    onMapReady && onMapReady(map);
 
     // Get initial center
     const initialCenter = map.getCenter();
@@ -377,22 +377,32 @@ export default function LocalReviewPage() {
       : null;
   }, [mapInstance]);
 
-  const handleMarkerClick = useCallback((place) => {
-    // Ensure live reports have the correct category
-    const updatedPlace = {
-      ...place,
-      category: place.category || "liveReport",
-    };
-    // set map center to this place
+  const handleMarkerClick = useCallback(
+    (place) => {
+      // Ensure live reports have the correct category
+      const updatedPlace = {
+        ...place,
+        category: place.category || "liveReport",
+      };
 
-    if (mapInstance) {
-      mapInstance.panTo({ lat: place.latitude, lng: place.longitude });
-    }
+      setSelectedPlace(updatedPlace);
+      setTownReviews([]); // Clear town reviews when selecting a different place
+      setExpandedReview(null);
 
-    setSelectedPlace(updatedPlace);
-    setTownReviews([]); // Clear town reviews when selecting a different place
-    setExpandedReview(null);
-  }, []);
+      // Move map center to the clicked place
+      const newCenter = {
+        lat: place.latitude,
+        lng: place.longitude,
+      };
+      setMapCenter(newCenter);
+
+      // If map instance is available, pan to the location smoothly
+      if (mapInstance) {
+        mapInstance.panTo(newCenter);
+      }
+    },
+    [mapInstance]
+  );
 
   const handleRegionClick = useCallback(
     (region) => {
