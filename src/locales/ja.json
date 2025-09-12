@@ -372,7 +372,7 @@
     "approvedPartyRequest": "{{partyName}}パーティーへの参加申請が承認されました",
     "rejectedPartyRequest": "{{partyName}}パーティーへの参加申請が拒否されました",
     "newReplyToArticle": "{{userName}}さんが「{{articleTitle}}」にコメントしました",
-    "taskScoreUpdated": "{{taskTitle}}課題のスコアが{{score}}点に更新されました"
+    "taskScoreUpdated": "{{taskTitle}}課題のスコアが更新されました"
   },
   "sidebar": {
     "dashboard": "ダッシュボード",

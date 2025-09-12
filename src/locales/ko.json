@@ -372,7 +372,7 @@
     "approvedPartyRequest": "{{partyName}} 파티 가입이 승인되었습니다",
     "rejectedPartyRequest": "{{partyName}} 파티 가입이 거절되었습니다",
     "newReplyToArticle": "{{userName}}님이 '{{articleTitle}}'에 댓글을 남겼습니다",
-    "taskScoreUpdated": "{{taskTitle}} 과제의 점수가 {{score}}점으로 업데이트되었습니다"
+    "taskScoreUpdated": "{{taskTitle}} 과제의 점수가 업데이트되었습니다"
   },
   "sidebar": {
     "dashboard": "대시보드",

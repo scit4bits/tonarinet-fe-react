@@ -372,7 +372,7 @@
     "approvedPartyRequest": "Your request to join {{partyName}} party has been approved",
     "rejectedPartyRequest": "Your request to join {{partyName}} party has been rejected",
     "newReplyToArticle": "{{userName}} commented on '{{articleTitle}}'",
-    "taskScoreUpdated": "The score for {{taskTitle}} task has been updated to {{score}} points"
+    "taskScoreUpdated": "The score for {{taskTitle}} task has been updated"
   },
   "sidebar": {
     "dashboard": "Dashboard",

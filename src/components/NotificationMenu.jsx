@@ -94,7 +94,6 @@ export default function NotificationMenu() {
         case "taskScoreUpdated":
           return t("notification.taskScoreUpdated", {
             taskTitle: obj.taskTitle,
-            score: obj.score,
           });
         default:
           return jsonString;
