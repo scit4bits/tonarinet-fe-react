@@ -78,7 +78,7 @@ export default function SysAdminUserPage() {
       <title>{t("pages.sysAdmin.users.title")}</title>
 
       <Typography variant="h4" gutterBottom className="mt-10 mb-7">
-        유저 관리
+        {t("pages.sysAdminPage.userManagement")}
       </Typography>
 
       <Box className="flex items-center mb-4 gap-4">
@@ -106,9 +106,12 @@ export default function SysAdminUserPage() {
           size="small"
           className="min-w-[250px]"
           onChange={(e) => setSearch(e.target.value)}
-          placeholder={`Search ${
-            searchBy === "all" ? "users" : `by ${searchBy}`
-          }`}
+          placeholder={t("pages.sysAdminPage.searchByField", {
+            field:
+              searchBy === "all"
+                ? t("pages.sysAdminPage.searchUsers")
+                : searchBy,
+          })}
           slotProps={{
             input: {
               startAdornment: (

@@ -61,7 +61,7 @@ export default function OrgAdminTeamPage() {
 
   return (
     <Box>
-      <Typography variant="h3">팀 관리</Typography>
+      <Typography variant="h3">{t("orgAdminPage.teamManagement")}</Typography>
       <Button
         variant="contained"
         color="primary"
@@ -70,16 +70,16 @@ export default function OrgAdminTeamPage() {
           setDialogOpen(true);
         }}
       >
-        Add Team
+        {t("orgAdminPage.addTeam")}
       </Button>
       <TableContainer component={Paper}>
         <title>{t("pages.orgAdmin.teams.title")}</title>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Team Name</TableCell>
-              <TableCell>Members</TableCell>
+              <TableCell>{t("orgAdminPage.tableHeaderId")}</TableCell>
+              <TableCell>{t("orgAdminPage.teamName")}</TableCell>
+              <TableCell>{t("orgAdminPage.members")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -106,16 +106,16 @@ export default function OrgAdminTeamPage() {
         </Table>
       </TableContainer>
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <DialogTitle>Add Team</DialogTitle>
+        <DialogTitle>{t("orgAdminPage.addTeam")}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To create a new team, please enter the team name and members.
+            {t("orgAdminPage.addTeamDescription")}
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             id="teamName"
-            label="Team Name"
+            label={t("orgAdminPage.teamName")}
             type="text"
             fullWidth
             variant="outlined"
@@ -154,7 +154,7 @@ export default function OrgAdminTeamPage() {
               <TextField
                 {...params}
                 margin="dense"
-                label="Team Members"
+                label={t("orgAdminPage.teamMembers")}
                 variant="outlined"
                 fullWidth
               />
@@ -163,7 +163,7 @@ export default function OrgAdminTeamPage() {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialogOpen(false)} color="primary">
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button
             onClick={() => {
@@ -172,7 +172,7 @@ export default function OrgAdminTeamPage() {
             }}
             color="primary"
           >
-            Add
+            {t("common.add")}
           </Button>
         </DialogActions>
       </Dialog>

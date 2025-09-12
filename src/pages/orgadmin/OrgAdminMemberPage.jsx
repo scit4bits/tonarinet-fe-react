@@ -92,34 +92,36 @@ export default function OrgAdminMemberPage() {
 
   return (
     <main className="mt-5">
-      <title>{t("pages.sysAdmin.users.title")}</title>
+      <title>{t("pages.orgAdmin.members.title")}</title>
 
       <Typography variant="h4" gutterBottom>
-        유저 관리
+        {t("orgAdminPage.memberManagement")}
       </Typography>
 
       <Box className="flex gap-5 items-center">
         <FormControl size="small" className="min-w-[120px]">
-          <InputLabel>검색 키워드</InputLabel>
+          <InputLabel>{t("orgAdminPage.searchKeyword")}</InputLabel>
           <Select
             value={searchBy}
             onChange={(e) => setSearchBy(e.target.value)}
-            label="검색 키워드"
+            label={t("orgAdminPage.searchKeyword")}
           >
-            <MenuItem value="all">전체</MenuItem>
-            <MenuItem value="id">ID</MenuItem>
-            <MenuItem value="email">이메일</MenuItem>
-            <MenuItem value="name">이름</MenuItem>
-            <MenuItem value="nickname">닉네임</MenuItem>
-            <MenuItem value="phone">핸드폰</MenuItem>
-            <MenuItem value="nationality">국가</MenuItem>
+            <MenuItem value="all">{t("orgAdminPage.searchAll")}</MenuItem>
+            <MenuItem value="id">{t("orgAdminPage.searchById")}</MenuItem>
+            <MenuItem value="email">{t("common.email")}</MenuItem>
+            <MenuItem value="name">{t("common.name")}</MenuItem>
+            <MenuItem value="nickname">{t("common.nickname")}</MenuItem>
+            <MenuItem value="phone">{t("common.phone")}</MenuItem>
+            <MenuItem value="nationality">{t("common.nationality")}</MenuItem>
           </Select>
         </FormControl>
 
         <TextField
-          placeholder={`Search ${
-            searchBy === "all" ? "users" : `by ${searchBy}`
-          }`}
+          placeholder={
+            searchBy === "all"
+              ? t("orgAdminPage.searchPlaceholderAll")
+              : t("orgAdminPage.searchPlaceholder", { field: searchBy })
+          }
           variant="outlined"
           size="small"
           value={search}
@@ -147,7 +149,7 @@ export default function OrgAdminMemberPage() {
                   direction={sortBy === "id" ? sortDirection : "asc"}
                   onClick={() => handleRequestSort("id")}
                 >
-                  ID
+                  {t("orgAdminPage.tableHeaderId")}
                 </TableSortLabel>
               </TableCell>
 
@@ -157,7 +159,7 @@ export default function OrgAdminMemberPage() {
                   direction={sortBy === "email" ? sortDirection : "asc"}
                   onClick={() => handleRequestSort("email")}
                 >
-                  이메일
+                  {t("common.email")}
                 </TableSortLabel>
               </TableCell>
 
@@ -167,7 +169,7 @@ export default function OrgAdminMemberPage() {
                   direction={sortBy === "name" ? sortDirection : "asc"}
                   onClick={() => handleRequestSort("name")}
                 >
-                  이름
+                  {t("common.name")}
                 </TableSortLabel>
               </TableCell>
 
@@ -177,7 +179,7 @@ export default function OrgAdminMemberPage() {
                   direction={sortBy === "nickname" ? sortDirection : "asc"}
                   onClick={() => handleRequestSort("nickname")}
                 >
-                  닉네임
+                  {t("common.nickname")}
                 </TableSortLabel>
               </TableCell>
 
@@ -187,7 +189,7 @@ export default function OrgAdminMemberPage() {
                   direction={sortBy === "phone" ? sortDirection : "asc"}
                   onClick={() => handleRequestSort("phone")}
                 >
-                  핸드폰
+                  {t("common.phone")}
                 </TableSortLabel>
               </TableCell>
 
@@ -197,7 +199,7 @@ export default function OrgAdminMemberPage() {
                   direction={sortBy === "birth" ? sortDirection : "asc"}
                   onClick={() => handleRequestSort("birth")}
                 >
-                  생일
+                  {t("common.birth")}
                 </TableSortLabel>
               </TableCell>
 
@@ -207,13 +209,13 @@ export default function OrgAdminMemberPage() {
                   direction={sortBy === "nationality" ? sortDirection : "asc"}
                   onClick={() => handleRequestSort("nationality")}
                 >
-                  국가
+                  {t("common.nationality")}
                 </TableSortLabel>
               </TableCell>
 
-              <TableCell>역할</TableCell>
-              <TableCell>승인여부</TableCell>
-              <TableCell>탈퇴</TableCell>
+              <TableCell>{t("orgAdminPage.role")}</TableCell>
+              <TableCell>{t("orgAdminPage.approved")}</TableCell>
+              <TableCell>{t("orgAdminPage.withdrawal")}</TableCell>
             </TableRow>
           </TableHead>
 
@@ -242,8 +244,8 @@ export default function OrgAdminMemberPage() {
                           handleRoleChange(user.id, e.target.value);
                         }}
                       >
-                        <MenuItem value="user">User</MenuItem>
-                        <MenuItem value="admin">Admin</MenuItem>
+                        <MenuItem value="user">{t("common.user")}</MenuItem>
+                        <MenuItem value="admin">{t("common.admin")}</MenuItem>
                       </Select>
                     </FormControl>
                   </TableCell>
@@ -261,7 +263,9 @@ export default function OrgAdminMemberPage() {
                       onClick={() => {
                         if (
                           window.confirm(
-                            `Are you sure you want to delete user ${user.name}?`
+                            t("orgAdminPage.confirmDeleteUser", {
+                              userName: user.name,
+                            })
                           )
                         ) {
                           // Handle delete logic here
@@ -269,7 +273,7 @@ export default function OrgAdminMemberPage() {
                         }
                       }}
                     >
-                      탈퇴
+                      {t("orgAdminPage.withdrawal")}
                     </Button>
                   </TableCell>
                 </TableRow>

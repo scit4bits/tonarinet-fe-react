@@ -18,9 +18,6 @@ import MainPage from "./pages/MainPage.jsx";
 import AdminLayout from "./components/AdminLayout.jsx";
 import SysAdminUserPage from "./pages/sysadmin/SysAdminUserPage.jsx";
 import SysAdminOrgPage from "./pages/sysadmin/SysAdminOrgPage.jsx";
-import SysAdminBoardPage from "./pages/sysadmin/SysAdminBoardPage.jsx";
-import SysAdminReviewPage from "./pages/sysadmin/SysAdminReviewPage.jsx";
-import SysAdminPartyPage from "./pages/sysadmin/SysAdminPartyPage.jsx";
 import SysAdminNoticePage from "./pages/sysadmin/SysAdminNoticePage.jsx";
 import ChatPage from "./pages/ChatPage.jsx";
 import OrgAdminMemberPage from "./pages/orgadmin/OrgAdminMemberPage.jsx";
@@ -86,9 +83,6 @@ createRoot(document.getElementById("root")).render(
           >
             <Route path="user" element={<SysAdminUserPage />} />
             <Route path="org" element={<SysAdminOrgPage />} />
-            <Route path="board" element={<SysAdminBoardPage />} />
-            <Route path="review" element={<SysAdminReviewPage />} />
-            <Route path="party" element={<SysAdminPartyPage />} />
             <Route path="notice" element={<SysAdminNoticePage />} />
           </Route>
 

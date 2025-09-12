@@ -71,6 +71,7 @@ export default function TaskDetailPage() {
   // Edit score state
   const [editScoreOpen, setEditScoreOpen] = useState(false);
   const [newScore, setNewScore] = useState("");
+  const [newFeedback, setNewFeedback] = useState("");
   const [scoreError, setScoreError] = useState("");
   const [updatingScore, setUpdatingScore] = useState(false);
 
@@ -161,6 +162,7 @@ export default function TaskDetailPage() {
   // Handle score editing
   const handleEditScore = () => {
     setNewScore(task.score !== null ? task.score.toString() : "");
+    setNewFeedback(task.feedback || "");
     setScoreError("");
     setEditScoreOpen(true);
   };
@@ -197,12 +199,17 @@ export default function TaskDetailPage() {
     try {
       setUpdatingScore(true);
       const numericScore = parseFloat(newScore);
-      await updateTaskScore(taskId, numericScore);
+      await updateTaskScore(taskId, numericScore, newFeedback || null);
 
       // Update the local task state
-      setTask((prev) => ({ ...prev, score: numericScore }));
+      setTask((prev) => ({
+        ...prev,
+        score: numericScore,
+        feedback: newFeedback || null,
+      }));
       setEditScoreOpen(false);
       setNewScore("");
+      setNewFeedback("");
     } catch (error) {
       console.error("Failed to update score:", error);
       setScoreError(t("common.failedToUpdateScore"));
@@ -214,6 +221,7 @@ export default function TaskDetailPage() {
   const handleCancelScoreEdit = () => {
     setEditScoreOpen(false);
     setNewScore("");
+    setNewFeedback("");
     setScoreError("");
   };
 
@@ -387,7 +395,7 @@ export default function TaskDetailPage() {
 
         {/* Assignment Information */}
         <Grid container spacing={3} sx={{ mb: 3 }}>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={task.feedback ? 4 : 6}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
               <PersonIcon color="primary" />
               <Typography variant="subtitle1" fontWeight="medium">
@@ -436,7 +444,7 @@ export default function TaskDetailPage() {
             </List>
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={task.feedback ? 4 : 6}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
               <ScheduleIcon color="primary" />
               <Typography variant="subtitle1" fontWeight="medium">
@@ -480,6 +488,27 @@ export default function TaskDetailPage() {
               </ListItem>
             </List>
           </Grid>
+
+          {/* Feedback Section */}
+          {task.feedback && (
+            <Grid item xs={12} md={4}>
+              <Box
+                sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}
+              >
+                <DescriptionIcon color="primary" />
+                <Typography variant="subtitle1" fontWeight="medium">
+                  {t("common.feedback")}
+                </Typography>
+              </Box>
+              <Card variant="outlined" sx={{ height: "fit-content" }}>
+                <CardContent>
+                  <Typography variant="body2" sx={{ whiteSpace: "pre-wrap" }}>
+                    {task.feedback}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          )}
         </Grid>
 
         <Divider sx={{ mb: 3 }} />
@@ -969,6 +998,20 @@ export default function TaskDetailPage() {
                 step: 0.1,
               }}
               disabled={updatingScore}
+              sx={{ mb: 3 }}
+            />
+
+            <TextField
+              label={t("common.feedback")}
+              multiline
+              rows={4}
+              fullWidth
+              variant="outlined"
+              value={newFeedback}
+              onChange={(e) => setNewFeedback(e.target.value)}
+              placeholder={t("common.enterFeedback")}
+              disabled={updatingScore}
+              helperText={t("common.feedbackOptional")}
             />
 
             {task?.score !== null && (

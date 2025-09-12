@@ -62,9 +62,13 @@ async function checkTaskManagementEligibility(taskId) {
   }
 }
 
-async function updateTaskScore(taskId, score) {
+async function updateTaskScore(taskId, score, feedback = null) {
   try {
-    const response = await taxios.patch(`/task/${taskId}/score?score=${score}`);
+    const requestBody = { score };
+    if (feedback !== null) {
+      requestBody.feedback = feedback;
+    }
+    const response = await taxios.patch(`/task/${taskId}/score`, requestBody);
     return response.data;
   } catch (error) {
     console.error("Error updating task score:", error);

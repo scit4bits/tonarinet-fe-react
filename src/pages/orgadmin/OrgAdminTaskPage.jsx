@@ -232,7 +232,7 @@ export default function OrgAdminTaskPage() {
           onClick={handleOpenDialog}
           className="mb-2"
         >
-          Add New Task
+          {t("orgAdminPage.addNewTask")}
         </Button>
       </Box>
 
@@ -252,7 +252,9 @@ export default function OrgAdminTaskPage() {
 
         <TextField
           placeholder={`${t("common.search")} ${
-            searchBy === "all" ? t("common.tasks") : `by ${searchBy}`
+            searchBy === "all"
+              ? t("common.tasks")
+              : `${t("common.by")} ${searchBy}`
           }`}
           variant="outlined"
           size="small"
@@ -279,8 +281,8 @@ export default function OrgAdminTaskPage() {
                 <Box display="flex" alignItems="center" gap={1}>
                   <InfoIcon fontSize="small" color="action" />
                   <Typography variant="caption" color="text.secondary">
-                    {t("pages.orgAdmin.task.searchInfo", {
-                      total: totalTasks,
+                    {t("orgAdminPage.searchInfo", {
+                      total: tasks.totalElements || 0,
                     })}
                   </Typography>
                 </Box>
@@ -382,12 +384,12 @@ export default function OrgAdminTaskPage() {
         maxWidth="md"
         fullWidth
       >
-        <DialogTitle>Add New Task</DialogTitle>
+        <DialogTitle>{t("orgAdminPage.addNewTask")}</DialogTitle>
         <DialogContent>
           <Box className="flex flex-col gap-4 mt-2">
             {/* Title */}
             <TextField
-              label="Title"
+              label={t("common.title")}
               fullWidth
               required
               value={formData.title}
@@ -397,7 +399,7 @@ export default function OrgAdminTaskPage() {
             {/* Contents */}
             <Box>
               <Typography variant="subtitle2" gutterBottom>
-                Contents
+                {t("common.content")}
               </Typography>
               <RichTextEditor
                 value={formData.contents}
@@ -411,7 +413,7 @@ export default function OrgAdminTaskPage() {
 
             {/* Due Date */}
             <TextField
-              label="Due Date"
+              label={t("common.dueDate")}
               type="datetime-local"
               fullWidth
               value={formData.dueDate}
@@ -425,7 +427,7 @@ export default function OrgAdminTaskPage() {
 
             {/* Max Score */}
             <TextField
-              label="Max Score"
+              label={t("common.maxScore")}
               type="number"
               fullWidth
               value={formData.maxScore}
@@ -455,8 +457,8 @@ export default function OrgAdminTaskPage() {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Assigned Users"
-                  placeholder="Select users..."
+                  label={t("orgAdminPage.assignedUsers")}
+                  placeholder={t("orgAdminPage.selectUsers")}
                   slotProps={{
                     input: {
                       ...params.InputProps,
@@ -497,8 +499,8 @@ export default function OrgAdminTaskPage() {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Assigned Teams"
-                  placeholder="Select teams..."
+                  label={t("orgAdminPage.assignedTeams")}
+                  placeholder={t("orgAdminPage.selectTeams")}
                   slotProps={{
                     input: {
                       ...params.InputProps,
@@ -516,13 +518,17 @@ export default function OrgAdminTaskPage() {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleCloseDialog}>{t("common.cancel")}</Button>
           <Button
             onClick={handleSubmit}
             variant="contained"
             disabled={!formData.title || creating}
           >
-            {creating ? <CircularProgress size={20} /> : "Create Task"}
+            {creating ? (
+              <CircularProgress size={20} />
+            ) : (
+              t("orgAdminPage.createTask")
+            )}
           </Button>
         </DialogActions>
       </Dialog>
@@ -534,7 +540,7 @@ export default function OrgAdminTaskPage() {
         maxWidth="lg"
         fullWidth
       >
-        <DialogTitle>Task Group Details</DialogTitle>
+        <DialogTitle>{t("orgAdminPage.taskGroupDetails")}</DialogTitle>
         <DialogContent>
           {taskDetailsLoading ? (
             <Box display="flex" justifyContent="center" p={4}>
@@ -550,7 +556,7 @@ export default function OrgAdminTaskPage() {
                     color="text.secondary"
                     gutterBottom
                   >
-                    Task Group ID
+                    {t("orgAdminPage.taskGroupId")}
                   </Typography>
                   <Typography variant="body1">{selectedTask.id}</Typography>
                 </Grid>
@@ -560,7 +566,7 @@ export default function OrgAdminTaskPage() {
                     color="text.secondary"
                     gutterBottom
                   >
-                    Organization
+                    {t("orgAdminPage.organization")}
                   </Typography>
                   <Typography variant="body1">
                     {selectedTask.organizationName}
@@ -572,7 +578,7 @@ export default function OrgAdminTaskPage() {
                     color="text.secondary"
                     gutterBottom
                   >
-                    Max Score
+                    {t("common.maxScore")}
                   </Typography>
                   <Typography variant="body1">
                     {selectedTask.maxScore || "-"}
@@ -589,7 +595,7 @@ export default function OrgAdminTaskPage() {
                   color="text.secondary"
                   gutterBottom
                 >
-                  Title
+                  {t("common.title")}
                 </Typography>
                 <Typography variant="h6">{selectedTask.title}</Typography>
               </Box>
@@ -601,7 +607,7 @@ export default function OrgAdminTaskPage() {
                   color="text.secondary"
                   gutterBottom
                 >
-                  Contents
+                  {t("common.content")}
                 </Typography>
                 <Box
                   sx={{
@@ -625,7 +631,7 @@ export default function OrgAdminTaskPage() {
                     />
                   ) : (
                     <Typography color="text.secondary" fontStyle="italic">
-                      No content provided
+                      {t("common.noContentProvided")}
                     </Typography>
                   )}
                 </Box>
@@ -639,7 +645,7 @@ export default function OrgAdminTaskPage() {
                     color="text.secondary"
                     gutterBottom
                   >
-                    Created Date
+                    {t("common.createdAt")}
                   </Typography>
                   <Typography variant="body1">
                     {formatDate(selectedTask.createdAt)}
@@ -651,7 +657,7 @@ export default function OrgAdminTaskPage() {
                     color="text.secondary"
                     gutterBottom
                   >
-                    Due Date
+                    {t("common.dueDate")}
                   </Typography>
                   <Typography variant="body1">
                     {formatDate(selectedTask.dueDate)}
@@ -669,7 +675,9 @@ export default function OrgAdminTaskPage() {
                     color="text.secondary"
                     gutterBottom
                   >
-                    Subtasks ({selectedTask.tasks.length})
+                    {t("orgAdminPage.subtasks", {
+                      count: selectedTask.tasks.length,
+                    })}
                   </Typography>
                   <List sx={{ bgcolor: "background.paper", borderRadius: 1 }}>
                     {selectedTask.tasks.map((task) => (
@@ -698,10 +706,14 @@ export default function OrgAdminTaskPage() {
                               <Chip
                                 label={
                                   task.assignedUserName
-                                    ? `User: ${task.assignedUserName}`
+                                    ? `${t("orgAdminPage.user")}: ${
+                                        task.assignedUserName
+                                      }`
                                     : task.teamName
-                                    ? `Team: ${task.teamName}`
-                                    : "Unassigned"
+                                    ? `${t("orgAdminPage.team")}: ${
+                                        task.teamName
+                                      }`
+                                    : t("orgAdminPage.unassigned")
                                 }
                                 size="small"
                                 color={
@@ -714,7 +726,9 @@ export default function OrgAdminTaskPage() {
                                 variant="outlined"
                               />
                               <Chip
-                                label={`Created by: ${task.createdByName}`}
+                                label={`${t("orgAdminPage.createdBy")}: ${
+                                  task.createdByName
+                                }`}
                                 size="small"
                                 color="info"
                                 variant="outlined"
@@ -732,13 +746,15 @@ export default function OrgAdminTaskPage() {
                                 variant="caption"
                                 color="text.secondary"
                               >
-                                Due: {formatDate(task.dueDate)}
+                                {t("orgAdminPage.due")}:{" "}
+                                {formatDate(task.dueDate)}
                               </Typography>
                               <Typography
                                 variant="caption"
                                 color="text.secondary"
                               >
-                                Score: {task.score || "Not graded"} /{" "}
+                                {t("orgAdminPage.score")}:{" "}
+                                {task.score || t("orgAdminPage.notGraded")} /{" "}
                                 {task.maxScore}
                               </Typography>
                             </Box>
@@ -751,11 +767,13 @@ export default function OrgAdminTaskPage() {
               )}
             </Box>
           ) : (
-            <Typography>No task details available</Typography>
+            <Typography>{t("orgAdminPage.noTaskDetailsAvailable")}</Typography>
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDetailsDialogClose}>Close</Button>
+          <Button onClick={handleDetailsDialogClose}>
+            {t("common.close")}
+          </Button>
         </DialogActions>
       </Dialog>
     </main>
