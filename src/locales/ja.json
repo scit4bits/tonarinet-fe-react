@@ -211,6 +211,8 @@
     "copyLink": "リンクコピー",
     "report": "通報",
     "enterCommentPlaceholder": "コメントを入力してください...",
+    "confirmDeleteComment": "本当にこのコメントを削除しますか？",
+    "commentDeleteError": "コメントの削除に失敗しました。もう一度お試しください。",
     "reportPost": "投稿を通報",
     "reportReason": "通報理由",
     "reportReasonPlaceholder": "通報理由を詳しく入力してください。",

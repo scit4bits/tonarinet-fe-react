@@ -38,6 +38,7 @@ import {
 import { addReplyToArticle, getRepliesOfArticle } from "../../utils/reply";
 import useAuth from "../../hooks/useAuth";
 import { downloadFile } from "../../utils/fileattachment";
+import taxios from "../../utils/taxios";
 
 export default function BoardArticleViewPage() {
   const { t } = useTranslation();
@@ -128,6 +129,18 @@ export default function BoardArticleViewPage() {
     } catch (error) {
       console.error("파일 다운로드 오류:", error);
       alert(t("common.fileDownloadFailed"));
+    }
+  };
+
+  const handleCommentDelete = (replyId) => async () => {
+    if (window.confirm(t("common.confirmDeleteComment"))) {
+      try {
+        await taxios.delete(`/reply/${replyId}`);
+        setReplies(await getRepliesOfArticle(articleId));
+      } catch (error) {
+        console.error("댓글 삭제 오류:", error);
+        alert(t("common.commentDeleteError"));
+      }
     }
   };
 
@@ -376,6 +389,7 @@ export default function BoardArticleViewPage() {
                     <IconButton
                       size="small"
                       aria-label={`delete comment by ${reply.createdByName}`}
+                      onClick={handleCommentDelete(reply.id)}
                     >
                       <DeleteOutline />
                     </IconButton>
