@@ -60,7 +60,7 @@ const MapCenterTracker = ({ onCenterChange, onMapReady }) => {
     if (!map) return;
 
     // Notify parent that map is ready
-    onMapReady && onMapReady(map);
+    onMapReady(map);
 
     // Get initial center
     const initialCenter = map.getCenter();
@@ -384,7 +384,6 @@ export default function LocalReviewPage() {
       category: place.category || "liveReport",
     };
     // set map center to this place
-    console.log(mapInstance);
 
     if (mapInstance) {
       mapInstance.panTo({ lat: place.latitude, lng: place.longitude });
