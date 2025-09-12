@@ -384,6 +384,8 @@ export default function LocalReviewPage() {
       category: place.category || "liveReport",
     };
     // set map center to this place
+    console.log(mapInstance);
+
     if (mapInstance) {
       mapInstance.panTo({ lat: place.latitude, lng: place.longitude });
     }
