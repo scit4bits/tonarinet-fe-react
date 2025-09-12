@@ -39,11 +39,6 @@ export default function MainPage() {
   const [tasksCount, setTasksCount] = useState(0);
   const [noticesCount, setNoticesCount] = useState(0);
 
-  // Enrollment status - simplified to show only D+ days
-  const [enrollmentStatus] = useState({
-    daysRemaining: 15, // This can be calculated from a target date
-  });
-
   // Calendar events remain as mockup
   const [calendarEvents] = useState([
     { date: "2025-09-10", title: "Document Submission", type: "deadline" },
@@ -238,10 +233,8 @@ export default function MainPage() {
             <Paper elevation={3}>
               <CardHeader
                 avatar={<Event color="primary" />}
-                title={t("common.enrollmentStatus")}
-                subheader={`${formatDaysRemaining(
-                  enrollmentStatus.daysRemaining
-                )} ${t("common.daysRemaining")}`}
+                title={t("Welcome")}
+                subheader={`Since ${user.createdAt.split("T")[0]}`}
               />
               <CardContent>
                 <Typography variant="body1" color="text.secondary">
