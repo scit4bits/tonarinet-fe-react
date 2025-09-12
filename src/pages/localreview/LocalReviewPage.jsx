@@ -383,6 +383,11 @@ export default function LocalReviewPage() {
       ...place,
       category: place.category || "liveReport",
     };
+    // set map center to this place
+    if (mapInstance) {
+      mapInstance.panTo({ lat: place.latitude, lng: place.longitude });
+    }
+
     setSelectedPlace(updatedPlace);
     setTownReviews([]); // Clear town reviews when selecting a different place
     setExpandedReview(null);
