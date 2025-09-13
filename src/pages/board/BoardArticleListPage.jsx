@@ -26,6 +26,10 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import FlagIcon from "@mui/icons-material/Flag";
 import PushPinIcon from "@mui/icons-material/PushPin";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import ImageIcon from "@mui/icons-material/Image";
+import DescriptionIcon from "@mui/icons-material/Description";
+import StarIcon from "@mui/icons-material/Star";
 import taxios from "../../utils/taxios";
 import useMyBoardList from "../../hooks/useMyBoardList";
 import {
@@ -317,7 +321,30 @@ export default function BoardArticleListPage() {
                     }}
                     title={article.title}
                   >
+                    {article.contents && article.contents.includes('<img src=') ? (
+                      <ImageIcon 
+                        className="text-blue-500 mr-2" 
+                        sx={{ fontSize: 16, verticalAlign: 'middle' }}
+                      />
+                    ) : (
+                      <DescriptionIcon 
+                        className="text-gray-500 mr-2" 
+                        sx={{ fontSize: 16, verticalAlign: 'middle' }}
+                      />
+                    )}
                     {article.title}
+                    {article.files && article.files.length > 0 && (
+                      <AttachFileIcon 
+                        className="text-gray-500 ml-1" 
+                        sx={{ fontSize: 16, verticalAlign: 'middle' }}
+                      />
+                    )}
+                    {article.likedByUsers >= 5 && (
+                      <StarIcon 
+                        className="text-yellow-500 ml-1" 
+                        sx={{ fontSize: 16, verticalAlign: 'middle' }}
+                      />
+                    )}
                     {article.replyCount > 0 && (
                       <span className="text-gray-500 ml-1">
                         [{article.replyCount}]
