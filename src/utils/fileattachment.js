@@ -66,9 +66,17 @@ async function downloadFile(fileId) {
     let filename = "download";
 
     if (contentDisposition) {
-      const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
-      if (filenameMatch) {
-        filename = filenameMatch[1];
+      // Try filename* first (RFC 5987 - supports UTF-8 encoding)
+      const filenameStarMatch = contentDisposition.match(/filename\*=UTF-8''([^;]+)/);
+      if (filenameStarMatch) {
+        // Decode the URL-encoded filename
+        filename = decodeURIComponent(filenameStarMatch[1]);
+      } else {
+        // Fallback to regular filename
+        const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+        if (filenameMatch) {
+          filename = filenameMatch[1];
+        }
       }
     }
 
