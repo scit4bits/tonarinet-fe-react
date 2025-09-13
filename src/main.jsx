@@ -1,14 +1,11 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import {createRoot} from "react-dom/client";
 import "./index.css";
-import App from "./App.jsx";
-import { BrowserRouter, Route, Routes } from "react-router";
+import {BrowserRouter, Route, Routes} from "react-router";
 import "./i18n.js";
-import { GlobalStyles, StyledEngineProvider } from "@mui/material";
+import {GlobalStyles, StyledEngineProvider} from "@mui/material";
 import Layout from "./components/Layout.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
 import SignUpPage from "./pages/auth/SignUpPage.jsx";
-import LanguageSelector from "./components/LanguageSelector.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 import SignInPage from "./pages/auth/SignInPage.jsx";
 import BoardArticleListPage from "./pages/board/BoardArticleListPage.jsx";
@@ -41,81 +38,81 @@ import FindPasswordPage from "./pages/auth/FindPasswordPage.jsx";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StyledEngineProvider enableCssLayer>
-    <GlobalStyles styles="@layer theme, base, mui, components, utilities;" />
-    <BrowserRouter>
-      <Routes>
-        <Route index element={<LandingPage />} />
-        <Route path="/signin" element={<SignInPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/forgot-password" element={<FindPasswordPage />} />
-        <Route path="/reset-password" element={<ResetPasswordPage />} />
+    <StyledEngineProvider enableCssLayer>
+        <GlobalStyles styles="@layer theme, base, mui, components, utilities;"/>
+        <BrowserRouter>
+            <Routes>
+                <Route index element={<LandingPage/>}/>
+                <Route path="/signin" element={<SignInPage/>}/>
+                <Route path="/signup" element={<SignUpPage/>}/>
+                <Route path="/forgot-password" element={<FindPasswordPage/>}/>
+                <Route path="/reset-password" element={<ResetPasswordPage/>}/>
 
-        <Route path="/logincb">
-          <Route path="line" element={<SignUpPage provider={"line"} />} />
-          <Route path="kakao" element={<SignUpPage provider={"kakao"} />} />
-          <Route path="google" element={<SignUpPage provider={"google"} />} />
-        </Route>
+                <Route path="/logincb">
+                    <Route path="line" element={<SignUpPage provider={"line"}/>}/>
+                    <Route path="kakao" element={<SignUpPage provider={"kakao"}/>}/>
+                    <Route path="google" element={<SignUpPage provider={"google"}/>}/>
+                </Route>
 
-        <Route element={<Layout />}>
-          <Route path="/main" element={<MainPage />} />
+                <Route element={<Layout/>}>
+                    <Route path="/main" element={<MainPage/>}/>
 
-          <Route path="/my" element={<MyPageLayout />}>
-            <Route index element={<MyPageMainPage />} />
-            <Route path="org" element={<MyPageOrgPage />} />
-            <Route path="team" element={<MyPageTeamPage />} />
-            <Route path="party" element={<MyPagePartyPage />} />
-            <Route path="tasks" element={<MyPageTaskPage />} />
-            <Route path="counsels" element={<MyPageCounselPage />} />
-          </Route>
+                    <Route path="/my" element={<MyPageLayout/>}>
+                        <Route index element={<MyPageMainPage/>}/>
+                        <Route path="org" element={<MyPageOrgPage/>}/>
+                        <Route path="team" element={<MyPageTeamPage/>}/>
+                        <Route path="party" element={<MyPagePartyPage/>}/>
+                        <Route path="tasks" element={<MyPageTaskPage/>}/>
+                        <Route path="counsels" element={<MyPageCounselPage/>}/>
+                    </Route>
 
-          <Route path="/org">
-            <Route path=":orgId" element={<OrgMainPage />} />
-            <Route path="list" element={<OrgSearchPage />} />
-          </Route>
+                    <Route path="/org">
+                        <Route path=":orgId" element={<OrgMainPage/>}/>
+                        <Route path="list" element={<OrgSearchPage/>}/>
+                    </Route>
 
-          <Route path="/party">
-            <Route path="list" element={<PartySearchPage />} />
-          </Route>
+                    <Route path="/party">
+                        <Route path="list" element={<PartySearchPage/>}/>
+                    </Route>
 
-          <Route path="/localReview" element={<LocalReviewPage />} />
-          <Route path="/chat" element={<ChatPage />} />
+                    <Route path="/localReview" element={<LocalReviewPage/>}/>
+                    <Route path="/chat" element={<ChatPage/>}/>
 
-          <Route
-            path="/sysadmin"
-            element={<AdminLayout role={"systemAdmin"} />}
-          >
-            <Route path="user" element={<SysAdminUserPage />} />
-            <Route path="org" element={<SysAdminOrgPage />} />
-            <Route path="notice" element={<SysAdminNoticePage />} />
-          </Route>
+                    <Route
+                        path="/sysadmin"
+                        element={<AdminLayout role={"systemAdmin"}/>}
+                    >
+                        <Route path="user" element={<SysAdminUserPage/>}/>
+                        <Route path="org" element={<SysAdminOrgPage/>}/>
+                        <Route path="notice" element={<SysAdminNoticePage/>}/>
+                    </Route>
 
-          <Route
-            path="/orgadmin/:orgId"
-            element={<AdminLayout role={"orgAdmin"} />}
-          >
-            <Route path="member" element={<OrgAdminMemberPage />} />
-            <Route path="team" element={<OrgAdminTeamPage />} />
-            <Route path="task" element={<OrgAdminTaskPage />} />
-            <Route path="counsel" element={<OrgAdminCounselPage />} />
-            <Route path="notice" element={<OrgAdminNoticePage />} />
-          </Route>
+                    <Route
+                        path="/orgadmin/:orgId"
+                        element={<AdminLayout role={"orgAdmin"}/>}
+                    >
+                        <Route path="member" element={<OrgAdminMemberPage/>}/>
+                        <Route path="team" element={<OrgAdminTeamPage/>}/>
+                        <Route path="task" element={<OrgAdminTaskPage/>}/>
+                        <Route path="counsel" element={<OrgAdminCounselPage/>}/>
+                        <Route path="notice" element={<OrgAdminNoticePage/>}/>
+                    </Route>
 
-          <Route path="/task">
-            <Route path=":taskId" element={<TaskDetailPage />} />
-          </Route>
-          <Route path="/board">
-            <Route index element={<BoardArticleListPage />} />
-            <Route path=":boardId">
-              <Route index element={<BoardArticleListPage />} />
-              <Route path=":articleId" element={<BoardArticleViewPage />} />
-              <Route path="write" element={<BoardWritePage />} />
-            </Route>
-          </Route>
+                    <Route path="/task">
+                        <Route path=":taskId" element={<TaskDetailPage/>}/>
+                    </Route>
+                    <Route path="/board">
+                        <Route index element={<BoardArticleListPage/>}/>
+                        <Route path=":boardId">
+                            <Route index element={<BoardArticleListPage/>}/>
+                            <Route path=":articleId" element={<BoardArticleViewPage/>}/>
+                            <Route path="write" element={<BoardWritePage/>}/>
+                        </Route>
+                    </Route>
 
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  </StyledEngineProvider>
+                    <Route path="*" element={<NotFoundPage/>}/>
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    </StyledEngineProvider>
 );

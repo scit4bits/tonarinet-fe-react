@@ -4,23 +4,23 @@
 
 /* src/index.css 또는 App.css 등에 추가 */
 @keyframes appearAndPop {
-  0% {
-    opacity: 0;
-    transform: scale(0.5);
-  }
-  70% {
-    opacity: 1;
-    transform: scale(1.1);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(2);
-  }
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    70% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(2);
+    }
 }
 
 .appear-animation {
-  /* 애니메이션이 끝난 후 마지막 상태를 유지합니다. */
-  animation: appearAndPop 0.5s ease-out forwards;
+    /* 애니메이션이 끝난 후 마지막 상태를 유지합니다. */
+    animation: appearAndPop 0.5s ease-out forwards;
 }
 
 .character-pin {
@@ -34,42 +34,42 @@
 }
 
 :root {
-  font-family: "Pretendard Variable", Pretendard, system-ui, Avenir, Helvetica,
+    font-family: "Pretendard Variable", Pretendard, system-ui, Avenir, Helvetica,
     Arial, sans-serif;
 
-  color-scheme: light;
+    color-scheme: light;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .scrollbar-hide {
-  scrollbar-width: none;
+    scrollbar-width: none;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+    margin: 0;
+    display: flex;
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
 }
 
 #root {
-  width: 100%;
-  margin: 0 auto;
-  text-align: center;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
 }
 
 /* Ensure Quill content styles are applied */
 .ql-editor {
-  font-family: inherit !important;
+    font-family: inherit !important;
 }
 
 .ql-editor p {
-  margin: 0 0 1em 0 !important;
+    margin: 0 0 1em 0 !important;
 }
 
 .ql-editor h1,
@@ -78,36 +78,36 @@ body {
 .ql-editor h4,
 .ql-editor h5,
 .ql-editor h6 {
-  margin: 0.5em 0 !important;
-  font-weight: bold !important;
+    margin: 0.5em 0 !important;
+    font-weight: bold !important;
 }
 
 .ql-editor-readonly > * {
-  cursor: auto !important;
+    cursor: auto !important;
 }
 
 .ql-editor ul,
 .ql-editor ol {
-  padding-left: 1.5em !important;
-  margin: 0 0 1em 0 !important;
+    padding-left: 1.5em !important;
+    margin: 0 0 1em 0 !important;
 }
 
 .ql-editor blockquote {
-  border-left: 4px solid #ccc !important;
-  margin: 0 0 1em 0 !important;
-  padding: 0.5em 1em !important;
-  background-color: #f9f9f9 !important;
+    border-left: 4px solid #ccc !important;
+    margin: 0 0 1em 0 !important;
+    padding: 0.5em 1em !important;
+    background-color: #f9f9f9 !important;
 }
 
 /* Override Tailwind's text alignment reset for Quill content */
 .ql-align-center {
-  text-align: center !important;
+    text-align: center !important;
 }
 
 .ql-align-right {
-  text-align: right !important;
+    text-align: right !important;
 }
 
 .ql-align-justify {
-  text-align: justify !important;
+    text-align: justify !important;
 }

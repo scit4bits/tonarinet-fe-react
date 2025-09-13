@@ -9,19 +9,19 @@ import taxios from "./taxios";
  * @returns {Promise<Object>} API response with nearby places
  */
 export const fetchNearbyRegions = async (center, radius = 0.08) => {
-  try {
-    const params = new URLSearchParams({
-      latitude: center.lat.toString(),
-      longitude: center.lng.toString(),
-      radius: radius.toString(),
-    });
+    try {
+        const params = new URLSearchParams({
+            latitude: center.lat.toString(),
+            longitude: center.lng.toString(),
+            radius: radius.toString(),
+        });
 
-    const response = await taxios.get(`/region/search?${params}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching nearby regions:", error);
-    throw error;
-  }
+        const response = await taxios.get(`/region/search?${params}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching nearby regions:", error);
+        throw error;
+    }
 };
 
 /**
@@ -32,24 +32,24 @@ export const fetchNearbyRegions = async (center, radius = 0.08) => {
  * @returns {Promise<Object>} API response with search results
  */
 export const searchPlacesNearLocation = async (
-  query,
-  center,
-  radius = 10000
+    query,
+    center,
+    radius = 10000
 ) => {
-  try {
-    const params = {
-      query: query,
-      lat: center.lat.toString(),
-      lng: center.lng.toString(),
-      radius: radius.toString(),
-    };
+    try {
+        const params = {
+            query: query,
+            lat: center.lat.toString(),
+            lng: center.lng.toString(),
+            radius: radius.toString(),
+        };
 
-    const response = await taxios.get("/search/places", { params });
-    return response.data;
-  } catch (error) {
-    console.error("Error searching places:", error);
-    throw error;
-  }
+        const response = await taxios.get("/search/places", {params});
+        return response.data;
+    } catch (error) {
+        console.error("Error searching places:", error);
+        throw error;
+    }
 };
 
 /**
@@ -59,19 +59,19 @@ export const searchPlacesNearLocation = async (
  * @returns {Promise<Object>} API response with reviews
  */
 export const fetchNearbyLiveReports = async (center, radius = 0.08) => {
-  try {
-    const params = new URLSearchParams({
-      latitude: center.lat.toString(),
-      longitude: center.lng.toString(),
-      range: radius.toString(),
-    });
+    try {
+        const params = new URLSearchParams({
+            latitude: center.lat.toString(),
+            longitude: center.lng.toString(),
+            range: radius.toString(),
+        });
 
-    const response = await taxios.get(`/livereport/near?${params}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching live reports:", error);
-    throw error;
-  }
+        const response = await taxios.get(`/livereport/near?${params}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching live reports:", error);
+        throw error;
+    }
 };
 
 /**
@@ -80,18 +80,18 @@ export const fetchNearbyLiveReports = async (center, radius = 0.08) => {
  * @returns {Promise<Object>} API response with location info
  */
 export const getLocationInfo = async (center) => {
-  try {
-    const params = {
-      lat: center.lat.toString(),
-      lng: center.lng.toString(),
-    };
+    try {
+        const params = {
+            lat: center.lat.toString(),
+            lng: center.lng.toString(),
+        };
 
-    const response = await taxios.get("/location/info", { params });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching location info:", error);
-    throw error;
-  }
+        const response = await taxios.get("/location/info", {params});
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching location info:", error);
+        throw error;
+    }
 };
 
 /**
@@ -101,16 +101,16 @@ export const getLocationInfo = async (center) => {
  * @returns {number} Distance in meters
  */
 export const calculateDistance = (coord1, coord2) => {
-  const R = 6371e3; // Earth's radius in meters
-  const φ1 = (coord1.lat * Math.PI) / 180;
-  const φ2 = (coord2.lat * Math.PI) / 180;
-  const Δφ = ((coord2.lat - coord1.lat) * Math.PI) / 180;
-  const Δλ = ((coord2.lng - coord1.lng) * Math.PI) / 180;
+    const R = 6371e3; // Earth's radius in meters
+    const φ1 = (coord1.lat * Math.PI) / 180;
+    const φ2 = (coord2.lat * Math.PI) / 180;
+    const Δφ = ((coord2.lat - coord1.lat) * Math.PI) / 180;
+    const Δλ = ((coord2.lng - coord1.lng) * Math.PI) / 180;
 
-  const a =
-    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const a =
+        Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+        Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-  return R * c; // Distance in meters
+    return R * c; // Distance in meters
 };

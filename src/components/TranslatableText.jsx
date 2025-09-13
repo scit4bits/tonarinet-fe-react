@@ -1,9 +1,9 @@
-import { useRef, useEffect } from 'react';
-import { useTextTranslation } from '../hooks/useTextTranslation';
-import { useTranslation } from 'react-i18next';
+import {useEffect, useRef} from 'react';
+import {useTextTranslation} from '../hooks/useTextTranslation';
+import {useTranslation} from 'react-i18next';
 
 // Wrapper component that makes any child component translatable
-export const TranslatableText = ({ children, className = '', style = {} }) => {
+export const TranslatableText = ({children, className = '', style = {}}) => {
     const elementRef = useRef(null);
     const translation = useTextTranslation();
     const {t} = useTranslation();
@@ -40,7 +40,7 @@ export const TranslatableText = ({ children, className = '', style = {} }) => {
             <div
                 ref={elementRef}
                 className={className}
-                style={{ userSelect: 'text', ...style }}
+                style={{userSelect: 'text', ...style}}
             >
                 {children}
             </div>
