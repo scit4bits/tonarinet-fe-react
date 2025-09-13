@@ -37,6 +37,8 @@ import MyPageTaskPage from "./pages/my/MyPageTaskPage.jsx";
 import OrgAdminNoticePage from "./pages/orgadmin/OrgAdminNoticePage.jsx";
 import MyPageCounselPage from "./pages/my/MyPageCounselPage.jsx";
 import PartySearchPage from "./pages/PartySearchPage.jsx";
+import FindPasswordPage from "./pages/auth/FindPasswordPage.jsx";
+import ResetPasswordPage from "./pages/auth/ResetPasswordPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StyledEngineProvider enableCssLayer>
@@ -46,6 +48,8 @@ createRoot(document.getElementById("root")).render(
         <Route index element={<LandingPage />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/forgot-password" element={<FindPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
 
         <Route path="/logincb">
           <Route path="line" element={<SignUpPage provider={"line"} />} />
