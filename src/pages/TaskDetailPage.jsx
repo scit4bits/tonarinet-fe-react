@@ -54,6 +54,7 @@ import {
 import RichTextEditor from "../components/RichTextEditor";
 import "react-quill-new/dist/quill.snow.css";
 import { createSubmission, getTaskSubmissions } from "../utils/submission";
+import { TranslatableText } from "../components/TranslatableText";
 
 export default function TaskDetailPage() {
   const { taskId } = useParams();
@@ -304,9 +305,11 @@ export default function TaskDetailPage() {
       <Paper elevation={2} sx={{ p: 4, mb: 4 }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
           <AssignmentIcon fontSize="large" color="primary" />
+          <TranslatableText>
           <Typography variant="h5" component="h2" fontWeight="bold">
             {task.name}
           </Typography>
+          </TranslatableText>
         </Box>
 
         <Divider sx={{ mb: 3 }} />
@@ -540,12 +543,15 @@ export default function TaskDetailPage() {
                     },
                   }}
                 >
+                  <TranslatableText>
+
                   <div
                     className="ql-editor"
                     dangerouslySetInnerHTML={{
                       __html: task.contents,
                     }}
                   />
+                  </TranslatableText>
                 </Box>
               ) : (
                 <Typography color="text.secondary" fontStyle="italic">
@@ -775,12 +781,14 @@ export default function TaskDetailPage() {
                                   },
                                 }}
                               >
+                                <TranslatableText>
                                 <div
                                   className="ql-editor"
                                   dangerouslySetInnerHTML={{
                                     __html: submission.contents,
                                   }}
                                 />
+                                </TranslatableText>
                               </Box>
                             ) : (
                               <Typography

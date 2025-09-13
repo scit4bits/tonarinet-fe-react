@@ -39,6 +39,7 @@ import { addReplyToArticle, getRepliesOfArticle } from "../../utils/reply";
 import useAuth from "../../hooks/useAuth";
 import { downloadFile } from "../../utils/fileattachment";
 import taxios from "../../utils/taxios";
+import { TranslatableText } from "../../components/TranslatableText";
 
 export default function BoardArticleViewPage() {
   const { t } = useTranslation();
@@ -221,9 +222,11 @@ export default function BoardArticleViewPage() {
               <IconButton onClick={() => window.history.back()} sx={{ mr: 1 }}>
                 <ArrowBackIosNew />
               </IconButton>
-              <Typography variant="h4" component="h2">
-                {article.title}
-              </Typography>
+              <TranslatableText>
+                <Typography variant="h4" component="h2">
+                  {article.title}
+                </Typography>
+              </TranslatableText>
             </Box>
             <Box
               sx={{
@@ -254,12 +257,15 @@ export default function BoardArticleViewPage() {
               flexGrow: 1,
             }}
           >
+            <TranslatableText>
+
             <Typography
               variant="body1"
               component="div"
               className="ql-editor ql-editor-readonly"
               dangerouslySetInnerHTML={{ __html: article.contents }}
             />
+            </TranslatableText>
           </Box>
           {/* Tag list (use chips) */}
           <Box sx={{ my: 2 }}>
@@ -371,9 +377,11 @@ export default function BoardArticleViewPage() {
                   >
                     {reply.createdByName}
                   </Typography>
-                  <Typography variant="body2" component="span">
-                    {reply.contents}
-                  </Typography>
+                  <TranslatableText className="inline">
+                    <Typography variant="body2" component="span">
+                      {reply.contents}
+                    </Typography>
+                  </TranslatableText>
                 </Box>
                 <Box
                   sx={{

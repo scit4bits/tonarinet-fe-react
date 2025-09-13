@@ -19,6 +19,7 @@ import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useChat } from "../hooks/useChat";
 import useAuth from "../hooks/useAuth";
+import { TranslatableText } from "../components/TranslatableText";
 
 export default function ChatPage() {
   const { t } = useTranslation();
@@ -137,13 +138,14 @@ export default function ChatPage() {
                 : "0 2px 8px rgba(0, 0, 0, 0.1)",
               transition: "all 0.2s ease",
               "&:hover": {
-                transform: "scale(1.02)",
                 boxShadow: isOwnMessage
                   ? "0 4px 12px rgba(25, 118, 210, 0.2)"
                   : "0 4px 12px rgba(0, 0, 0, 0.15)",
               },
             }}
           >
+            <TranslatableText>
+
             <Typography
               variant="body1"
               sx={{
@@ -154,7 +156,8 @@ export default function ChatPage() {
               }}
             >
               {msg.message || msg.text}
-            </Typography>
+            </Typography> 
+            </TranslatableText>
           </Paper>
 
           {/* Time for own messages (bottom right) - only show for last in group */}
