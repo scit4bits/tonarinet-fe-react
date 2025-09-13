@@ -76,6 +76,16 @@ async function updateTaskScore(taskId, score, feedback = null) {
   }
 }
 
+async function getAITaskRecommendation(prompt) {
+  try {
+    const response = await taxios.post("/task/ai-recommend", {prompt}); // Assuming the prompt is sent as plain text
+    return response.data;
+  } catch (error) {
+    console.error("Error getting AI task recommendation:", error);
+    throw error;
+  }
+}
+
 export {
   getTaskById,
   createTask,
@@ -83,4 +93,5 @@ export {
   getTaskGroupById,
   checkTaskManagementEligibility,
   updateTaskScore,
+  getAITaskRecommendation,
 };

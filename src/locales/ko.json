@@ -690,7 +690,14 @@
     "teamMembers": "팀 멤버",
     "addTeamDescription": "새 팀을 생성하려면 팀 이름과 멤버를 입력하세요.",
     "searchInfo": "총 {{total}}개 항목 중 검색",
-    "by": "기준"
+    "by": "기준",
+    "aiRecommendation": "AI 추천",
+    "aiTaskRecommendation": "AI 과제 추천",
+    "aiPromptDescription": "과제 생성에 도움이 되는 AI 추천을 받으려면 프롬프트를 입력하세요.",
+    "aiPromptLabel": "AI 프롬프트",
+    "aiPromptPlaceholder": "예: '중급 JavaScript 개발자를 위한 실습 과제를 만들어 주세요'",
+    "generating": "생성 중...",
+    "generateRecommendation": "추천 생성"
   },
   "footer": {
     "aboutUs": "About us",

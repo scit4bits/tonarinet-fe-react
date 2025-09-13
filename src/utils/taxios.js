@@ -2,7 +2,7 @@ import axios from "axios";
 
 const taxios = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8999/api",
-  timeout: 10000,
+  timeout: 30000, // for AI requests that may take longer
 });
 
 // Request interceptor

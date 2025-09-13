@@ -690,7 +690,14 @@
     "teamMembers": "Team Members",
     "addTeamDescription": "To create a new team, please enter the team name and members.",
     "searchInfo": "Searching among {{total}} items",
-    "by": "by"
+    "by": "by",
+    "aiRecommendation": "AI Recommendation",
+    "aiTaskRecommendation": "AI Task Recommendation",
+    "aiPromptDescription": "Enter a prompt to get AI recommendations that help with task creation.",
+    "aiPromptLabel": "AI Prompt",
+    "aiPromptPlaceholder": "e.g., 'Create a practical assignment for intermediate JavaScript developers'",
+    "generating": "Generating...",
+    "generateRecommendation": "Generate Recommendation"
   },
   "footer": {
     "aboutUs": "About us",

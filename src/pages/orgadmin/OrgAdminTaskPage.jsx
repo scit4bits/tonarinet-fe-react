@@ -36,11 +36,12 @@ import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import InfoIcon from "@mui/icons-material/Info";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import useOrgTaskList from "../../hooks/useOrgTaskList";
 import useOrgMemberList from "../../hooks/useOrgMemberList";
 import { useParams, useNavigate } from "react-router";
-import { useState, useEffect } from "react";
-import { createTask, getTaskById, getTaskGroupById } from "../../utils/task";
+import { useState, useEffect, useCallback } from "react";
+import { createTask, getTaskGroupById, getAITaskRecommendation } from "../../utils/task";
 import { getTeamByOrgId } from "../../utils/team";
 import RichTextEditor from "../../components/RichTextEditor";
 import "react-quill-new/dist/quill.snow.css";
@@ -74,6 +75,11 @@ export default function OrgAdminTaskPage() {
   const [teams, setTeams] = useState([]);
   const [teamsLoading, setTeamsLoading] = useState(false);
 
+  // AI Prompt Dialog state
+  const [aiDialogOpen, setAiDialogOpen] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+
   // Task details dialog state
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -99,13 +105,7 @@ export default function OrgAdminTaskPage() {
   );
 
   // Fetch teams when dialog opens
-  useEffect(() => {
-    if (dialogOpen && orgId) {
-      fetchTeams();
-    }
-  }, [dialogOpen, orgId]);
-
-  const fetchTeams = async () => {
+  const fetchTeams = useCallback(async () => {
     try {
       setTeamsLoading(true);
       const teamsData = await getTeamByOrgId(orgId);
@@ -116,7 +116,13 @@ export default function OrgAdminTaskPage() {
     } finally {
       setTeamsLoading(false);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    if (dialogOpen && orgId) {
+      fetchTeams();
+    }
+  }, [dialogOpen, orgId, fetchTeams]);
 
   // Handle dialog open/close
   const handleOpenDialog = () => {
@@ -133,6 +139,36 @@ export default function OrgAdminTaskPage() {
       assignedUsers: [],
       assignedTeams: [],
     });
+  };
+
+  // Handle AI dialog open/close
+  const handleOpenAiDialog = () => {
+    setAiDialogOpen(true);
+  };
+
+  const handleCloseAiDialog = () => {
+    setAiDialogOpen(false);
+    setAiPrompt("");
+  };
+
+  // Handle AI recommendation
+  const handleAiRecommendation = async () => {
+    if (!aiPrompt.trim()) return;
+    
+    try {
+      setAiLoading(true);
+      const response = await getAITaskRecommendation(aiPrompt);
+      
+      // Insert AI response into the RichTextEditor
+      handleInputChange("contents", response.recommendation || response);
+      
+      // Close AI dialog
+      handleCloseAiDialog();
+    } catch (error) {
+      console.error("Failed to get AI recommendation:", error);
+    } finally {
+      setAiLoading(false);
+    }
   };
 
   // Handle form submission
@@ -398,9 +434,21 @@ export default function OrgAdminTaskPage() {
 
             {/* Contents */}
             <Box>
-              <Typography variant="subtitle2" gutterBottom>
-                {t("common.content")}
-              </Typography>
+              <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Typography variant="subtitle2" gutterBottom>
+                  {t("common.content")}
+                </Typography>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  startIcon={<AutoAwesomeIcon />}
+                  onClick={handleOpenAiDialog}
+                  sx={{ mb: 1 }}
+                >
+                  {t("orgAdminPage.aiRecommendation")}
+                </Button>
+              </Box>
+              
               <RichTextEditor
                 value={formData.contents}
                 onChange={(content) => handleInputChange("contents", content)}
@@ -409,9 +457,7 @@ export default function OrgAdminTaskPage() {
                 minHeight="200px"
                 showImageUpload={true}
               />
-            </Box>
-
-            {/* Due Date */}
+            </Box>            {/* Due Date */}
             <TextField
               label={t("common.dueDate")}
               type="datetime-local"
@@ -773,6 +819,49 @@ export default function OrgAdminTaskPage() {
         <DialogActions>
           <Button onClick={handleDetailsDialogClose}>
             {t("common.close")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* AI Prompt Dialog */}
+      <Dialog
+        open={aiDialogOpen}
+        onClose={handleCloseAiDialog}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          <Box display="flex" alignItems="center" gap={1}>
+            <AutoAwesomeIcon />
+            {t("orgAdminPage.aiTaskRecommendation")}
+          </Box>
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            {t("orgAdminPage.aiPromptDescription")}
+          </Typography>
+          <TextField
+            fullWidth
+            multiline
+            rows={4}
+            label={t("orgAdminPage.aiPromptLabel")}
+            placeholder={t("orgAdminPage.aiPromptPlaceholder")}
+            value={aiPrompt}
+            onChange={(e) => setAiPrompt(e.target.value)}
+            disabled={aiLoading}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseAiDialog} disabled={aiLoading}>
+            {t("common.cancel")}
+          </Button>
+          <Button
+            onClick={handleAiRecommendation}
+            variant="contained"
+            disabled={!aiPrompt.trim() || aiLoading}
+            startIcon={aiLoading ? <CircularProgress size={16} /> : <AutoAwesomeIcon />}
+          >
+            {aiLoading ? t("orgAdminPage.generating") : t("orgAdminPage.generateRecommendation")}
           </Button>
         </DialogActions>
       </Dialog>

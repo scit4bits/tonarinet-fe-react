@@ -690,7 +690,14 @@
     "teamMembers": "チームメンバー",
     "addTeamDescription": "新しいチームを作成するには、チーム名とメンバーを入力してください。",
     "searchInfo": "合計{{total}}項目から検索中",
-    "by": "基準"
+    "by": "基準",
+    "aiRecommendation": "AI推奨",
+    "aiTaskRecommendation": "AI課題推奨",
+    "aiPromptDescription": "課題作成に役立つAI推奨を受けるためのプロンプトを入力してください。",
+    "aiPromptLabel": "AIプロンプト",
+    "aiPromptPlaceholder": "例：「中級JavaScript開発者向けの実践的な課題を作成してください」",
+    "generating": "生成中...",
+    "generateRecommendation": "推奨を生成"
   },
   "footer": {
     "aboutUs": "About us",
