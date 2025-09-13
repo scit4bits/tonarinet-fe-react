@@ -318,6 +318,11 @@ export default function BoardArticleListPage() {
                     title={article.title}
                   >
                     {article.title}
+                    {article.replyCount > 0 && (
+                      <span className="text-gray-500 ml-1">
+                        [{article.replyCount}]
+                      </span>
+                    )}
                   </TableCell>
                   <TableCell align="center">{article.createdByName}</TableCell>
                   <TableCell align="center">
