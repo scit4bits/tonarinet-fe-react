@@ -109,6 +109,8 @@
     "completed": "完了",
     "inProgress": "進行中",
     "pending": "保留中",
+    "pendingApproval": "承認待ち",
+    "awaitingApproval": "承認をお待ちください",
     "schedule": "スケジュール",
     "task": "タスク",
     "tasks": "タスク",

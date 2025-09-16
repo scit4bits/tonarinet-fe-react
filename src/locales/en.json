@@ -99,6 +99,8 @@
     "completed": "Completed",
     "inProgress": "In Progress",
     "pending": "Pending",
+    "pendingApproval": "Pending Approval",
+    "awaitingApproval": "Awaiting Approval",
     "schedule": "Schedule",
     "task": "Task",
     "tasks": "Tasks",
