@@ -1,190 +1,190 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    CircularProgress,
-    Container,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    InputAdornment,
-    Stack,
-    TextField,
-    Typography,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import usePartyList from "../hooks/usePartyList";
 import taxios from "../utils/taxios";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 export default function PartySearchPage() {
-    const {t} = useTranslation();
-    const {parties, loading, search, setSearch} = usePartyList("name");
+  const { t } = useTranslation();
+  const { parties, loading, search, setSearch } = usePartyList("name");
 
-    // Dialog state for entry message form
-    const [dialogOpen, setDialogOpen] = useState(false);
-    const [selectedPartyId, setSelectedPartyId] = useState(null);
-    const [entryMessage, setEntryMessage] = useState("");
-    const [submitting, setSubmitting] = useState(false);
+  // Dialog state for entry message form
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedPartyId, setSelectedPartyId] = useState(null);
+  const [entryMessage, setEntryMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-    const handleInputChange = (e) => {
-        const value = e.target.value;
-        setSearch(value);
-    };
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setSearch(value);
+  };
 
-    const handleJoinClick = (partyId) => {
-        setSelectedPartyId(partyId);
-        setDialogOpen(true);
-    };
+  const handleJoinClick = (partyId) => {
+    setSelectedPartyId(partyId);
+    setDialogOpen(true);
+  };
 
-    const handleCloseDialog = () => {
-        setDialogOpen(false);
-        setSelectedPartyId(null);
-        setEntryMessage("");
-    };
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+    setSelectedPartyId(null);
+    setEntryMessage("");
+  };
 
-    const handleSubmitJoin = async () => {
-        if (!selectedPartyId || !entryMessage.trim()) {
-            alert(t("common.pleaseEnterMessage"));
-            return;
-        }
+  const handleSubmitJoin = async () => {
+    if (!selectedPartyId || !entryMessage.trim()) {
+      alert(t("common.pleaseEnterMessage"));
+      return;
+    }
 
-        setSubmitting(true);
-        try {
-            await taxios.post(`/party/${selectedPartyId}/join`, {
-                message: entryMessage.trim(),
-            });
+    setSubmitting(true);
+    try {
+      await taxios.post(`/party/${selectedPartyId}/join`, {
+        entryMessage: entryMessage.trim(),
+      });
 
-            alert(t("common.partyJoinApplicationCompleted"));
-            handleCloseDialog();
-        } catch (error) {
-            console.error("Error joining party:", error);
-            alert(t("common.partyJoinApplicationError"));
-        } finally {
-            setSubmitting(false);
-        }
-    };
+      alert(t("common.partyJoinApplicationCompleted"));
+      handleCloseDialog();
+    } catch (error) {
+      console.error("Error joining party:", error);
+      alert(t("common.partyJoinApplicationError"));
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
-    return (
-        <Container maxWidth="md" sx={{py: 4}}>
-            {/* Search Bar */}
-            <Box sx={{mb: 4}}>
-                <TextField
-                    fullWidth
-                    variant="outlined"
-                    value={search}
-                    onChange={handleInputChange}
-                    placeholder={t("common.partySearchPlaceholder")}
-                    slotProps={{
-                        htmlInput: {
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <SearchIcon/>
-                                </InputAdornment>
-                            ),
-                        },
-                    }}
-                />
-            </Box>
+  return (
+    <Container maxWidth="md" sx={{ py: 4 }}>
+      {/* Search Bar */}
+      <Box sx={{ mb: 4 }}>
+        <TextField
+          fullWidth
+          variant="outlined"
+          value={search}
+          onChange={handleInputChange}
+          placeholder={t("common.partySearchPlaceholder")}
+          slotProps={{
+            htmlInput: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+      </Box>
 
-            {/* Loading State */}
-            {loading && (
-                <Box display="flex" justifyContent="center" sx={{my: 4}}>
-                    <CircularProgress/>
-                </Box>
-            )}
+      {/* Loading State */}
+      {loading && (
+        <Box display="flex" justifyContent="center" sx={{ my: 4 }}>
+          <CircularProgress />
+        </Box>
+      )}
 
-            {/* Party List */}
-            <Stack spacing={2}>
-                {!loading &&
-                    parties.data.length > 0 &&
-                    parties.data.map((party) => (
-                        <Card key={party.id} variant="outlined">
-                            <CardContent>
-                                <Box
-                                    display="flex"
-                                    justifyContent="space-between"
-                                    alignItems="center"
-                                >
-                                    <Box>
-                                        <Typography variant="h6" component="div">
-                                            {party.name}
-                                        </Typography>
-                                        {party.description && (
-                                            <Typography
-                                                variant="body2"
-                                                color="text.secondary"
-                                                sx={{mt: 1}}
-                                            >
-                                                {party.description}
-                                            </Typography>
-                                        )}
-                                    </Box>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={() => handleJoinClick(party.id)}
-                                    >
-                                        {t("common.join")}
-                                    </Button>
-                                </Box>
-                            </CardContent>
-                        </Card>
-                    ))}
-            </Stack>
-
-            {/* Empty State */}
-            {!loading && parties.data.length === 0 && (
-                <Box textAlign="center" sx={{mt: 5}}>
-                    <Typography variant="body1" color="text.secondary">
-                        {t("common.noPartiesFound")}
+      {/* Party List */}
+      <Stack spacing={2}>
+        {!loading &&
+          parties.data.length > 0 &&
+          parties.data.map((party) => (
+            <Card key={party.id} variant="outlined">
+              <CardContent>
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Box>
+                    <Typography variant="h6" component="div">
+                      {party.name}
                     </Typography>
+                    {party.description && (
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ mt: 1 }}
+                      >
+                        {party.description}
+                      </Typography>
+                    )}
+                  </Box>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleJoinClick(party.id)}
+                  >
+                    {t("common.join")}
+                  </Button>
                 </Box>
-            )}
+              </CardContent>
+            </Card>
+          ))}
+      </Stack>
 
-            {/* Entry Message Dialog */}
-            <Dialog
-                open={dialogOpen}
-                onClose={handleCloseDialog}
-                maxWidth="sm"
-                fullWidth
-            >
-                <DialogTitle sx={{textAlign: "center"}}>
-                    {t("common.partyJoinApplication")}
-                </DialogTitle>
-                <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="entryMessage"
-                        label={t("common.partyEntryMessage")}
-                        type="text"
-                        fullWidth
-                        multiline
-                        rows={4}
-                        variant="outlined"
-                        placeholder={t("common.partyEntryMessagePlaceholder")}
-                        value={entryMessage}
-                        onChange={(e) => setEntryMessage(e.target.value)}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseDialog} disabled={submitting}>
-                        {t("common.cancel")}
-                    </Button>
-                    <Button
-                        onClick={handleSubmitJoin}
-                        color="primary"
-                        variant="contained"
-                        disabled={submitting || !entryMessage.trim()}
-                    >
-                        {submitting ? t("common.applying") : t("common.joinApplication")}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </Container>
-    );
+      {/* Empty State */}
+      {!loading && parties.data.length === 0 && (
+        <Box textAlign="center" sx={{ mt: 5 }}>
+          <Typography variant="body1" color="text.secondary">
+            {t("common.noPartiesFound")}
+          </Typography>
+        </Box>
+      )}
+
+      {/* Entry Message Dialog */}
+      <Dialog
+        open={dialogOpen}
+        onClose={handleCloseDialog}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle sx={{ textAlign: "center" }}>
+          {t("common.partyJoinApplication")}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="entryMessage"
+            label={t("common.partyEntryMessage")}
+            type="text"
+            fullWidth
+            multiline
+            rows={4}
+            variant="outlined"
+            placeholder={t("common.partyEntryMessagePlaceholder")}
+            value={entryMessage}
+            onChange={(e) => setEntryMessage(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} disabled={submitting}>
+            {t("common.cancel")}
+          </Button>
+          <Button
+            onClick={handleSubmitJoin}
+            color="primary"
+            variant="contained"
+            disabled={submitting || !entryMessage.trim()}
+          >
+            {submitting ? t("common.applying") : t("common.joinApplication")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Container>
+  );
 }

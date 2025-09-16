@@ -111,6 +111,7 @@
     "pending": "保留中",
     "pendingApproval": "承認待ち",
     "awaitingApproval": "承認をお待ちください",
+    "reportedBy": "報告者",
     "schedule": "スケジュール",
     "task": "タスク",
     "tasks": "タスク",
@@ -386,7 +387,8 @@
     "searchParties": "パーティー検索",
     "searchAndJoinParties": "新しいパーティーを検索して参加してみましょう！",
     "noData": "データがありません",
-    "organizations": "組織"
+    "organizations": "組織",
+    "systemNoticeBoard": "システム通知掲示板"
   },
   "notification": {
     "newNotice": "新しいお知らせ: {{title}}",
@@ -682,6 +684,7 @@
     "tableHeaderTitle": "タイトル",
     "tableHeaderAuthor": "作成者",
     "tableHeaderCreatedAt": "作成日",
+    "tableHeaderReplies": "返信",
     "role": "役割",
     "approved": "承認済み",
     "withdrawal": "退会",

@@ -101,6 +101,7 @@
     "pending": "대기중",
     "pendingApproval": "승인 대기중",
     "awaitingApproval": "승인을 기다리고 있습니다",
+    "reportedBy": "제보자",
     "schedule": "일정",
     "task": "업무",
     "tasks": "업무",
@@ -383,7 +384,8 @@
     "searchParties": "파티 검색",
     "searchAndJoinParties": "새로운 파티를 검색하고 가입해보세요!",
     "noData": "데이터가 없습니다",
-    "organizations": "조직"
+    "organizations": "조직",
+    "systemNoticeBoard": "시스템 공지게시판"
   },
   "notification": {
     "newNotice": "새로운 공지사항: {{title}}",
@@ -679,6 +681,7 @@
     "tableHeaderTitle": "제목",
     "tableHeaderAuthor": "작성자",
     "tableHeaderCreatedAt": "작성일",
+    "tableHeaderReplies": "댓글",
     "role": "역할",
     "approved": "승인여부",
     "withdrawal": "탈퇴",

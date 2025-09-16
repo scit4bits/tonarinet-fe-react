@@ -101,6 +101,7 @@
     "pending": "Pending",
     "pendingApproval": "Pending Approval",
     "awaitingApproval": "Awaiting Approval",
+    "reportedBy": "Reported by",
     "schedule": "Schedule",
     "task": "Task",
     "tasks": "Tasks",
@@ -383,7 +384,8 @@
     "searchParties": "Search Parties",
     "searchAndJoinParties": "Search and join new parties!",
     "noData": "No data available",
-    "organizations": "organizations"
+    "organizations": "organizations",
+    "systemNoticeBoard": "System Notice Board"
   },
   "notification": {
     "newNotice": "New notice: {{title}}",
@@ -679,6 +681,7 @@
     "tableHeaderTitle": "Title",
     "tableHeaderAuthor": "Author",
     "tableHeaderCreatedAt": "Created Date",
+    "tableHeaderReplies": "Replies",
     "role": "Role",
     "approved": "Approved",
     "withdrawal": "Withdrawal",

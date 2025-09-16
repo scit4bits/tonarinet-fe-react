@@ -26,6 +26,7 @@ import {
 import useAuth from "../hooks/useAuth";
 import taxios from "../utils/taxios";
 import { useNavigate } from "react-router";
+import Flag from "react-world-flags";
 
 export default function MainPage() {
   const { t } = useTranslation();
@@ -155,6 +156,7 @@ export default function MainPage() {
                 >
                   <Person sx={{ fontSize: 40 }} />
                 </Avatar>
+                <Flag code={user?.nationality || null} className="h-[40px]" />
                 <Typography variant="h6" className="font-semibold text-center">
                   {user?.name || "User"}
                 </Typography>
