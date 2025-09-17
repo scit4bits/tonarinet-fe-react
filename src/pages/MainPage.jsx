@@ -441,11 +441,26 @@ export default function MainPage() {
                             label={
                               task.score
                                 ? t("common.completed")
-                                : t("common.inProgress")
+                                : (task.dueDate > Date.now()
+                                    ? t("common.inProgress")
+                                    : t("common.overdue")) +
+                                  ` (${formatDaysRemaining(
+                                    task.dueDate
+                                      ? Math.ceil(
+                                          (Date.now() -
+                                            new Date(task.dueDate)) /
+                                            (1000 * 60 * 60 * 24)
+                                        )
+                                      : 0
+                                  )})`
                             }
                             size="small"
                             color={getStatusColor(
-                              task.score ? "completed" : "inProgress"
+                              task.score
+                                ? "completed"
+                                : task.dueDate > Date.now()
+                                ? "inProgress"
+                                : "overdue"
                             )}
                             variant="outlined"
                           />
