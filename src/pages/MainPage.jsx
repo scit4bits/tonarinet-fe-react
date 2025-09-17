@@ -392,13 +392,23 @@ export default function MainPage() {
                   )}
 
                   {!orgLoading && myOrganizations?.length === 0 && (
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      className="text-center py-4"
-                    >
-                      {t("common.noOrganizationsJoined")}
-                    </Typography>
+                    <Box className="text-center py-4">
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        className="mb-2"
+                      >
+                        {t("common.noOrganizationsJoined")}
+                      </Typography>
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => navigate("/org/list")}
+                        startIcon={<Business />}
+                      >
+                        {t("common.searchOrganizations")}
+                      </Button>
+                    </Box>
                   )}
                 </Box>
               </CardContent>
