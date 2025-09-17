@@ -22,6 +22,8 @@ import {
   Event,
   Notifications,
   Person,
+  Business,
+  Group,
 } from "@mui/icons-material";
 import useAuth from "../hooks/useAuth";
 import taxios from "../utils/taxios";
@@ -200,6 +202,38 @@ export default function MainPage() {
                 <Typography variant="h6" color="success">
                   {noticesCount}
                 </Typography>
+              </Box>
+            </Paper>
+
+            <Paper
+              className="p-3 bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors"
+              elevation={0}
+              onClick={() => navigate("/org/list")}
+            >
+              <Box className="flex items-center justify-between">
+                <Box className="flex items-center">
+                  <Business color="primary" className="mr-2" />
+                  <Typography variant="body2" className="font-medium">
+                    {t("common.searchOrganizations")}
+                  </Typography>
+                </Box>
+                <ArrowForward color="primary" className="ml-2" />
+              </Box>
+            </Paper>
+
+            <Paper
+              className="p-3 bg-purple-50 cursor-pointer hover:bg-purple-100 transition-colors"
+              elevation={0}
+              onClick={() => navigate("/party/list")}
+            >
+              <Box className="flex items-center justify-between">
+                <Box className="flex items-center">
+                  <Group color="secondary" className="mr-2" />
+                  <Typography variant="body2" className="font-medium">
+                    {t("common.searchParties")}
+                  </Typography>
+                </Box>
+                <ArrowForward color="secondary" className="ml-2" />
               </Box>
             </Paper>
           </Box>

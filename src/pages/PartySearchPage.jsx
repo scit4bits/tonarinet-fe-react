@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardContent,
+  Chip,
   CircularProgress,
   Container,
   Dialog,
@@ -16,6 +17,9 @@ import {
   Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import PeopleIcon from "@mui/icons-material/People";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import usePartyList from "../hooks/usePartyList";
 import taxios from "../utils/taxios";
 import { useTranslation } from "react-i18next";
@@ -103,35 +107,65 @@ export default function PartySearchPage() {
           parties.data.length > 0 &&
           parties.data.map((party) => (
             <Card key={party.id} variant="outlined">
-              <CardContent>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Box>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="flex-start"
+                p={2}
+              >
+                <Box sx={{ flex: 1 }}>
+                  <Box display="flex" alignItems="center" gap={1}>
                     <Typography variant="h6" component="div">
                       {party.name}
                     </Typography>
-                    {party.description && (
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ mt: 1 }}
-                      >
-                        {party.description}
+                    {/* Recruitment Status Chip */}
+                    <Chip
+                      icon={
+                        party.isFinished ? (
+                          <CheckCircleIcon />
+                        ) : (
+                          <HourglassEmptyIcon />
+                        )
+                      }
+                      label={
+                        party.isFinished
+                          ? t("common.recruitmentCompleted")
+                          : t("common.recruiting")
+                      }
+                      size="small"
+                      color={party.isFinished ? "success" : "primary"}
+                      variant="outlined"
+                    />
+                    {/* Member Count */}
+                    <Box display="flex" alignItems="center" gap={0.5}>
+                      <PeopleIcon color="action" sx={{ fontSize: 16 }} />
+                      <Typography variant="body2" color="text.secondary">
+                        {party.userCount || 0}
                       </Typography>
-                    )}
+                    </Box>
                   </Box>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleJoinClick(party.id)}
-                  >
-                    {t("common.join")}
-                  </Button>
+
+                  {party.description && (
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mt: 1 }}
+                    >
+                      {party.description}
+                    </Typography>
+                  )}
                 </Box>
-              </CardContent>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleJoinClick(party.id)}
+                  disabled={party.isFinished}
+                >
+                  {party.isFinished
+                    ? t("common.recruitmentClosed")
+                    : t("common.join")}
+                </Button>
+              </Box>
             </Card>
           ))}
       </Stack>

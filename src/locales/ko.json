@@ -382,6 +382,9 @@
     "submitReview": "리뷰 제출",
     "searchOrganizations": "조직 검색",
     "searchParties": "파티 검색",
+    "recruiting": "모집중",
+    "recruitmentCompleted": "모집완료",
+    "recruitmentClosed": "모집종료",
     "searchAndJoinParties": "새로운 파티를 검색하고 가입해보세요!",
     "noData": "데이터가 없습니다",
     "organizations": "조직",
@@ -392,6 +395,8 @@
     "incomingPartyRequest": "{{userName}}님이 {{partyName}} 파티 가입을 요청했습니다",
     "approvedPartyRequest": "{{partyName}} 파티 가입이 승인되었습니다",
     "rejectedPartyRequest": "{{partyName}} 파티 가입이 거절되었습니다",
+    "incomingOrgRequest": "{{userName}}님이 {{orgName}} 조직 가입을 요청했습니다",
+    "approvedOrgRequest": "{{orgName}} 조직 가입이 승인되었습니다",
     "newReplyToArticle": "{{userName}}님이 '{{articleTitle}}'에 댓글을 남겼습니다",
     "taskScoreUpdated": "{{taskTitle}} 과제의 점수가 업데이트되었습니다"
   },

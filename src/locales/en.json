@@ -382,6 +382,9 @@
     "submitReview": "Submit Review",
     "searchOrganizations": "Search Organizations",
     "searchParties": "Search Parties",
+    "recruiting": "Recruiting",
+    "recruitmentCompleted": "Recruitment Completed",
+    "recruitmentClosed": "Recruitment Closed",
     "searchAndJoinParties": "Search and join new parties!",
     "noData": "No data available",
     "organizations": "organizations",
@@ -392,6 +395,8 @@
     "incomingPartyRequest": "{{userName}} has requested to join {{partyName}} party",
     "approvedPartyRequest": "Your request to join {{partyName}} party has been approved",
     "rejectedPartyRequest": "Your request to join {{partyName}} party has been rejected",
+    "incomingOrgRequest": "{{userName}} has requested to join {{orgName}} organization",
+    "approvedOrgRequest": "Your request to join {{orgName}} organization has been approved",
     "newReplyToArticle": "{{userName}} commented on '{{articleTitle}}'",
     "taskScoreUpdated": "The score for {{taskTitle}} task has been updated"
   },

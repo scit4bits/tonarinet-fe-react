@@ -385,6 +385,9 @@
     "submitReview": "レビューを送信",
     "searchOrganizations": "組織検索",
     "searchParties": "パーティー検索",
+    "recruiting": "募集中",
+    "recruitmentCompleted": "募集完了",
+    "recruitmentClosed": "募集終了",
     "searchAndJoinParties": "新しいパーティーを検索して参加してみましょう！",
     "noData": "データがありません",
     "organizations": "組織",
@@ -395,6 +398,8 @@
     "incomingPartyRequest": "{{userName}}さんが{{partyName}}パーティーへの参加を申請しました",
     "approvedPartyRequest": "{{partyName}}パーティーへの参加申請が承認されました",
     "rejectedPartyRequest": "{{partyName}}パーティーへの参加申請が拒否されました",
+    "incomingOrgRequest": "{{userName}}さんが{{orgName}}組織への参加を申請しました",
+    "approvedOrgRequest": "{{orgName}}組織への参加申請が承認されました",
     "newReplyToArticle": "{{userName}}さんが「{{articleTitle}}」にコメントしました",
     "taskScoreUpdated": "{{taskTitle}}課題のスコアが更新されました"
   },

@@ -1,177 +1,259 @@
-import React, {useEffect, useState} from "react";
-import {useTranslation} from "react-i18next";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import {Avatar, Badge, Box, IconButton, Menu, MenuItem, Typography,} from "@mui/material";
-
-import {Notifications as NotificationsIcon,} from "@mui/icons-material";
 import {
-    getMyNotification,
-    getUnreadNotificationCount,
-    readAllNotification,
-    readOneNotification,
+  Badge,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
+
+import {
+  Notifications as NotificationsIcon,
+  Announcement as AnnouncementIcon,
+  Group as GroupIcon,
+  Business as BusinessIcon,
+  Reply as ReplyIcon,
+  Assignment as AssignmentIcon,
+  Info as InfoIcon,
+} from "@mui/icons-material";
+import {
+  getMyNotification,
+  getUnreadNotificationCount,
+  readAllNotification,
+  readOneNotification,
 } from "../utils/notification";
 
 export default function NotificationMenu() {
-    const {t} = useTranslation();
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [notifications, setNotifications] = useState([]);
-    const [unreadCount, setUnreadCount] = useState(0);
-    const open = Boolean(anchorEl);
+  const { t } = useTranslation();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const open = Boolean(anchorEl);
 
-    useEffect(() => {
-        getUnreadNotificationCount().then((count) => {
-            setUnreadCount(count);
-        });
-    }, []);
+  useEffect(() => {
+    getUnreadNotificationCount().then((count) => {
+      setUnreadCount(count);
+    });
+  }, []);
 
-    const handleClick = async (event) => {
-        const eventCapture = event.currentTarget; // capturing
-        setNotifications(await getMyNotification());
-        setAnchorEl(eventCapture);
-    };
+  const handleClick = async (event) => {
+    const eventCapture = event.currentTarget; // capturing
+    setNotifications(await getMyNotification());
+    setAnchorEl(eventCapture);
+  };
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-    const handleNotificationClick = async (notiId, url) => {
-        if (url) {
-            window.location.href = url;
-        }
+  const handleNotificationClick = async (notiId, url) => {
+    if (url) {
+      window.location.href = url;
+    }
 
-        const result = await readOneNotification(notiId);
-        if (result) {
-            setNotifications(await getMyNotification());
-        }
+    const result = await readOneNotification(notiId);
+    if (result) {
+      setNotifications(await getMyNotification());
+    }
 
-        handleClose();
-    };
+    handleClose();
+  };
 
-    const handleMarkAllAsRead = async () => {
-        const result = await readAllNotification();
-        if (result) {
-            setNotifications(await getMyNotification());
-            setUnreadCount(0);
-        }
-    };
+  const handleMarkAllAsRead = async () => {
+    const result = await readAllNotification();
+    if (result) {
+      setNotifications(await getMyNotification());
+      setUnreadCount(0);
+    }
+  };
 
-    const convertJSONtoMessage = (jsonString) => {
-        try {
-            const obj = JSON.parse(jsonString);
-            switch (obj.messageType) {
-                case "newNotice":
-                case "newOrgNotice":
-                    return t("notification.newNotice", {title: obj.title});
-                case "incomingPartyRequest":
-                    return t("notification.incomingPartyRequest", {
-                        partyName: obj.partyName,
-                        userName: obj.userName,
-                    });
-                case "approvedPartyRequest":
-                    return t("notification.approvedPartyRequest", {
-                        partyName: obj.partyName,
-                    });
-                case "rejectedPartyRequest":
-                    return t("notification.rejectedPartyRequest", {
-                        partyName: obj.partyName,
-                    });
-                case "newReplyToArticle":
-                    return t("notification.newReplyToArticle", {
-                        articleTitle: obj.articleTitle,
-                        userName: obj.userName,
-                    });
-                case "taskScoreUpdated":
-                    return t("notification.taskScoreUpdated", {
-                        taskTitle: obj.taskTitle,
-                    });
-                default:
-                    return jsonString;
-            }
-        } catch (error) {
-            console.error("Error parsing JSON:", error);
-            return jsonString;
-        }
-    };
+  const convertJSONtoMessage = (jsonString) => {
+    try {
+      const obj = JSON.parse(jsonString);
+      switch (obj.messageType) {
+        case "newNotice":
+        case "newOrgNotice":
+          return t("notification.newNotice", { title: obj.title });
+        case "incomingPartyRequest":
+          return t("notification.incomingPartyRequest", {
+            partyName: obj.partyName,
+            userName: obj.userName,
+          });
+        case "approvedPartyRequest":
+          return t("notification.approvedPartyRequest", {
+            partyName: obj.partyName,
+          });
+        case "rejectedPartyRequest":
+          return t("notification.rejectedPartyRequest", {
+            partyName: obj.partyName,
+          });
+        case "incomingOrgRequest":
+          return t("notification.incomingOrgRequest", {
+            orgName: obj.orgName,
+            userName: obj.userName,
+          });
+        case "approvedOrgRequest":
+          return t("notification.approvedOrgRequest", {
+            orgName: obj.orgName,
+          });
+        case "newReplyToArticle":
+          return t("notification.newReplyToArticle", {
+            articleTitle: obj.articleTitle,
+            userName: obj.userName,
+          });
+        case "taskScoreUpdated":
+          return t("notification.taskScoreUpdated", {
+            taskTitle: obj.taskTitle,
+          });
+        default:
+          return jsonString;
+      }
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+      return jsonString;
+    }
+  };
 
-    return (
-        <>
-            <IconButton onClick={handleClick} size="large" aria-label="notifications">
-                <Badge badgeContent={unreadCount} color="error">
-                    <NotificationsIcon/>
-                </Badge>
-            </IconButton>
+  const getNotificationIcon = (contents) => {
+    try {
+      const obj = JSON.parse(contents);
+      switch (obj.messageType) {
+        case "newNotice":
+        case "newOrgNotice":
+          return (
+            <AnnouncementIcon
+              sx={{ width: 24, height: 24, color: "primary.main" }}
+            />
+          );
+        case "incomingPartyRequest":
+        case "approvedPartyRequest":
+        case "rejectedPartyRequest":
+          return (
+            <GroupIcon sx={{ width: 24, height: 24, color: "success.main" }} />
+          );
+        case "incomingOrgRequest":
+        case "approvedOrgRequest":
+          return (
+            <BusinessIcon sx={{ width: 24, height: 24, color: "info.main" }} />
+          );
+        case "newReplyToArticle":
+          return (
+            <ReplyIcon
+              sx={{ width: 24, height: 24, color: "secondary.main" }}
+            />
+          );
+        case "taskScoreUpdated":
+          return (
+            <AssignmentIcon
+              sx={{ width: 24, height: 24, color: "warning.main" }}
+            />
+          );
+        default:
+          return (
+            <InfoIcon sx={{ width: 24, height: 24, color: "text.secondary" }} />
+          );
+      }
+    } catch (error) {
+      return (
+        <InfoIcon sx={{ width: 24, height: 24, color: "text.secondary" }} />
+      );
+    }
+  };
 
-            <Menu
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                slotProps={{
-                    list: {
-                        sx: {
-                            maxHeight: 600,
-                            width: 400,
-                        },
-                    },
+  return (
+    <>
+      <IconButton onClick={handleClick} size="large" aria-label="notifications">
+        <Badge badgeContent={unreadCount} color="error">
+          <NotificationsIcon />
+        </Badge>
+      </IconButton>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        slotProps={{
+          list: {
+            sx: {
+              padding: 0,
+              width: 400,
+            },
+          },
+        }}
+        disableScrollLock={true}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        {/* Scrollable notifications section */}
+        <Box
+          sx={{
+            maxHeight: 400,
+            overflowY: "auto",
+            borderBottom: "1px solid",
+            borderColor: "divider",
+          }}
+        >
+          {notifications.length > 0 ? (
+            notifications.map((notification) => (
+              <MenuItem
+                key={notification.id}
+                onClick={() =>
+                  handleNotificationClick(notification.id, notification.link)
+                }
+                sx={{
+                  py: 2,
+                  opacity: notification.isRead ? 0.5 : 1,
+                  backgroundColor: notification.isRead
+                    ? "rgba(0, 0, 0, 0.05)"
+                    : "transparent",
                 }}
-                disableScrollLock={true}
-                transformOrigin={{horizontal: "right", vertical: "top"}}
-                anchorOrigin={{horizontal: "right", vertical: "bottom"}}
-            >
-                {notifications.length > 0 ? (
-                    notifications.map((notification) => (
-                        <MenuItem
-                            key={notification.id}
-                            onClick={() =>
-                                handleNotificationClick(notification.id, notification.link)
-                            }
-                            sx={{
-                                py: 2,
-                                opacity: notification.isRead ? 0.5 : 1,
-                                backgroundColor: notification.isRead
-                                    ? "rgba(0, 0, 0, 0.05)"
-                                    : "transparent",
-                            }}
-                        >
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "flex-start",
-                                    gap: 2,
-                                    width: "100%",
-                                }}
-                            >
-                                <Avatar sx={{width: 24, height: 24}}/>
-                                <Box className="w-full">
-                                    <Typography
-                                        variant="subtitle2"
-                                        fontWeight={notification.isRead ? "normal" : "bold"}
-                                        sx={{
-                                            color: notification.isRead
-                                                ? "text.secondary"
-                                                : "text.primary",
-                                            textWrap: "wrap",
-                                            overflowWrap: "anywhere",
-                                        }}
-                                    >
-                                        {convertJSONtoMessage(notification.contents)}
-                                    </Typography>
-                                </Box>
-                            </Box>
-                        </MenuItem>
-                    ))
-                ) : (
-                    <MenuItem disabled>
-                        <Typography variant="body2" color="text.secondary">
-                            {t("common.noNotifications")}
-                        </Typography>
-                    </MenuItem>
-                )}
-                <MenuItem onClick={handleMarkAllAsRead}>
-                    <Typography variant="body1" color="text.primary">
-                        {t("common.markAllAsRead")}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 2,
+                    width: "100%",
+                  }}
+                >
+                  {getNotificationIcon(notification.contents)}
+                  <Box className="w-full">
+                    <Typography
+                      variant="subtitle2"
+                      fontWeight={notification.isRead ? "normal" : "bold"}
+                      sx={{
+                        color: notification.isRead
+                          ? "text.secondary"
+                          : "text.primary",
+                        textWrap: "wrap",
+                        overflowWrap: "anywhere",
+                      }}
+                    >
+                      {convertJSONtoMessage(notification.contents)}
                     </Typography>
-                </MenuItem>
-            </Menu>
-        </>
-    );
+                  </Box>
+                </Box>
+              </MenuItem>
+            ))
+          ) : (
+            <MenuItem disabled>
+              <Typography variant="body2" color="text.secondary">
+                {t("common.noNotifications")}
+              </Typography>
+            </MenuItem>
+          )}
+        </Box>
+
+        {/* Fixed action button at bottom */}
+        <MenuItem onClick={handleMarkAllAsRead}>
+          <Typography variant="body1" color="text.primary">
+            {t("common.markAllAsRead")}
+          </Typography>
+        </MenuItem>
+      </Menu>
+    </>
+  );
 }
