@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
   Box,
@@ -43,12 +43,15 @@ export default function BoardArticleListPage() {
   const { boardId } = useParams();
   const navigate = useNavigate();
   const { boards } = useMyBoardList();
+  const [searchParams] = useSearchParams();
 
   // 선택된 게시판 상태
   const [selectedBoard, setSelectedBoard] = useState(null);
 
   // 카테고리 선택 상태
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState(
+    searchParams.get("category") || "all"
+  );
 
   // 페이지네이션 상태
   const [page, setPage] = useState(0);

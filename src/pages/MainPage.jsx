@@ -26,6 +26,7 @@ import {
   Group,
 } from "@mui/icons-material";
 import useAuth from "../hooks/useAuth";
+import useMyOrganizationList from "../hooks/useMyOrganizationList";
 import taxios from "../utils/taxios";
 import { useNavigate } from "react-router";
 import Flag from "react-world-flags";
@@ -39,6 +40,8 @@ export default function MainPage() {
   const [notices, setNotices] = useState([]);
   const [tasksCount, setTasksCount] = useState(0);
   const [noticesCount, setNoticesCount] = useState(0);
+  const { organizations: myOrganizations, loading: orgLoading } =
+    useMyOrganizationList();
 
   // Calendar events remain as mockup
   const [calendarEvents] = useState([
@@ -115,6 +118,17 @@ export default function MainPage() {
     } else {
       return `D${days}`;
     }
+  };
+
+  const calculateDaysSinceApproval = (approvedAtString) => {
+    if (!approvedAtString) return null;
+
+    const approvedDate = new Date(approvedAtString);
+    const currentDate = new Date();
+    const timeDiff = currentDate - approvedDate;
+    const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+    return daysDiff;
   };
 
   const handleTaskClick = (taskId) => {
@@ -267,17 +281,126 @@ export default function MainPage() {
               gap: 2,
             }}
           >
-            {/* Enrollment Status - Simplified */}
+            {/* My Organizations List */}
             <Paper elevation={3}>
               <CardHeader
-                avatar={<Event color="primary" />}
-                title={t("Welcome")}
-                subheader={`Since ${user.createdAt.split("T")[0]}`}
+                avatar={<Business color="primary" />}
+                title={t("common.myOrganizations")}
+                subheader={`${myOrganizations?.length || 0} ${t(
+                  "common.organizations"
+                )}`}
+                action={
+                  <Button
+                    size="small"
+                    endIcon={<ArrowForward />}
+                    onClick={() => navigate("/my/org")}
+                  >
+                    {t("common.more")}
+                  </Button>
+                }
               />
-              <CardContent>
-                <Typography variant="body1" color="text.secondary">
-                  {t("common.haveGoodDay")}
-                </Typography>
+              <CardContent className="pt-0">
+                <Box className="space-y-3">
+                  {orgLoading ? (
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      className="text-center py-4"
+                    >
+                      {t("common.loading")}
+                    </Typography>
+                  ) : (
+                    myOrganizations?.slice(0, 5).map((org) => {
+                      const daysSinceApproval = calculateDaysSinceApproval(
+                        org.approvedAt
+                      );
+                      return (
+                        <Card
+                          key={org.id}
+                          variant="outlined"
+                          className={`transition-all ${
+                            org.isGranted
+                              ? "cursor-pointer hover:shadow-md"
+                              : "opacity-60 cursor-not-allowed bg-gray-50"
+                          }`}
+                          sx={{
+                            filter: org.isGranted ? "none" : "grayscale(0.3)",
+                          }}
+                          onClick={() =>
+                            org.isGranted && navigate(`/org/${org.id}`)
+                          }
+                        >
+                          <CardContent className="pb-2">
+                            <Box className="flex justify-between items-start mb-2">
+                              <Box className="flex items-center gap-2">
+                                <Flag
+                                  code={org.countryCode}
+                                  className="h-6 w-8 object-cover rounded"
+                                  style={{ height: "24px", width: "32px" }}
+                                />
+                                <Typography
+                                  variant="subtitle2"
+                                  className={`font-medium ${
+                                    !org.isGranted ? "text-gray-500" : ""
+                                  }`}
+                                >
+                                  {org.name}
+                                </Typography>
+                              </Box>
+                              <Box className="flex flex-col items-end gap-1">
+                                <Chip
+                                  label={
+                                    org.isGranted
+                                      ? t("common.granted")
+                                      : t("common.pending")
+                                  }
+                                  size="small"
+                                  color={org.isGranted ? "success" : "warning"}
+                                  variant="outlined"
+                                />
+                                {daysSinceApproval !== null && (
+                                  <Typography
+                                    variant="caption"
+                                    color="text.secondary"
+                                    className="text-xs"
+                                  >
+                                    D+{daysSinceApproval}
+                                  </Typography>
+                                )}
+                              </Box>
+                            </Box>
+                            {org.role === "admin" && (
+                              <Box className="mt-2">
+                                <Button
+                                  size="small"
+                                  variant="outlined"
+                                  color="primary"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(`/orgadmin/${org.id}`);
+                                  }}
+                                  className="text-xs"
+                                >
+                                  {t("common.management")}
+                                </Button>
+                              </Box>
+                            )}
+                          </CardContent>
+                        </Card>
+                      );
+                    })
+                  )}
+
+                  {!orgLoading && myOrganizations?.length === 0 && (
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      className="text-center py-4"
+                    >
+                      {t("common.noOrganizationsJoined")}
+                    </Typography>
+                  )}
+                </Box>
               </CardContent>
             </Paper>
 

@@ -97,6 +97,7 @@
     "medium": "Medium",
     "low": "Low",
     "completed": "Completed",
+    "granted": "Granted",
     "inProgress": "In Progress",
     "pending": "Pending",
     "pendingApproval": "Pending Approval",
@@ -294,6 +295,7 @@
     "partyMembersTitle": "Party Members",
     "memberRoles": "Member Roles",
     "moreRoles": "more",
+    "more": "More",
     "partyNameLabel": "Party Name",
     "enterPartyNamePlaceholder": "Enter party name",
     "creating": "Creating...",
@@ -568,7 +570,22 @@
     "organization": {
       "main": {
         "title": "Tonarinet - {{orgName}}",
-        "membersCount": "{{count}} members"
+        "membersCount": "{{count}} members",
+        "noticesAndAnnouncements": "Notices & Announcements",
+        "teams": "Teams",
+        "communityBoard": "Community Board",
+        "visitBoard": "Visit Board",
+        "viewAll": "View All",
+        "noNoticesAvailable": "No notices available",
+        "noTeamsAvailable": "No teams available",
+        "organizationNotFound": "Organization not found",
+        "failedToLoadData": "Failed to load organization data",
+        "loading": "Loading...",
+        "leader": "Leader",
+        "member": "member",
+        "members": "members",
+        "joinDiscussions": "Join discussions, share ideas, and connect with other members of our community.",
+        "by": "by"
       }
     },
     "orgAdmin": {

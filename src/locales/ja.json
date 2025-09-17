@@ -107,6 +107,7 @@
     "medium": "中",
     "low": "低",
     "completed": "完了",
+    "granted": "承認済み",
     "inProgress": "進行中",
     "pending": "保留中",
     "pendingApproval": "承認待ち",
@@ -297,6 +298,7 @@
     "partyMembersTitle": "パーティーメンバー",
     "memberRoles": "メンバーの役割",
     "moreRoles": "個以上",
+    "more": "もっと見る",
     "partyNameLabel": "パーティー名",
     "enterPartyNamePlaceholder": "パーティー名を入力してください",
     "creating": "作成中...",
@@ -571,7 +573,22 @@
     "organization": {
       "main": {
         "title": "Tonarinet - {{orgName}}",
-        "membersCount": "{{count}} メンバー"
+        "membersCount": "{{count}} メンバー",
+        "noticesAndAnnouncements": "お知らせ・案内",
+        "teams": "チーム",
+        "communityBoard": "コミュニティボード",
+        "visitBoard": "ボードを見る",
+        "viewAll": "全て見る",
+        "noNoticesAvailable": "お知らせがありません",
+        "noTeamsAvailable": "チームがありません",
+        "organizationNotFound": "組織が見つかりません",
+        "failedToLoadData": "組織データの読み込みに失敗しました",
+        "loading": "読み込み中...",
+        "leader": "リーダー",
+        "member": "メンバー",
+        "members": "メンバー",
+        "joinDiscussions": "ディスカッションに参加し、アイデアを共有し、コミュニティの他のメンバーとつながりましょう。",
+        "by": "作成者"
       }
     },
     "orgAdmin": {
