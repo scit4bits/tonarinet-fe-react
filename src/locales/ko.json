@@ -757,5 +757,20 @@
     "projectIntro3": "다국어 지원으로 여러 국가의 사용자들이 쉽게 이용할 수 있습니다.",
     "projectIntro4": "글로벌 커뮤니티 환경을 제공합니다.",
     "projectIntro5": "개발자와 사용자 의견을 반영하여 지속적으로 개선하고 있습니다."
+  },
+  "calendar": {
+    "date": "날짜",
+    "time": "시간",
+    "event": "일정",
+    "allDay": "종일",
+    "week": "주",
+    "work_week": "근무 주",
+    "day": "일",
+    "month": "월",
+    "yesterday": "어제",
+    "tomorrow": "내일",
+    "today": "오늘",
+    "agenda": "일정",
+    "noEventsInRange": "이 범위 내에 일정이 없습니다."
   }
 }

@@ -757,5 +757,20 @@
     "projectIntro3": "Multilingual support makes it easy for users from different countries to use.",
     "projectIntro4": "Provides a global community environment.",
     "projectIntro5": "Continuously improved by reflecting feedback from developers and users."
+  },
+  "calendar": {
+    "date": "Date",
+    "time": "Time",
+    "event": "Event",
+    "allDay": "All Day",
+    "week": "Week",
+    "work_week": "Work Week",
+    "day": "Day",
+    "month": "Month",
+    "yesterday": "Yesterday",
+    "tomorrow": "Tomorrow",
+    "today": "Today",
+    "agenda": "Agenda",
+    "noEventsInRange": "There are no events in this range."
   }
 }

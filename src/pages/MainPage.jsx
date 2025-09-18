@@ -30,6 +30,7 @@ import useMyOrganizationList from "../hooks/useMyOrganizationList";
 import taxios from "../utils/taxios";
 import { useNavigate } from "react-router";
 import Flag from "react-world-flags";
+import CustomCalendar from "../components/CustomCalendar";
 
 export default function MainPage() {
   const { t } = useTranslation();
@@ -571,59 +572,7 @@ export default function MainPage() {
                 subheader={t("pages.main.dashboard.importantDates")}
               />
               <CardContent className="pt-0">
-                <List>
-                  {calendarEvents.map((event, index) => (
-                    <div key={index}>
-                      <ListItem className="px-0">
-                        <ListItemIcon>
-                          <Avatar
-                            className={`w-8 h-8 text-xs ${
-                              event.type === "deadline"
-                                ? "bg-red-100 text-red-600"
-                                : event.type === "meeting"
-                                ? "bg-blue-100 text-blue-600"
-                                : "bg-green-100 text-green-600"
-                            }`}
-                          >
-                            {new Date(event.date).getDate()}
-                          </Avatar>
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={event.title}
-                          secondary={new Date(event.date).toLocaleDateString(
-                            "en-US",
-                            {
-                              weekday: "short",
-                              month: "short",
-                              day: "numeric",
-                            }
-                          )}
-                          primaryTypographyProps={{
-                            variant: "body1",
-                            className: "font-medium",
-                          }}
-                          secondaryTypographyProps={{
-                            variant: "body2",
-                            color: "text.secondary",
-                          }}
-                        />
-                        <Chip
-                          label={event.type}
-                          size="small"
-                          variant="outlined"
-                          color={
-                            event.type === "deadline"
-                              ? "error"
-                              : event.type === "meeting"
-                              ? "primary"
-                              : "success"
-                          }
-                        />
-                      </ListItem>
-                      {index < calendarEvents.length - 1 && <Divider />}
-                    </div>
-                  ))}
-                </List>
+                <CustomCalendar />
               </CardContent>
             </Paper>
           </Box>

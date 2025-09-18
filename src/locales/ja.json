@@ -761,5 +761,20 @@
     "projectIntro3": "多言語対応で、さまざまな国のユーザーが簡単に利用できます。",
     "projectIntro4": "グローバルなコミュニティ環境を提供します。",
     "projectIntro5": "開発者とユーザーの意見を反映し、継続的に改善しています。"
+  },
+  "calendar": {
+    "date": "日付",
+    "time": "時間",
+    "event": "イベント",
+    "allDay": "終日",
+    "week": "週",
+    "work_week": "勤務週",
+    "day": "日",
+    "month": "月",
+    "yesterday": "昨日",
+    "tomorrow": "明日",
+    "today": "今日",
+    "agenda": "アジェンダ",
+    "noEventsInRange": "この範囲内にイベントはありません。"
   }
 }
