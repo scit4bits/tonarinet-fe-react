@@ -1,0 +1,15 @@
+[
+  {
+    "id": "placeHolder",
+    "name": {
+      "ko": "홍길동",
+      "ja": "ホン・ギルドン"
+    },
+    "profile": {
+      "ko": "풀스택 개발자",
+      "ja": "フルスタック開発者"
+    },
+    "email": "placeholder@placeholder.com",
+    "phone": "+82-00-0000-0000"
+  }
+]
