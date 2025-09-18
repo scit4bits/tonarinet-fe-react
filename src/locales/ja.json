@@ -34,6 +34,7 @@
   "phone": "電話番号",
   "nationality": "国籍",
   "email": "メールアドレス",
+
   "common": {
     "comment": "コメント",
     "unknown": "不明",
@@ -753,6 +754,12 @@
     "membersTeam": "Members",
     "allRightsReserved": "© 2025 Team 4bits. All Rights Reserved.",
     "profile": "Profile",
-    "contacts": "Contacts"
+    "contacts": "Contacts",
+    "projectIntroTitle": "プロジェクト紹介",
+    "projectIntro1": "トナリネットは地域コミュニティと交流するためのプラットフォームです。",
+    "projectIntro2": "様々な掲示板やチャット機能で近隣の方々と情報を共有できます。",
+    "projectIntro3": "多言語対応で、さまざまな国のユーザーが簡単に利用できます。",
+    "projectIntro4": "グローバルなコミュニティ環境を提供します。",
+    "projectIntro5": "開発者とユーザーの意見を反映し、継続的に改善しています。"
   }
 }

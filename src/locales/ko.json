@@ -750,6 +750,12 @@
     "members": "Members",
     "allRightsReserved": "© 2025 Team 4bits. All Rights Reserved.",
     "profile": "Profile",
-    "contacts": "Contacts"
+    "contacts": "Contacts",
+    "projectIntroTitle": "프로젝트 소개",
+    "projectIntro1": "토나리넷은 지역 커뮤니티와 소통을 위한 플랫폼입니다.",
+    "projectIntro2": "다양한 게시판과 채팅 기능으로 이웃과 정보를 나눌 수 있습니다.",
+    "projectIntro3": "다국어 지원으로 여러 국가의 사용자들이 쉽게 이용할 수 있습니다.",
+    "projectIntro4": "글로벌 커뮤니티 환경을 제공합니다.",
+    "projectIntro5": "개발자와 사용자 의견을 반영하여 지속적으로 개선하고 있습니다."
   }
 }

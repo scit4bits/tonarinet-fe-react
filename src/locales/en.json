@@ -750,6 +750,12 @@
     "membersTeam": "Members",
     "allRightsReserved": "© 2025 Team 4bits. All Rights Reserved.",
     "profile": "Profile",
-    "contacts": "Contacts"
+    "contacts": "Contacts",
+    "projectIntroTitle": "Project Introduction",
+    "projectIntro1": "Tonarinet is a platform for local community communication.",
+    "projectIntro2": "Share information with neighbors through various boards and chat features.",
+    "projectIntro3": "Multilingual support makes it easy for users from different countries to use.",
+    "projectIntro4": "Provides a global community environment.",
+    "projectIntro5": "Continuously improved by reflecting feedback from developers and users."
   }
 }
