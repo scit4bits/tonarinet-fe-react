@@ -47,8 +47,10 @@ export default function CustomCalendar() {
       // make every date in data to moment object with Seoul timezone
       response.data = response.data.map((event) => ({
         ...event,
-        fromWhen: moment.utc(event.fromWhen).tz("Asia/Seoul"),
-        toWhen: event.toWhen ? moment.utc(event.toWhen).tz("Asia/Seoul") : null,
+        fromWhen: moment.utc(event.fromWhen).tz("Asia/Seoul").toDate(),
+        toWhen: event.toWhen
+          ? moment.utc(event.toWhen).tz("Asia/Seoul").toDate()
+          : null,
       }));
       setEvents(response.data);
     }
@@ -58,7 +60,6 @@ export default function CustomCalendar() {
 
   const handleRangeChange = async (range) => {
     let start, end;
-    console.log(range);
     if (Array.isArray(range)) {
       // week view or day view
       start = moment(range[0])
@@ -87,8 +88,10 @@ export default function CustomCalendar() {
     // make every date in data to moment object with Seoul timezone
     response.data = response.data.map((event) => ({
       ...event,
-      fromWhen: moment.utc(event.fromWhen).tz("Asia/Seoul"),
-      toWhen: event.toWhen ? moment.utc(event.toWhen).tz("Asia/Seoul") : null,
+      fromWhen: moment.utc(event.fromWhen).tz("Asia/Seoul").toDate(),
+      toWhen: event.toWhen
+        ? moment.utc(event.toWhen).tz("Asia/Seoul").toDate()
+        : null,
     }));
 
     setEvents(response.data);
