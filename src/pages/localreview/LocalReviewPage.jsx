@@ -999,6 +999,8 @@ export default function LocalReviewPage() {
               ) : (
                 <Typography variant="body2">
                   {t("common.clickMarkerInstruction")}
+                  <br />
+                  {t("common.zoomInMap")}
                 </Typography>
               )}
             </Box>

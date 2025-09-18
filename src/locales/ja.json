@@ -378,6 +378,7 @@
     "liveReportPrefix": "ライブレポート",
     "moreReports": "個以上のレポート",
     "clickMarkerInstruction": "マーカーをクリックするか、地図上の任意の場所をクリックして場所を選択し、レビューを書いてください。",
+    "zoomInMap": "位置が見えない場合は、地図を拡大してください。",
     "addTownReview": "街レビューを追加",
     "rateRegionInstruction": "この地域を評価してください（0-5スケール）:",
     "reviewContent": "レビュー内容",

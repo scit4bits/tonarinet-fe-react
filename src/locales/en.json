@@ -375,6 +375,7 @@
     "liveReportPrefix": "Live Report",
     "moreReports": "more reports",
     "clickMarkerInstruction": "Click on a marker or anywhere on the map to select a location and write a review.",
+    "zoomInMap": "If you can't see the location, please zoom in on the map.",
     "addTownReview": "Add Town Review",
     "rateRegionInstruction": "Rate this region (0-5 scale):",
     "reviewContent": "Review Content",

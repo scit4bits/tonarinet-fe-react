@@ -375,6 +375,7 @@
     "liveReportPrefix": "실시간 제보",
     "moreReports": "개 더 많은 제보",
     "clickMarkerInstruction": "마커를 클릭하거나 지도의 아무 곳이나 클릭하여 위치를 선택하고 리뷰를 작성하세요.",
+    "zoomInMap": "위치가 보이지 않는다면 지도를 확대해주세요.",
     "addTownReview": "동네리뷰 추가",
     "rateRegionInstruction": "이 지역을 평가하세요 (0-5점 척도):",
     "reviewContent": "리뷰 내용",
