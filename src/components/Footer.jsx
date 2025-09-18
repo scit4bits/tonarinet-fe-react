@@ -30,7 +30,7 @@ export default function Footer() {
   return (
     <>
       <footer className="bg-gray-300 w-full p-3 text-center flex flex-col items-center">
-        <div className="flex gap-5 max-w-[1200px] gap-15">
+        <div className="flex gap-5 max-w-[1200px]">
           <div className="flex flex-col text-left">
             <img src={LogoWithTitle} alt="logo" className="h-[55px]" />
             <div className="flex flex-row text-left items-center">
@@ -42,7 +42,7 @@ export default function Footer() {
               <Typography variant="h3">4bits</Typography>
             </div>
           </div>
-          <div className="flex flex-col text-left">
+          <div className="flex flex-col text-left max-w-[400px]">
             <Typography variant="h6">
               {t("footer.projectIntroTitle")}
             </Typography>
@@ -71,7 +71,11 @@ export default function Footer() {
                   "&:hover": { textDecoration: "underline" },
                 }}
               >
-                {i18n.language === "ko" ? member.name.ko : member.name.ja}
+                {i18n.language === "ko"
+                  ? member.name.ko
+                  : i18n.language === "ja"
+                  ? member.name.ja
+                  : member.name.en}
               </Typography>
             ))}
           </div>
@@ -85,7 +89,9 @@ export default function Footer() {
           {selectedMember &&
             (i18n.language === "ko"
               ? selectedMember.name.ko
-              : selectedMember.name.ja)}
+              : i18n.language === "ja"
+              ? selectedMember.name.ja
+              : selectedMember.name.en)}
         </DialogTitle>
         <DialogContent>
           <Typography variant="h6">{t("common.profile")}</Typography>
@@ -93,7 +99,9 @@ export default function Footer() {
             {selectedMember &&
               (i18n.language === "ko"
                 ? selectedMember.profile.ko
-                : selectedMember.profile.ja)}
+                : i18n.language === "ja"
+                ? selectedMember.profile.ja
+                : selectedMember.profile.en)}
           </Typography>
           <Typography variant="h6">{t("common.contacts")}</Typography>
           <Typography variant="body2">

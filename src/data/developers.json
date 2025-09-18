@@ -3,11 +3,13 @@
     "id": "placeHolder",
     "name": {
       "ko": "홍길동",
-      "ja": "ホン・ギルドン"
+      "ja": "ホン・ギルドン",
+      "en": "Hong Gildong"
     },
     "profile": {
       "ko": "풀스택 개발자",
-      "ja": "フルスタック開発者"
+      "ja": "フルスタック開発者",
+      "en": "Full Stack Developer"
     },
     "email": "placeholder@placeholder.com",
     "phone": "+82-00-0000-0000"
