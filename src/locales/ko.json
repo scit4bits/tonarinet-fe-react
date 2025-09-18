@@ -111,6 +111,7 @@
     "memberManagement": "멤버 관리",
     "teamManagement": "팀 관리",
     "noticeManagement": "공지사항 관리",
+    "scheduleManagement": "일정 관리",
     "counselingManagement": "상담 관리",
     "boardSelection": "게시판 선택",
     "writePost": "게시글 작성",
@@ -391,7 +392,14 @@
     "searchAndJoinParties": "새로운 파티를 검색하고 가입해보세요!",
     "noData": "데이터가 없습니다",
     "organizations": "조직",
-    "systemNoticeBoard": "시스템 공지게시판"
+    "systemNoticeBoard": "시스템 공지게시판",
+    "yes": "예",
+    "no": "아니오",
+    "na": "해당 없음",
+    "from": "시작",
+    "to": "종료",
+    "organizationId": "조직 ID",
+    "eventId": "이벤트 ID"
   },
   "notification": {
     "newNotice": "새로운 공지사항: {{title}}",
@@ -417,7 +425,8 @@
     "memberManagement": "멤버관리",
     "teamManagement": "팀관리",
     "taskManagement": "과제관리",
-    "counselManagement": "상담관리"
+    "counselManagement": "상담관리",
+    "scheduleManagement": "일정관리"
   },
   "landing": {
     "neighborCommunication": "이웃과 소통하는",
@@ -757,6 +766,39 @@
     "projectIntro3": "다국어 지원으로 여러 국가의 사용자들이 쉽게 이용할 수 있습니다.",
     "projectIntro4": "글로벌 커뮤니티 환경을 제공합니다.",
     "projectIntro5": "개발자와 사용자 의견을 반영하여 지속적으로 개선하고 있습니다."
+  },
+  "scheduleManagement": {
+    "pageTitle": "일정 관리",
+    "newSchedule": "새 일정",
+    "createNewSchedule": "새 일정 만들기",
+    "title": "제목",
+    "description": "설명",
+    "type": "유형",
+    "allDay": "종일",
+    "startDate": "시작 날짜",
+    "startDateTime": "시작 날짜 및 시간",
+    "endDateTime": "종료 날짜 및 시간 (선택사항)",
+    "cancel": "취소",
+    "create": "일정 만들기",
+    "creating": "만드는 중...",
+    "scheduleCreatedSuccess": "일정이 성공적으로 만들어졌습니다!",
+    "scheduleCreateError": "일정 생성에 실패했습니다. 다시 시도해 주세요.",
+    "validation": {
+      "titleRequired": "제목은 필수입니다",
+      "descriptionRequired": "설명은 필수입니다",
+      "startDateRequired": "시작 날짜/시간은 필수입니다",
+      "endTimeAfterStart": "종료 시간은 시작 시간보다 늦어야 합니다"
+    },
+    "types": {
+      "meeting": "회의",
+      "event": "행사",
+      "deadline": "마감일",
+      "reminder": "알림",
+      "maintenance": "점검",
+      "holiday": "휴일",
+      "training": "교육",
+      "other": "기타"
+    }
   },
   "calendar": {
     "date": "날짜",

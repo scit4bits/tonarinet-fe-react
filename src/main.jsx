@@ -36,6 +36,7 @@ import MyPageCounselPage from "./pages/my/MyPageCounselPage.jsx";
 import PartySearchPage from "./pages/PartySearchPage.jsx";
 import FindPasswordPage from "./pages/auth/FindPasswordPage.jsx";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage.jsx";
+import SysAdminSchedPage from "./pages/sysadmin/SysAdminSchedPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StyledEngineProvider enableCssLayer>
@@ -85,6 +86,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="user" element={<SysAdminUserPage />} />
             <Route path="org" element={<SysAdminOrgPage />} />
             <Route path="notice" element={<SysAdminNoticePage />} />
+            <Route path="schedule" element={<SysAdminSchedPage />} />
           </Route>
 
           <Route

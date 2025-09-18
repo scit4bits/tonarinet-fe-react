@@ -111,6 +111,7 @@
     "memberManagement": "Member Management",
     "teamManagement": "Team Management",
     "noticeManagement": "Notice Management",
+    "scheduleManagement": "Schedule Management",
     "counselingManagement": "Counseling Management",
     "boardSelection": "Board Selection",
     "writePost": "Write Post",
@@ -391,7 +392,14 @@
     "searchAndJoinParties": "Search and join new parties!",
     "noData": "No data available",
     "organizations": "organizations",
-    "systemNoticeBoard": "System Notice Board"
+    "systemNoticeBoard": "System Notice Board",
+    "yes": "Yes",
+    "no": "No",
+    "na": "N/A",
+    "from": "From",
+    "to": "To",
+    "organizationId": "Organization ID",
+    "eventId": "Event ID"
   },
   "notification": {
     "newNotice": "New notice: {{title}}",
@@ -417,7 +425,8 @@
     "memberManagement": "Member Management",
     "teamManagement": "Team Management",
     "taskManagement": "Task Management",
-    "counselManagement": "Counsel Management"
+    "counselManagement": "Counsel Management",
+    "scheduleManagement": "Schedule Management"
   },
   "landing": {
     "neighborCommunication": "Communicate with",
@@ -757,6 +766,39 @@
     "projectIntro3": "Multilingual support makes it easy for users from different countries to use.",
     "projectIntro4": "Provides a global community environment.",
     "projectIntro5": "Continuously improved by reflecting feedback from developers and users."
+  },
+  "scheduleManagement": {
+    "pageTitle": "Schedule Management",
+    "newSchedule": "New Schedule",
+    "createNewSchedule": "Create New Schedule",
+    "title": "Title",
+    "description": "Description",
+    "type": "Type",
+    "allDay": "All Day",
+    "startDate": "Start Date",
+    "startDateTime": "Start Date & Time",
+    "endDateTime": "End Date & Time (Optional)",
+    "cancel": "Cancel",
+    "create": "Create Schedule",
+    "creating": "Creating...",
+    "scheduleCreatedSuccess": "Schedule created successfully!",
+    "scheduleCreateError": "Failed to create schedule. Please try again.",
+    "validation": {
+      "titleRequired": "Title is required",
+      "descriptionRequired": "Description is required",
+      "startDateRequired": "Start date/time is required",
+      "endTimeAfterStart": "End time must be after start time"
+    },
+    "types": {
+      "meeting": "Meeting",
+      "event": "Event",
+      "deadline": "Deadline",
+      "reminder": "Reminder",
+      "maintenance": "Maintenance",
+      "holiday": "Holiday",
+      "training": "Training",
+      "other": "Other"
+    }
   },
   "calendar": {
     "date": "Date",

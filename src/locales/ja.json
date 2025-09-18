@@ -122,6 +122,7 @@
     "memberManagement": "メンバー管理",
     "teamManagement": "チーム管理",
     "noticeManagement": "お知らせ管理",
+    "scheduleManagement": "スケジュール管理",
     "counselingManagement": "相談管理",
     "boardSelection": "掲示板選択",
     "writePost": "投稿作成",
@@ -395,7 +396,14 @@
     "searchAndJoinParties": "新しいパーティーを検索して参加してみましょう！",
     "noData": "データがありません",
     "organizations": "組織",
-    "systemNoticeBoard": "システム通知掲示板"
+    "systemNoticeBoard": "システム通知掲示板",
+    "yes": "はい",
+    "no": "いいえ",
+    "na": "該当なし",
+    "from": "開始",
+    "to": "終了",
+    "organizationId": "組織ID",
+    "eventId": "イベントID"
   },
   "notification": {
     "newNotice": "新しいお知らせ: {{title}}",
@@ -421,7 +429,10 @@
     "memberManagement": "メンバー管理",
     "teamManagement": "チーム管理",
     "taskManagement": "タスク管理",
-    "counselManagement": "カウンセル管理"
+    "counselManagement": "カウンセル管理",
+    "partyManagement": "パーティー管理",
+    "boardManagement": "掲示板管理",
+    "scheduleManagement": "スケジュール管理"
   },
   "landing": {
     "neighborCommunication": "外国の近所との",
@@ -761,6 +772,39 @@
     "projectIntro3": "多言語対応で、さまざまな国のユーザーが簡単に利用できます。",
     "projectIntro4": "グローバルなコミュニティ環境を提供します。",
     "projectIntro5": "開発者とユーザーの意見を反映し、継続的に改善しています。"
+  },
+  "scheduleManagement": {
+    "pageTitle": "スケジュール管理",
+    "newSchedule": "新しいスケジュール",
+    "createNewSchedule": "新しいスケジュールを作成",
+    "title": "タイトル",
+    "description": "説明",
+    "type": "タイプ",
+    "allDay": "終日",
+    "startDate": "開始日",
+    "startDateTime": "開始日時",
+    "endDateTime": "終了日時（オプション）",
+    "cancel": "キャンセル",
+    "create": "スケジュール作成",
+    "creating": "作成中...",
+    "scheduleCreatedSuccess": "スケジュールが正常に作成されました！",
+    "scheduleCreateError": "スケジュールの作成に失敗しました。もう一度お試しください。",
+    "validation": {
+      "titleRequired": "タイトルは必須です",
+      "descriptionRequired": "説明は必須です",
+      "startDateRequired": "開始日時は必須です",
+      "endTimeAfterStart": "終了時間は開始時間より後である必要があります"
+    },
+    "types": {
+      "meeting": "会議",
+      "event": "イベント",
+      "deadline": "締切",
+      "reminder": "リマインダー",
+      "maintenance": "メンテナンス",
+      "holiday": "祝日",
+      "training": "研修",
+      "other": "その他"
+    }
   },
   "calendar": {
     "date": "日付",
