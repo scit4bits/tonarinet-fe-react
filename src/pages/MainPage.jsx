@@ -469,7 +469,7 @@ export default function MainPage() {
                             color={getStatusColor(
                               task.score
                                 ? "completed"
-                                : task.dueDate > Date.now()
+                                : new Date(task.dueDate) > Date.now()
                                 ? "inProgress"
                                 : "overdue"
                             )}
