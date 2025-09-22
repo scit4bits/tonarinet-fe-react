@@ -73,7 +73,7 @@ export default function OrgAdminNoticePage() {
 
   // 글쓰기 버튼 클릭 시 게시글 작성 페이지로 이동
   const handleWriteClick = () => {
-    navigate(`/board/0/write`);
+    navigate(`/board/${orgId}/write`);
   };
 
   return (
