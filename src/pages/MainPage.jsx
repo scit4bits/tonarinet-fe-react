@@ -452,7 +452,7 @@ export default function MainPage() {
                             label={
                               task.score
                                 ? t("common.completed")
-                                : (task.dueDate > Date.now()
+                                : (new Date(task.dueDate) > Date.now()
                                     ? t("common.inProgress")
                                     : t("common.overdue")) +
                                   ` (${formatDaysRemaining(
