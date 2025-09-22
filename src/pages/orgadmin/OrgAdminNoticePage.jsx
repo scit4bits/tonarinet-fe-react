@@ -25,6 +25,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import CreateIcon from "@mui/icons-material/Create";
 import useArticleList from "../../hooks/useArticleList";
 import { useParams } from "react-router";
+import taxios from "../../utils/taxios";
 
 // 조직 관리자: 공지 목록 페이지
 export default function OrgAdminNoticePage() {
@@ -72,8 +73,10 @@ export default function OrgAdminNoticePage() {
   };
 
   // 글쓰기 버튼 클릭 시 게시글 작성 페이지로 이동
-  const handleWriteClick = () => {
-    navigate(`/board/${orgId}/write`);
+  const handleWriteClick = async () => {
+    const boardIds = await taxios.get("/board");
+    let boardId = boardIds.data.find((board) => board.orgId == orgId)?.id;
+    navigate(`/board/${boardId}/write`);
   };
 
   return (
