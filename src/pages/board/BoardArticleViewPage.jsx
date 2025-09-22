@@ -345,6 +345,7 @@ export default function BoardArticleViewPage() {
                   key={file.id}
                   startIcon={<AttachFile />}
                   onClick={() => handleFileDownload(file)}
+                  sx={{ textTransform: "none" }}
                 >
                   {file.originalFilename}
                 </Button>
