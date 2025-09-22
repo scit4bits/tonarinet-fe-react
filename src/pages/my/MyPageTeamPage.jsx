@@ -150,9 +150,11 @@ export default function MyPageTeamPage() {
                         <Avatar
                           key={user.id}
                           src={
-                            `${import.meta.env.VITE_API_BASE_URL}/files/${
-                              user?.profileFileId
-                            }/download` || null
+                            user?.profileFileId
+                              ? `${import.meta.env.VITE_API_BASE_URL}/files/${
+                                  user?.profileFileId
+                                }/download`
+                              : null
                           }
                           {...getStringAvatar(user.name)}
                           title={`${user.name}${

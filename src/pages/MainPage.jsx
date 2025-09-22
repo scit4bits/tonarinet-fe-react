@@ -165,9 +165,11 @@ export default function MainPage() {
               <>
                 <Avatar
                   src={
-                    `${import.meta.env.VITE_API_BASE_URL}/files/${
-                      user?.profileFileId
-                    }/download` || null
+                    user?.profileFileId
+                      ? `${import.meta.env.VITE_API_BASE_URL}/files/${
+                          user?.profileFileId
+                        }/download`
+                      : null
                   }
                   sx={{ width: 100, height: 100, mb: 2 }}
                 >

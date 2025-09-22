@@ -154,9 +154,11 @@ export default function MyPageLayout() {
             <Box sx={{ position: "relative", display: "inline-block" }}>
               <Avatar
                 src={
-                  `${import.meta.env.VITE_API_BASE_URL}/files/${
-                    user?.profileFileId
-                  }/download` || null
+                  user?.profileFileId
+                    ? `${import.meta.env.VITE_API_BASE_URL}/files/${
+                        user?.profileFileId
+                      }/download`
+                    : null
                 }
                 sx={{
                   width: 100,

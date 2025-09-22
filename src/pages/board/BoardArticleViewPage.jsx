@@ -248,9 +248,11 @@ export default function BoardArticleViewPage() {
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Avatar
                   src={
-                    `${import.meta.env.VITE_API_BASE_URL}/files/${
-                      article.createdByProfileFileId
-                    }/download` || null
+                    article.createdByProfileFileId
+                      ? `${import.meta.env.VITE_API_BASE_URL}/files/${
+                          article.createdByProfileFileId
+                        }/download`
+                      : null
                   }
                   sx={{ width: 35, height: 35 }}
                 />

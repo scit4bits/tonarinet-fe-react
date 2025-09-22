@@ -319,9 +319,11 @@ export default function MyPagePartyPage() {
                         <Avatar
                           key={user.id}
                           src={
-                            `${import.meta.env.VITE_API_BASE_URL}/files/${
-                              user?.profileFileId
-                            }/download` || null
+                            user?.profileFildId
+                              ? `${import.meta.env.VITE_API_BASE_URL}/files/${
+                                  user?.profileFileId
+                                }/download`
+                              : null
                           }
                           {...getStringAvatar(user.name)}
                           title={`${user.name}${
@@ -473,9 +475,11 @@ export default function MyPagePartyPage() {
                       <ListItemAvatar>
                         <Avatar
                           src={
-                            `${import.meta.env.VITE_API_BASE_URL}/files/${
-                              partyUser?.profileFileId
-                            }/download` || null
+                            partyUser?.profileFildId
+                              ? `${import.meta.env.VITE_API_BASE_URL}/files/${
+                                  partyUser?.profileFileId
+                                }/download`
+                              : null
                           }
                           {...getStringAvatar(partyUser.name)}
                         >
@@ -546,9 +550,11 @@ export default function MyPagePartyPage() {
                       <ListItemAvatar>
                         <Avatar
                           src={
-                            `${import.meta.env.VITE_API_BASE_URL}/files/${
-                              partyUser?.profileFileId
-                            }/download` || null
+                            partyUser?.profileFildId
+                              ? `${import.meta.env.VITE_API_BASE_URL}/files/${
+                                  partyUser?.profileFileId
+                                }/download`
+                              : null
                           }
                           {...getStringAvatar(partyUser.name)}
                         />

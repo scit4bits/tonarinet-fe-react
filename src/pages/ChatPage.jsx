@@ -58,9 +58,11 @@ export default function ChatPage() {
         {!isOwnMessage && (
           <Avatar
             src={
-              `${import.meta.env.VITE_API_BASE_URL}/files/${
-                msg?.sender?.profileFileId
-              }/download` || null
+              msg?.sender?.profileFileId
+                ? `${import.meta.env.VITE_API_BASE_URL}/files/${
+                    msg?.sender?.profileFileId
+                  }/download`
+                : null
             }
             sx={{
               width: 32,
@@ -185,9 +187,11 @@ export default function ChatPage() {
         {isOwnMessage && (
           <Avatar
             src={
-              `${import.meta.env.VITE_API_BASE_URL}/files/${
-                user?.profileFileId
-              }/download` || null
+              user?.profileFileId
+                ? `${import.meta.env.VITE_API_BASE_URL}/files/${
+                    user?.profileFileId
+                  }/download`
+                : null
             }
             sx={{
               width: 32,
