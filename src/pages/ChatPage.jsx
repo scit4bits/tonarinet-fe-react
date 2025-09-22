@@ -94,10 +94,9 @@ export default function ChatPage() {
                 color="text.secondary"
                 sx={{ fontWeight: 500 }}
               >
-                {msg.senderName ||
-                  msg.sender?.name ||
-                  msg.user ||
+                {msg.sender?.nickname ||
                   msg.senderName ||
+                  msg.user ||
                   t("common.unknown")}
               </Typography>
               <Typography
@@ -258,7 +257,7 @@ export default function ChatPage() {
       sx={{
         display: "flex",
         width: "100%",
-        height: "80vh",
+        height: "60vh",
         overflow: "hidden",
         backgroundColor: "background.default",
       }}
