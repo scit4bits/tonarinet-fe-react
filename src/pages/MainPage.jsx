@@ -470,7 +470,7 @@ export default function MainPage() {
                               task.score
                                 ? "completed"
                                 : new Date(task.dueDate) > Date.now()
-                                ? "inProgress"
+                                ? "in_progress"
                                 : "overdue"
                             )}
                             variant="outlined"
