@@ -267,6 +267,7 @@
     "myCounsel": "私の相談",
     "counselor": "カウンセラー",
     "statusCompleted": "完了",
+    "statusReplied": "返信済み",
     "statusInProgress": "進行中",
     "statusPending": "保留中",
     "statusScheduled": "予定",

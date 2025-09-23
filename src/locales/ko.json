@@ -263,6 +263,7 @@
     "myCounsel": "내 상담",
     "counselor": "상담사",
     "statusCompleted": "완료",
+    "statusReplied": "답변됨",
     "statusInProgress": "진행중",
     "statusPending": "대기",
     "statusScheduled": "예정",

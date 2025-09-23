@@ -136,13 +136,8 @@ export default function MyPageMainPage() {
   };
 
   const getCounselStatus = (counsel) => {
-    // Adapt based on actual counsel data structure
-    if (counsel.status) return counsel.status;
-    const counselDate = new Date(counsel.date || counsel.scheduledDate);
-    const now = new Date();
-
-    if (counselDate < now) return t("common.statusCompleted");
-    return t("common.statusScheduled");
+    if (counsel.replyCount > 0) return t("common.statusReplied");
+    else return t("common.statusPending");
   };
 
   const handleTaskClick = (taskId) => {

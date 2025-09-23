@@ -263,6 +263,7 @@
     "myCounsel": "My Counsel",
     "counselor": "Counselor",
     "statusCompleted": "Completed",
+    "statusReplied": "Replied",
     "statusInProgress": "In Progress",
     "statusPending": "Pending",
     "statusScheduled": "Scheduled",
