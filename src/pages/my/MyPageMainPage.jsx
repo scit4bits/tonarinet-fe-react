@@ -311,7 +311,7 @@ export default function MyPageMainPage() {
                 <Button
                   size="small"
                   endIcon={<ArrowForward />}
-                  onClick={() => navigate("/my/counsel")}
+                  onClick={() => navigate("/my/counsels")}
                 >
                   {t("common.viewAll")}
                 </Button>
