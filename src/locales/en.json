@@ -337,7 +337,7 @@
     "organizationSearchPlaceholder": "Search organizations...",
     "apply": "Apply",
     "noOrganizationsFound": "No organizations found",
-    "registrationCompleted": "Registration completed",
+    "registrationCompleted": "Application for organization completed. Please wait for admin approval.",
     "registrationError": "Error occurred during application. The organization may have already been applied for.",
     "partySearchPlaceholder": "Search parties...",
     "join": "Join",

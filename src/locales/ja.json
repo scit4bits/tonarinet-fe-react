@@ -341,7 +341,7 @@
     "organizationSearchPlaceholder": "組織を検索してください...",
     "apply": "申請",
     "noOrganizationsFound": "組織が見つかりません",
-    "registrationCompleted": "登録完了",
+    "registrationCompleted": "登録申請が完了しました。管理者の承認をお待ちください。",
     "registrationError": "登録申請中にエラーが発生しました。すでに申請されている組織かもしれません。",
     "partySearchPlaceholder": "パーティーを検索してください...",
     "join": "参加",

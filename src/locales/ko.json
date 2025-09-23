@@ -337,7 +337,7 @@
     "organizationSearchPlaceholder": "조직을 검색하세요...",
     "apply": "신청",
     "noOrganizationsFound": "조직을 찾을 수 없습니다",
-    "registrationCompleted": "가입 완료",
+    "registrationCompleted": "가입 신청이 완료되었습니다. 관리자의 승인을 기다려주세요.",
     "registrationError": "가입 신청 도중 오류가 발생했습니다. 이미 신청된 조직일 수 있습니다.",
     "partySearchPlaceholder": "파티를 검색하세요...",
     "join": "가입",
