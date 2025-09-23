@@ -261,7 +261,7 @@ export default function ChatPage() {
       sx={{
         display: "flex",
         width: "100%",
-        height: "60vh",
+        height: "70vh",
         overflow: "hidden",
         backgroundColor: "background.default",
       }}
