@@ -262,7 +262,7 @@ export default function LandingPage() {
               {t("landing.connectWithNeighbors")}
             </h2>
             <a
-              href="#"
+              href="/signup"
               className="inline-block rounded-full bg-[#3E8BDC] px-12 py-5 text-xl font-bold text-white hover:bg-[#3577BE]"
             >
               {t("landing.exploreCommunity")}
