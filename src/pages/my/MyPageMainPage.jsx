@@ -149,8 +149,8 @@ export default function MyPageMainPage() {
     navigate(`/task/${taskId}`);
   };
 
-  const handleCounselClick = () => {
-    navigate(`/my/counsel`); // Navigate to counsel list page since individual counsel view might not exist
+  const handleCounselClick = (counselId) => {
+    navigate(`/board/view/${counselId}`);
   };
 
   if (loading) {
@@ -311,7 +311,7 @@ export default function MyPageMainPage() {
                 <Button
                   size="small"
                   endIcon={<ArrowForward />}
-                  onClick={() => navigate("/my/counsels")}
+                  onClick={() => navigate("/my/counsel")}
                 >
                   {t("common.viewAll")}
                 </Button>
@@ -323,7 +323,7 @@ export default function MyPageMainPage() {
                     key={counsel.id}
                     variant="outlined"
                     className="cursor-pointer hover:shadow-md transition-shadow"
-                    onClick={() => handleCounselClick()}
+                    onClick={() => handleCounselClick(counsel.id)}
                   >
                     <CardContent className="pb-2">
                       <Box className="flex justify-between items-start mb-2">
