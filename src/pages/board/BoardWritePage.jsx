@@ -28,8 +28,9 @@ import {
   Send as SendIcon,
 } from "@mui/icons-material";
 import { getMe } from "../../utils/user";
-import { writeArticle } from "../../utils/board";
+import { getBoardInformation, writeArticle } from "../../utils/board";
 import RichTextEditor from "../../components/RichTextEditor";
+import { getMyOrganizations } from "../../utils/organization";
 
 export default function BoardWritePage() {
   const { t } = useTranslation();
@@ -64,9 +65,27 @@ export default function BoardWritePage() {
   }, [t, isAdmin]);
 
   useEffect(() => {
-    getMe().then((data) => {
-      setIsAdmin(data.isAdmin);
-    });
+    async function checkPrivileges() {
+      const myOrgs = await getMyOrganizations();
+      const boardInfo = await getBoardInformation(boardId);
+      const meData = await getMe();
+
+      let isAdminUser = false;
+
+      myOrgs.forEach((org) => {
+        if (org.id === boardInfo.organizationId && org.role === "admin") {
+          isAdminUser = true;
+        }
+      });
+
+      if (meData.isAdmin) {
+        isAdminUser = true;
+      }
+
+      setIsAdmin(isAdminUser);
+    }
+
+    checkPrivileges();
   }, []);
 
   const handleTitleChange = (event) => {
