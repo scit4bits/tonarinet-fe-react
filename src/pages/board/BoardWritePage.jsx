@@ -73,7 +73,7 @@ export default function BoardWritePage() {
       let isAdminUser = false;
 
       myOrgs.forEach((org) => {
-        if (org.id === boardInfo.organizationId && org.role === "admin") {
+        if (org.id === boardInfo.orgId && org.role === "admin") {
           isAdminUser = true;
         }
       });
