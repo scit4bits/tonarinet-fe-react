@@ -58,9 +58,9 @@ export default function ChatPage() {
         {!isOwnMessage && (
           <Avatar
             src={
-              msg?.senderProfileFileId
+              msg?.senderProfileFileId || msg?.sender?.profileFileId
                 ? `${import.meta.env.VITE_API_BASE_URL}/files/${
-                    msg?.senderProfileFileId
+                    msg?.senderProfileFileId || msg?.sender?.profileFileId
                   }/download`
                 : null
             }
