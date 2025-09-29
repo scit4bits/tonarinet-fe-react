@@ -54,9 +54,9 @@ export default function BoardArticleListPage() {
   );
 
   // 페이지네이션 상태
-  const [page, setPage] = useState(0);
-  const [noticePage, setNoticePage] = useState(0);
-  const [hotPage, setHotPage] = useState(0);
+  const [page, setPage] = useState(1);
+  const [noticePage, setNoticePage] = useState(1);
+  const [hotPage, setHotPage] = useState(1);
 
   // 게시글 데이터
   const [articles, setArticles] = useState(null);
@@ -82,22 +82,26 @@ export default function BoardArticleListPage() {
   }, [boards]);
 
   useEffect(() => {
-    searchArticles(boardId, selectedCategory, searchBy, search).then((data) => {
-      setArticles(data);
-    });
-  }, [selectedCategory, searchBy, search]);
+    searchArticles(boardId, selectedCategory, searchBy, search, page - 1).then(
+      (data) => {
+        setArticles(data);
+      }
+    );
+  }, [selectedCategory, searchBy, search, page]);
 
   useEffect(() => {
-    getBoardHotArticles(boardId).then((data) => {
+    getBoardHotArticles(boardId, hotPage).then((data) => {
       setHotArticles(data);
     });
-  }, []);
+  }, [hotPage]);
 
   useEffect(() => {
-    searchArticles(boardId, "notice").then((data) => {
-      setNotice(data);
-    });
-  }, []);
+    searchArticles(boardId, "notice", "all", "", noticePage - 1).then(
+      (data) => {
+        setNotice(data);
+      }
+    );
+  }, [noticePage]);
 
   useEffect(() => {
     if (boardId !== "undefined" && boardId !== undefined) {
@@ -155,11 +159,11 @@ export default function BoardArticleListPage() {
     return found ? found.label : category;
   };
 
-  const handleNoticePrev = () => setNoticePage((p) => Math.max(0, p - 1));
+  const handleNoticePrev = () => setNoticePage((p) => Math.max(1, p - 1));
   const handleNoticeNext = () =>
     setNoticePage((p) => Math.min(notice.totalPages, p + 1));
 
-  const handleHotPrev = () => setHotPage((p) => Math.max(0, p - 1));
+  const handleHotPrev = () => setHotPage((p) => Math.max(1, p - 1));
   const handleHotNext = () =>
     setHotPage((p) => Math.min(hotArticles.totalPages, p + 1));
 
@@ -413,19 +417,19 @@ export default function BoardArticleListPage() {
               </Typography>
               <div className="flex items-center space-x-1 text-sm text-gray-600">
                 <span>
-                  {noticePage + 1} / {notice.totalPages}
+                  {noticePage} / {notice.totalPages}
                 </span>
                 <IconButton
                   size="small"
                   onClick={handleNoticePrev}
-                  disabled={noticePage === 0}
+                  disabled={noticePage === 1}
                 >
                   <ArrowBackIcon />
                 </IconButton>
                 <IconButton
                   size="small"
                   onClick={handleNoticeNext}
-                  disabled={noticePage + 1 === notice.totalPages}
+                  disabled={noticePage === notice.totalPages}
                 >
                   <ArrowForwardIcon />
                 </IconButton>
@@ -467,19 +471,19 @@ export default function BoardArticleListPage() {
               </Typography>
               <div className="flex items-center space-x-1 text-sm text-gray-600">
                 <span>
-                  {hotPage + 1} / {hotArticles.totalPages}
+                  {hotPage} / {hotArticles.totalPages}
                 </span>
                 <IconButton
                   size="small"
                   onClick={handleHotPrev}
-                  disabled={hotPage === 0}
+                  disabled={hotPage === 1}
                 >
                   <ArrowBackIcon />
                 </IconButton>
                 <IconButton
                   size="small"
                   onClick={handleHotNext}
-                  disabled={hotPage + 1 === hotArticles.totalPages}
+                  disabled={hotPage === hotArticles.totalPages}
                 >
                   <ArrowForwardIcon />
                 </IconButton>
