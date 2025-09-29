@@ -471,11 +471,13 @@ export default function ChatPage() {
                 const prevIsFromSameSender =
                   prevMsg &&
                   (prevMsg.senderId === msg.senderId ||
-                    prevMsg.sender?.id === msg.sender?.id);
+                    (prevMsg.sender !== null &&
+                      prevMsg.sender?.id === msg.sender?.id));
                 const nextIsFromSameSender =
                   nextMsg &&
                   (nextMsg.senderId === msg.senderId ||
-                    nextMsg.sender?.id === msg.sender?.id);
+                    (nextMsg.sender !== null &&
+                      nextMsg.sender?.id === msg.sender?.id));
 
                 const isFirstInGroup = !prevIsFromSameSender;
                 const isLastInGroup = !nextIsFromSameSender;
