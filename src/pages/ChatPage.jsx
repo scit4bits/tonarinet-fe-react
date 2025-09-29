@@ -58,9 +58,9 @@ export default function ChatPage() {
         {!isOwnMessage && (
           <Avatar
             src={
-              msg?.sender?.profileFileId
+              msg?.senderProfileFileId
                 ? `${import.meta.env.VITE_API_BASE_URL}/files/${
-                    msg?.sender?.profileFileId
+                    msg?.senderProfileFileId
                   }/download`
                 : null
             }
@@ -72,7 +72,7 @@ export default function ChatPage() {
               visibility: isLastInGroup ? "visible" : "hidden",
             }}
           >
-            {msg.senderName?.[0] ||
+            {msg.senderNickname?.[0] ||
               msg.sender?.name?.[0] ||
               msg.user?.[0] ||
               "U"}
@@ -97,8 +97,8 @@ export default function ChatPage() {
                 sx={{ fontWeight: 500 }}
               >
                 {msg.sender?.nickname ||
-                  msg.senderName ||
-                  msg.user ||
+                  msg.senderNickname ||
+                  msg.user?.nickname ||
                   t("common.unknown")}
               </Typography>
               <Typography
