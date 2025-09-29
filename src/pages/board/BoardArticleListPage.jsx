@@ -303,7 +303,7 @@ export default function BoardArticleListPage() {
                 <TableCell align="center" className="min-w-[40px]">
                   {t("pages.board.articles.tableHeaders.number")}
                 </TableCell>
-                <TableCell align="center" className="min-w-[80px]">
+                <TableCell align="center" className="min-w-[100px]">
                   {t("pages.board.articles.tableHeaders.category")}
                 </TableCell>
                 <TableCell align="center" className="min-w-[300px]">
