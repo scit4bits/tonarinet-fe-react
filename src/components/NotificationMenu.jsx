@@ -26,11 +26,14 @@ import {
   readOneNotification,
 } from "../utils/notification";
 
+import { useNavigate } from "react-router";
+
 export default function NotificationMenu() {
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const navigate = useNavigate();
   const open = Boolean(anchorEl);
 
   useEffect(() => {
@@ -51,7 +54,7 @@ export default function NotificationMenu() {
 
   const handleNotificationClick = async (notiId, url) => {
     if (url) {
-      window.location.href = url;
+      navigate(url);
     }
 
     const result = await readOneNotification(notiId);
