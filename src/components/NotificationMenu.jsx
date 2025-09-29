@@ -53,13 +53,13 @@ export default function NotificationMenu() {
   };
 
   const handleNotificationClick = async (notiId, url) => {
-    if (url) {
-      navigate(url);
-    }
-
     const result = await readOneNotification(notiId);
     if (result) {
+      setUnreadCount(await getUnreadNotificationCount());
       setNotifications(await getMyNotification());
+    }
+    if (url) {
+      navigate(url);
     }
 
     handleClose();
