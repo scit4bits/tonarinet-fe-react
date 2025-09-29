@@ -1,85 +1,70 @@
-# Tonarinet - 커뮤니티 플랫폼
+# 토나리넷 となりネット - 프론트엔드
 
-Tonarinet은 지역 커뮤니티를 연결하기 위해 설계된 현대적이고 기능이 풍부한 웹 애플리케이션입니다. 사용자들이 이웃과 교류하고, 지역 그룹에 가입하며, 정보를 공유하고, 커뮤니티 활동에 참여할 수 있는 플랫폼을 제공합니다.
+[![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)](https://vitejs.dev/)
+[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 
-## ✨ 주요 기능
+**데모 사이트: https://tn.thxx.xyz**
 
-- **다국어 지원**: 영어, 한국어(Korean), 일본어(Japanese) 간의 원활한 언어 전환이 가능합니다.
-- **커뮤니티 게시판**: 리치 텍스트 에디터를 사용하여 주제를 생성하고 토론하며, 이미지를 공유하고 게시물에 참여할 수 있습니다.
-- **실시간 채팅**: 다른 사용자 및 그룹과 즉시 소통할 수 있습니다.
-- **그룹 관리**: 프로젝트나 활동에 협력하기 위해 조직 및 파티(소규모 그룹)를 생성하거나 가입할 수 있습니다.
-- **작업 시스템**: 조직 내에서 작업을 할당하고 관리합니다.
-- **인터랙티브 지도**: 통합된 Google 지도를 사용하여 지역 리뷰 및 정보를 발견할 수 있습니다.
-- **사용자 인증**: 안전한 회원가입 및 로그인 기능을 제공합니다.
-- **마이페이지**: 활동, 프로필 및 그룹을 관리할 수 있는 개인화된 대시보드입니다.
-- **관리자 패널**: 시스템 전반 및 조직별 관리를 위한 전용 인터페이스를 제공합니다.
+## 소개
 
-## 🛠️ 기술 스택
+**토나리넷**은 유학생 및 외국인 노동자를 위한 통합 관리 및 지원 플랫폼입니다. 이 프로젝트는 SMART Cloud IT Master 47기 교육과정에서 진행된 팀 프로젝트(4bits)의 프론트엔드 클라이언트입니다.
 
-- **코어**: React 19, Vite
-- **스타일링**: Material-UI (MUI) & Tailwind CSS
-- **라우팅**: React Router
-- **API 통신**: Axios (RESTful API용), StompJS (WebSocket 통신용)
-- **국제화 (i18n)**: i18next & React-i18next
-- **텍스트 편집기**: React Quill (리치 텍스트 에디터)
-- **매핑**: Google Maps React API
+사용자 친화적인 인터페이스를 통해 유학생과 외국인 노동자가 현지 생활에 쉽게 적응하고, 필요한 정보를 얻으며, 커뮤니티를 형성할 수 있도록 돕습니다.
 
-## 🚀 시작하기
+## 기술 스택
 
-개발 및 테스트 목적으로 로컬 컴퓨터에서 프로젝트를 복사하여 실행하려면 다음 지침을 따르십시오.
+- **언어:** JavaScript
+- **프레임워크:** React (Vite)
+- **상태 관리:** React Hooks
+- **UI 라이브러리:** TailwindCSS, Material-UI (MUI)
+- **라우팅:** React Router DOM
+- **API 통신:** Axios
+- **국제화 (i18n):** `react-i18next`
+- **WYSIWYG 에디터:** `react-quill-new`
+- **캘린더:** `react-big-calendar`
+- **실시간 통신:** `@stomp/stompjs`
+- **지도:** `@vis.gl/react-google-maps`
 
-### 사전 요구 사항
+## 시작하기
 
-- [Node.js](https://nodejs.org/) (LTS 버전 권장)
-- [npm](https://www.npmjs.com/) (Node.js와 함께 제공)
+### 환경변수 설정
 
-### 설치
-
-1.  **리포지토리 클론:**
-    ```sh
-    git clone https://github.com/tonarinet/tonarinet-fe-react.git
-    cd tonarinet-fe-react
-    ```
-
-2.  **의존성 설치:**
-    ```sh
-    npm install
-    ```
-
-## 📜 사용 가능한 스크립트
-
-프로젝트 디렉토리에서 다음 명령을 실행할 수 있습니다:
-
--   `npm run dev`
-    개발 모드에서 앱을 실행합니다. 브라우저에서 [http://localhost:5173](http://localhost:5173)을 열어 확인하세요. 코드를 수정하면 페이지가 다시 로드됩니다.
-
--   `npm run build`
-    `dist` 폴더에 프로덕션용 앱을 빌드합니다. 프로덕션 모드에서 React를 올바르게 번들링하고 최상의 성능을 위해 빌드를 최적화합니다.
-
--   `npm run lint`
-    ESLint를 사용하여 소스 코드를 린트하여 코드의 문제를 찾아 수정합니다.
-
--   `npm run preview`
-    `dist` 디렉토리에서 로컬로 빌드된 프로덕션 앱을 제공합니다.
-
-## 📁 프로젝트 구조
-
-`src` 폴더에는 핵심 애플리케이션 로직이 포함되어 있습니다:
+이 프로젝트를 실행하기 위해서는 `.env` 파일을 프로젝트 루트에 생성하고 아래의 환경변수들을 설정해야 합니다.
 
 ```
-src/
-├── assets/         # 이미지 및 아이콘과 같은 정적 자산
-├── components/     # 재사용 가능한 React 컴포넌트 (예: Header, Footer)
-├── data/           # 정적 데이터 파일 (예: JSON)
-├── hooks/          # 비즈니스 로직 및 데이터 페칭을 위한 커스텀 React 훅
-├── locales/        # i18n을 위한 번역 파일 (en, ko, ja)
-├── pages/          # 각 라우트에 대한 최상위 페이지 컴포넌트
-├── utils/          # 유틸리티 함수, API 클라이언트 및 헬퍼 스크립트
-├── App.jsx         # 라우팅 설정이 포함된 메인 애플리케이션 컴포넌트
-├── i18n.js         # i18next 설정
-└── main.jsx        # 애플리케이션의 진입점
+VITE_API_BASE_URL=http://localhost:8999/api
+VITE_WS_URL=ws://localhost:8999/ws
+VITE_GOOGLE_MAPS_API_KEY=...
 ```
 
-## 📄 라이선스
+### 설치 및 실행
 
-이 프로젝트는 현재 라이선스가 없습니다. 배포할 계획이라면 라이선스 파일을 추가하십시오.
+의존성을 설치하고 프로젝트를 개발 모드로 실행하는 명령어는 다음과 같습니다.
+
+```bash
+npm install
+npm run dev
+```
+
+프로젝트 빌드는 다음 명령어를 사용합니다.
+
+```bash
+npm run build
+```
+
+## 기술적 특징
+
+- **반응형 UI:** TailwindCSS와 Material-UI를 활용하여 다양한 디바이스에서 최적화된 사용자 경험을 제공하는 반응형 웹 디자인을 구현했습니다.
+- **국제화 (i18n):** `react-i18next` 라이브러리를 사용하여 한국어, 영어, 일본어 3개 국어를 지원하며, 사용자가 언어를 쉽게 전환할 수 있도록 구현했습니다.
+- **WYSIWYG 에디터:** `react-quill-new`를 도입하여 사용자 친화적인 콘텐츠 작성 환경을 제공합니다.
+- **간편한 API 통신:** Axios를 사용하여 백엔드 API와 효율적으로 통신하며, 인증 토큰 자동 삽입 및 오류 발생 시 로그인 페이지로 리다이렉트하는 기능을 구현하여 사용자 경험을 향상시켰습니다.
+- **실시간 채팅:** `@stomp/stompjs`를 사용하여 백엔드 WebSocket 서버와 연동, 실시간 채팅 기능을 구현했습니다.
+- **Google Maps 통합:** `@vis.gl/react-google-maps`를 활용하여 현지 동네 리뷰 및 이벤트 제보 시스템에 Google Maps 기능을 통합했습니다.
+
+
+
+## 라이센스
+
+이 프로젝트는 [GNU LGPLv3](LICENSE.md) 라이센스를 따릅니다.
