@@ -73,7 +73,7 @@ export default function ChatPage() {
             }}
           >
             {msg.senderNickname?.[0] ||
-              msg.sender?.name?.[0] ||
+              msg.sender?.nickname?.[0] ||
               msg.user?.[0] ||
               "U"}
           </Avatar>
