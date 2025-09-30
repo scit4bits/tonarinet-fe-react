@@ -90,7 +90,7 @@ export default function BoardArticleListPage() {
   }, [selectedCategory, searchBy, search, page]);
 
   useEffect(() => {
-    getBoardHotArticles(boardId, hotPage).then((data) => {
+    getBoardHotArticles(boardId, hotPage - 1).then((data) => {
       setHotArticles(data);
     });
   }, [hotPage]);
