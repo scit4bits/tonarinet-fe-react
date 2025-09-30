@@ -526,6 +526,15 @@ export default function MainPage() {
                 avatar={<Notifications color="primary" />}
                 title={t("common.latestNotices")}
                 subheader={`${noticesCount} ${t("common.announcements")}`}
+                action={
+                  <Button
+                    size="small"
+                    endIcon={<ArrowForward />}
+                    onClick={() => navigate("/board/0")}
+                  >
+                    {t("common.viewAll")}
+                  </Button>
+                }
               />
               <CardContent className="pt-0">
                 <List>
