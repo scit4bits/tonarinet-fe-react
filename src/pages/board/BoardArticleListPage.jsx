@@ -300,7 +300,7 @@ export default function BoardArticleListPage() {
           <Table size="small" className=" w-full rounded p-4 shadow flex-1">
             <TableHead>
               <TableRow>
-                <TableCell align="center" className="min-w-[40px]">
+                <TableCell align="center" className="min-w-[60px]">
                   {t("pages.board.articles.tableHeaders.number")}
                 </TableCell>
                 <TableCell align="center" className="min-w-[100px]">
