@@ -530,7 +530,7 @@ export default function LocalReviewPage() {
           ...response,
           category: "liveReport",
           position: { lat: response.latitude, lng: response.longitude },
-          name: `Live Report #${response.id}`,
+          name: `${t("common.liveReport")} #${response.id}`,
         });
 
         const liveReportsData = await fetchNearbyLiveReports(
@@ -649,7 +649,8 @@ export default function LocalReviewPage() {
           {selectedPlace ? (
             <>
               <Typography variant="h5" component="h2" gutterBottom>
-                {selectedPlace.name || `Live Report #${selectedPlace.id}`}
+                {selectedPlace.name ||
+                  `${t("common.liveReport")} #${selectedPlace.id}`}
                 {selectedPlace.isNewReview && (
                   <Chip
                     label={t("common.new")}
