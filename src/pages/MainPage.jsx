@@ -446,7 +446,7 @@ export default function MainPage() {
                         <Box className="flex justify-between items-start mb-2">
                           <Typography
                             variant="subtitle2"
-                            className="font-medium"
+                            className="font-medium text-left pr-3"
                           >
                             {task.title || task.name}
                           </Typography>
