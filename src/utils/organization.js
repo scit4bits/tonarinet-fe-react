@@ -36,7 +36,7 @@ async function applyToOrganization(organizationId) {
 async function createOrganization(name, countryCode, type) {
   const response = await taxios.post(`/organization/create`, {
     name,
-    countryCode,
+    country_code: countryCode,
     type,
   });
   return response.data;
