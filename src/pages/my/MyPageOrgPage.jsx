@@ -166,6 +166,9 @@ export default function MyPageOrgPage() {
                             }
                           : {},
                     }}
+                    onClick={() => {
+                      navigate(`/org/${org.id}`);
+                    }}
                   >
                     <CardContent sx={{ flexGrow: 1 }}>
                       <Box
