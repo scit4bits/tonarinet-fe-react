@@ -279,7 +279,8 @@ export default function MyPageOrgPage() {
                             variant="contained"
                             size="small"
                             sx={{ flexGrow: 1 }}
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.stopPropagation();
                               navigate(`/orgadmin/${org.id}`);
                             }}
                           >
