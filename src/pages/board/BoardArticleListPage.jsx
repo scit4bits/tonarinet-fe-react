@@ -131,7 +131,7 @@ export default function BoardArticleListPage() {
   // 카테고리 변경 핸들러
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
-    setPage(0); // 카테고리 변경 시 첫 페이지로 이동
+    setPage(1); // 카테고리 변경 시 첫 페이지로 이동
   };
 
   const handlePageChange = (event, value) => {
