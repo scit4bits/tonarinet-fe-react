@@ -211,7 +211,7 @@ export default function ChatPage() {
 
   // Scroll to bottom when messages change
   useEffect(() => {
-    // scrollToBottom();
+    scrollToBottom();
   }, [messages]);
 
   const scrollToBottom = () => {
