@@ -52,6 +52,7 @@ import {
 import RichTextEditor from "../components/RichTextEditor";
 import "react-quill-new/dist/quill.snow.css";
 import { createSubmission, getTaskSubmissions } from "../utils/submission";
+import { downloadFile } from "../utils/fileattachment";
 import { TranslatableText } from "../components/TranslatableText";
 
 export default function TaskDetailPage() {
@@ -225,6 +226,19 @@ export default function TaskDetailPage() {
     setNewScore("");
     setNewFeedback("");
     setScoreError("");
+  };
+
+  // Handle file download
+  const handleFileDownload = async (file) => {
+    try {
+      const success = await downloadFile(file.id);
+      if (!success) {
+        alert(t("common.fileDownloadFailed"));
+      }
+    } catch (error) {
+      console.error("File download error:", error);
+      alert(t("common.fileDownloadFailed"));
+    }
   };
 
   // Date formatting
@@ -865,12 +879,7 @@ export default function TaskDetailPage() {
                                   <Button
                                     size="small"
                                     variant="outlined"
-                                    href={`${
-                                      import.meta.env.VITE_API_BASE_URL ||
-                                      "http://localhost:8999/api"
-                                    }/files/${file.id}/download`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                    onClick={() => handleFileDownload(file)}
                                   >
                                     {t("common.downloadFile")}
                                   </Button>
