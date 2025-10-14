@@ -66,23 +66,22 @@ export default function BoardWritePage() {
 
   useEffect(() => {
     async function checkPrivileges() {
-      const myOrgs = await getMyOrganizations();
-      const boardInfo = await getBoardInformation(boardId);
       const meData = await getMe();
-
-      let isAdminUser = false;
-
-      myOrgs.forEach((org) => {
-        if (org.id === boardInfo.orgId && org.role === "admin") {
-          isAdminUser = true;
-        }
-      });
-
       if (meData.isAdmin) {
-        isAdminUser = true;
+        setIsAdmin(true);
+        return;
       }
+      const myOrgs = await getMyOrganizations();
+      const boardInfo = (await getBoardInformation(boardId)) || null;
 
-      setIsAdmin(isAdminUser);
+      if (boardInfo !== null) {
+        myOrgs.forEach((org) => {
+          if (org.id === boardInfo.orgId && org.role === "admin") {
+            setIsAdmin(true);
+            return;
+          }
+        });
+      }
     }
 
     checkPrivileges();
