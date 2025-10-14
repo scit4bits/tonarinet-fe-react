@@ -280,7 +280,7 @@ export default function MyPageOrgPage() {
                             size="small"
                             sx={{ flexGrow: 1 }}
                             onClick={() => {
-                              window.location.href = `/orgadmin/${org.id}`;
+                              navigate(`/orgadmin/${org.id}`);
                             }}
                           >
                             {t("common.manage")}
